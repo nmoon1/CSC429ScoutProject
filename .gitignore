@@ -1,0 +1,13 @@
+options.txt
+sources.txt
+compile.bat
+run-only.bat
+run.bat
+
+.metadata/
+.classpath
+.project
+.vscode/
+.settings/
+
+*.class
