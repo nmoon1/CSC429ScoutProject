@@ -1,13 +1,15 @@
 package model;
 
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.Properties;
 import java.util.Vector;
 
 import exception.InvalidPrimaryKeyException;
 
-public class Scout extends EntityBase {
+public class Scout extends EntityBase
+{
 	private static final String myTableName = "Scout";
 
 	protected Properties dependencies;
@@ -21,28 +23,8 @@ public class Scout extends EntityBase {
 		super(myTableName);
 
 		setDependencies();
-		String query = "SELECT * FROM " + myTableName + " WHERE (ID = " + scoutId + ")";
-
-		Vector<Properties> allDataRetrieved = getSelectQueryResult(query);
-
-		// You must get one scout at least
-		if (allDataRetrieved == null) throw new InvalidPrimaryKeyException("No scout matching id : " + scoutId + " found.");
-		
-		// There should be EXACTLY one scout. More than that is an error
-		if (allDataRetrieved.size() != 1) throw new InvalidPrimaryKeyException("Multiple scouts matching id : " + scoutId + " found.");
-		
-		// copy all the retrieved data into persistent state
-		Properties retrievedScoutData = allDataRetrieved.elementAt(0);
 		persistentState = new Properties();
-
-		Enumeration allKeys = retrievedScoutData.propertyNames();
-		while (allKeys.hasMoreElements())
-		{
-			String nextKey = (String)allKeys.nextElement();
-			String nextValue = retrievedScoutData.getProperty(nextKey);
-
-			if (nextValue != null) persistentState.setProperty(nextKey, nextValue);
-		}
+		lookupAndStore(scoutId);
 	}
 	
 	public Scout()
@@ -76,24 +58,19 @@ public class Scout extends EntityBase {
 		}
 	}
 	
-	public Scout(String key, String match) throws InvalidPrimaryKeyException
+	public void lookupAndStore(String query) throws InvalidPrimaryKeyException
 	{
-		super(myTableName);
-
-		setDependencies();
-		String query = "SELECT * FROM " + myTableName + " WHERE (" + key + " = " + match + ")";
-
-		Vector<Properties> allDataRetrieved = getSelectQueryResult(query);
+		Vector<Properties> allDataRetrieved = getSelectQueryResult("SELECT * FROM " + myTableName + " WHERE (" + query + ")");
 
 		// You must get one scout at least
-		if (allDataRetrieved == null) throw new InvalidPrimaryKeyException("No scout matching " + key + " : " + match + " found.");
+		if (allDataRetrieved == null) throw new InvalidPrimaryKeyException("No scout matching query \"" + query + "\" found.");
 		
 		// There should be EXACTLY one scout. More than that is an error
-		if (allDataRetrieved.size() != 1) throw new InvalidPrimaryKeyException("Multiple scouts matching " + key + " : " + match + " found.");
+		if (allDataRetrieved.size() != 1) throw new InvalidPrimaryKeyException("Multiple scouts matching query \"" + query + "\" found.");
 		
 		// copy all the retrieved data into persistent state
 		Properties retrievedScoutData = allDataRetrieved.elementAt(0);
-		persistentState = new Properties();
+		persistentState.clear();
 
 		Enumeration allKeys = retrievedScoutData.propertyNames();
 		while (allKeys.hasMoreElements())
@@ -129,6 +106,24 @@ public class Scout extends EntityBase {
 			updateStatusMessage = "Error in installing scout data in database!";
 		}
 	}
+	
+	public void setScout(Properties props)
+	{
+		persistentState.clear();
+		Enumeration allKeys = props.propertyNames();
+		while (allKeys.hasMoreElements())
+		{
+			String nextKey = (String)allKeys.nextElement();
+			String nextValue = props.getProperty(nextKey);
+
+			if (nextValue != null) persistentState.setProperty(nextKey, nextValue);
+		}
+	}
+	
+	public void setState(String key, String value)
+	{
+		persistentState.setProperty(key, value);
+	}
 
 	public Object getState(String key)
 	{
@@ -136,11 +131,18 @@ public class Scout extends EntityBase {
 		return persistentState.getProperty(key);
 	}
 
-	public void stateChangeRequest(String key, Object value) {
+	public void stateChangeRequest(String key, Object value)
+	{
 		myRegistry.updateSubscribers(key, this);
 	}
+	
+	public void updateStatusDate(Date date)
+	{
+		persistentState.setProperty("DateStatusUpdated", date.getYear() + "-" + date.getMonth() + "-" + date.getDay());
+	}
 
-	protected void initializeSchema(String tableName) {
+	protected void initializeSchema(String tableName)
+	{
 		if (mySchema == null) mySchema = getSchemaInfo(tableName);
 	}
 	
