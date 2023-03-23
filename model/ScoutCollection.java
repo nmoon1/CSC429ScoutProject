@@ -5,7 +5,7 @@ import java.util.Vector;
 
 public class ScoutCollection extends EntityBase
 {
-	private static final String myTableName = "ScoutCollection";
+	private static final String myTableName = "Scout";
 
 	public Vector<Scout> scouts;
 	
@@ -15,14 +15,14 @@ public class ScoutCollection extends EntityBase
 		scouts = new Vector<Scout>();
 	}
 	
-	public void lookupAll(String query)
+	public void lookupAll(String condition)
 	{
-		storeQueryResults("SELECT * FROM Scout WHERE (" + query + ")");
+		storeQueryResults("SELECT * FROM " + myTableName + " WHERE (" + condition + ")");
 	}
 	
 	public void lookupAll()
 	{
-		storeQueryResults("SELECT * FROM Scout");
+		storeQueryResults("SELECT * FROM " + myTableName);
 	}
 	
 	public Object getState(String key)
