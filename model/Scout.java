@@ -58,15 +58,15 @@ public class Scout extends EntityBase
 		}
 	}
 	
-	public void lookupAndStore(String query) throws InvalidPrimaryKeyException
+	public void lookupAndStore(String condition) throws InvalidPrimaryKeyException
 	{
-		Vector<Properties> allDataRetrieved = getSelectQueryResult("SELECT * FROM " + myTableName + " WHERE (" + query + ")");
+		Vector<Properties> allDataRetrieved = getSelectQueryResult("SELECT * FROM " + myTableName + " WHERE (" + condition + ")");
 
 		// You must get one scout at least
-		if (allDataRetrieved == null) throw new InvalidPrimaryKeyException("No scout matching query \"" + query + "\" found.");
+		if (allDataRetrieved == null) throw new InvalidPrimaryKeyException("No scout matching condition \"" + condition + "\" found.");
 		
 		// There should be EXACTLY one scout. More than that is an error
-		if (allDataRetrieved.size() != 1) throw new InvalidPrimaryKeyException("Multiple scouts matching query \"" + query + "\" found.");
+		if (allDataRetrieved.size() != 1) throw new InvalidPrimaryKeyException("Multiple scouts matching condition \"" + condition + "\" found.");
 		
 		// copy all the retrieved data into persistent state
 		Properties retrievedScoutData = allDataRetrieved.elementAt(0);
@@ -86,20 +86,19 @@ public class Scout extends EntityBase
 	{
 		try
 		{
-			if (persistentState.getProperty("ID") != null)
+			String id = persistentState.getProperty("ID"); 
+			if (id != null)
 			{
 				Properties whereClause = new Properties();
-				whereClause.setProperty("ID",
-				persistentState.getProperty("ID"));
+				whereClause.setProperty("ID", id);
 				updatePersistentState(mySchema, persistentState, whereClause);
-				updateStatusMessage = "Scout data for scout ID : " + persistentState.getProperty("ID") + " updated successfully in database!";
+				updateStatusMessage = "Scout data for scout ID : " + id + " updated successfully in database!";
+				return;
 			}
-			else
-			{
-				Integer bookNumber = insertAutoIncrementalPersistentState(mySchema, persistentState);
-				persistentState.setProperty("ID", "" + bookNumber.intValue());
-				updateStatusMessage = "Scout data for new scout : " +  persistentState.getProperty("ID") + "installed successfully in database!";
-			}
+			
+			id = insertAutoIncrementalPersistentState(mySchema, persistentState).toString();
+			persistentState.setProperty("ID", id);
+			updateStatusMessage = "Scout data for new scout : " +  id + "installed successfully in database!";
 		}
 		catch (SQLException ex)
 		{
