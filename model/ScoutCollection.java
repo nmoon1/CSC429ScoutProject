@@ -3,11 +3,14 @@ package model;
 import java.util.Properties;
 import java.util.Vector;
 
-public class ScoutCollection extends EntityBase
+import impresario.IView;
+import userinterface.MessageView;
+
+public class ScoutCollection extends EntityBase implements IView
 {
 	private static final String myTableName = "Scout";
-
 	public Vector<Scout> scouts;
+	protected MessageView statusLog;
 	
 	public ScoutCollection()
 	{
@@ -71,5 +74,37 @@ public class ScoutCollection extends EntityBase
 			Scout scout = new Scout(nextScoutData);
 			if (scout != null) scouts.add(scout);
 		}
+	}
+
+	public void updateState(String key, Object value)
+	{
+		clearErrorMessage();
+	}
+	
+	/**
+	 * Display error message
+	 */
+	//----------------------------------------------------------
+	public void displayErrorMessage(String message)
+	{
+		statusLog.displayErrorMessage(message);
+	}
+
+	/**
+	 * Display info message
+	 */
+	//----------------------------------------------------------
+	public void displayMessage(String message)
+	{
+		statusLog.displayMessage(message);
+	}
+
+	/**
+	 * Clear error message
+	 */
+	//----------------------------------------------------------
+	public void clearErrorMessage()
+	{
+		statusLog.clearErrorMessage();
 	}
 }
