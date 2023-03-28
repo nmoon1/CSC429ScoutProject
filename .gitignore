@@ -9,5 +9,6 @@ run.bat
 .project
 .vscode/
 .settings/
+.idea/
 
 *.class
