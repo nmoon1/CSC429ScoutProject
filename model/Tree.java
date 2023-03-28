@@ -21,7 +21,7 @@ import userinterface.ViewFactory;
 public class Tree extends EntityBase implements IView
 {
 
-    private static final String myTableName = "Book";
+    private static final String myTableName = "Tree";
 	protected Properties dependencies;
 	private String updateStatusMessage = "";
 
@@ -172,7 +172,7 @@ public class Tree extends EntityBase implements IView
 			}
 			else
 			{
-				int bookId =
+				int Barcode =
 					insertAutoIncrementalPersistentState(mySchema, persistentState);
 				persistentState.setProperty("Barcode", "" + Barcode);
 				updateStatusMessage = "Tree data for new tree : " +  persistentState.getProperty("Barcode" + "installed successfully in database!");
@@ -216,42 +216,5 @@ public class Tree extends EntityBase implements IView
 				"; Status: " + persistentState.getProperty("Status") +
 				"; DateStatusUpdated: " + persistentState.getProperty("DateStatusUpdated") + "\n";
 	}
-	public void createAndShowTreeView()
-	{
-		Scene currentScene = (Scene)myViews.get("TreeView");
 
-		if(currentScene == null)
-		{
-			View newView = ViewFactory.createView("TreeView", this);
-			currentScene = new Scene(newView);
-			myViews.put("TreeView", currentScene);
-		}
-
-		swapToView(currentScene);
-	}
-
-	public String getTreeBarcode()
-	{
-		return persistentState.getProperty("Barcode");
-	}
-
-	public String getTreeType()
-	{
-		return persistentState.getProperty("Type");
-	}
-
-	public String getTreeNotes()
-	{
-		return persistentState.getProperty("Notes");
-	}
-
-	public String getStatus()
-	{
-		return persistentState.getProperty("Status");
-	}
-
-	public String getDateStatusUpdated()
-	{
-		return persistentState.getProperty("DateStatusUpdated");
-	}
 }
