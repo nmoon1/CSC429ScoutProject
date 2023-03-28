@@ -79,7 +79,28 @@ public class TLC implements IView, IModel {
 
     public void stateChangeRequest(String key, Object value) {
         switch(key) {
-            // add cases as necessary
+            case "RegisterScout": 
+                break;
+            case "UpdateScout": 
+                break;
+            case "RemoveScout": 
+                break;
+            case "AddTree": 
+                break;
+            case "UpdateTree": 
+                break;
+            case "RemoveTree": 
+                break;
+            case "AddTreeType": 
+                break;
+            case "UpdateTreeType":
+                break;
+            case "StartShift":
+                break;
+            case "EndShift":
+                break;
+            case "SellTree":
+                break;
         }
 
         myRegistry.updateSubscribers(key, this);
