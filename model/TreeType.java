@@ -147,8 +147,8 @@ public class TreeType extends EntityBase implements IView {
 
     public String toString()
 	{
-		return "Type description: " + persistentState.getProperty("typeDescription") + "; Cost: " + persistentState.getProperty("cost") 
-			+ "; Barcode prefix: " + persistentState.getProperty("barcodePrefix");
+		return "Type description: " + persistentState.getProperty("TypeDescription") + "; Cost: " + persistentState.getProperty("Cost") 
+			+ "; Barcode prefix: " + persistentState.getProperty("BarcodePrefix");
 	}
 
     protected void initializeSchema(String tableName)
