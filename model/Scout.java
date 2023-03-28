@@ -7,8 +7,10 @@ import java.util.Properties;
 import java.util.Vector;
 
 import exception.InvalidPrimaryKeyException;
+import impresario.IView;
+import userinterface.MessageView;
 
-public class Scout extends EntityBase
+public class Scout extends EntityBase implements IView
 {
 	private static final String myTableName = "Scout";
 
@@ -17,6 +19,7 @@ public class Scout extends EntityBase
 	// GUI Components
 
 	private String updateStatusMessage = "";
+	protected MessageView statusLog;
 	
 	public Scout(String scoutId) throws InvalidPrimaryKeyException
 	{
@@ -24,7 +27,7 @@ public class Scout extends EntityBase
 
 		setDependencies();
 		persistentState = new Properties();
-		lookupAndStore(scoutId);
+		lookupAndStore("ID = " + scoutId);
 	}
 	
 	public Scout()
@@ -56,6 +59,11 @@ public class Scout extends EntityBase
 
 			if (nextValue != null) persistentState.setProperty(nextKey, nextValue);
 		}
+	}
+	
+	public String getFullName()
+	{
+		return persistentState.getProperty("FirstName") + " " + persistentState.getProperty("LastName"); 
 	}
 	
 	public void lookupAndStore(String condition) throws InvalidPrimaryKeyException
@@ -92,13 +100,13 @@ public class Scout extends EntityBase
 				Properties whereClause = new Properties();
 				whereClause.setProperty("ID", id);
 				updatePersistentState(mySchema, persistentState, whereClause);
-				updateStatusMessage = "Scout data for scout ID : " + id + " updated successfully in database!";
+				updateStatusMessage = "Scout data for scout " + getFullName() + " updated successfully in database!";
 				return;
 			}
 			
 			id = insertAutoIncrementalPersistentState(mySchema, persistentState).toString();
 			persistentState.setProperty("ID", id);
-			updateStatusMessage = "Scout data for new scout : " +  id + "installed successfully in database!";
+			updateStatusMessage = "Scout data for new scout " + getFullName() + "installed successfully in database!";
 		}
 		catch (SQLException ex)
 		{
@@ -149,5 +157,37 @@ public class Scout extends EntityBase
 	{
 		dependencies = new Properties();
 		myRegistry.setDependencies(dependencies);
+	}
+
+	public void updateState(String key, Object value)
+	{
+		clearErrorMessage();
+	}
+	
+	/**
+	 * Display error message
+	 */
+	//----------------------------------------------------------
+	public void displayErrorMessage(String message)
+	{
+		statusLog.displayErrorMessage(message);
+	}
+
+	/**
+	 * Display info message
+	 */
+	//----------------------------------------------------------
+	public void displayMessage(String message)
+	{
+		statusLog.displayMessage(message);
+	}
+
+	/**
+	 * Clear error message
+	 */
+	//----------------------------------------------------------
+	public void clearErrorMessage()
+	{
+		statusLog.clearErrorMessage();
 	}
 }
