@@ -80,27 +80,22 @@ public class TLC implements IView, IModel {
     public void stateChangeRequest(String key, Object value) {
         switch(key) {
             case "RegisterScout": 
-                break;
             case "UpdateScout": 
-                break;
             case "RemoveScout": 
-                break;
             case "AddTree": 
-                break;
             case "UpdateTree": 
-                break;
             case "RemoveTree": 
-                break;
             case "AddTreeType": 
-                break;
             case "UpdateTreeType":
-                break;
             case "StartShift":
-                break;
             case "EndShift":
-                break;
             case "SellTree":
+                doAction(key);
                 break;
+            case "CompleteAction":
+            case "CancelAction":         
+                createAndShowTLCView();
+                break;   
         }
 
         myRegistry.updateSubscribers(key, this);
@@ -130,5 +125,15 @@ public class TLC implements IView, IModel {
         myStage.setScene(newScene);
         myStage.sizeToScene();
         WindowPosition.placeCenter(myStage);
+    }
+
+    public void doAction(String actionType) {
+        try {
+            Action action = ActionFactory.createAction(actionType);
+            action.subscribe("CompleteAction", this);
+            action.stateChangeRequest("DoYourJob", "");
+        } catch(Exception e) {
+            new Event(Event.getLeafLevelClassName(this), "createAction", "Unrecognized action: " + actionType + "." + e.toString(), Event.ERROR);
+        }
     }
 }
