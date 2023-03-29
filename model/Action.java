@@ -66,6 +66,11 @@ abstract public class Action implements IView, IModel {
         if(newScene == null) {
             System.out.println("Action.swapToView(): no view to display.");
             new Event(Event.getLeafLevelClassName(this), "swapToView", "Missing view to display", Event.ERROR);
+            return;
         }
+
+        myStage.setScene(newScene);
+        myStage.sizeToScene();
+        WindowPosition.placeCenter(myStage);
     }
 }
