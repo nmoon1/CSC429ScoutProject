@@ -191,9 +191,9 @@ public class RegisterScoutView extends View {
    		    	prop.setProperty("PhoneNumber", phoneNumber.getText());
    		    	prop.setProperty("Email", email.getText());
    				prop.setProperty("TroopID", troopID.getText());
-   				myModel.stateChangeRequest("submit", prop);
+   				myModel.stateChangeRequest("Submit", prop);
    				
-   				String error = (String)myModel.getState("error");
+   				String error = (String)myModel.getState("Error");
    				if (error.length() != 0) displayErrorMessage(error);
    				else if (vbox.getChildren().contains(successMessage))
    					vbox.getChildren().add(successMessage); 
