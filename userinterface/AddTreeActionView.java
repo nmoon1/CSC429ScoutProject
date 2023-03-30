@@ -2,7 +2,6 @@
 package userinterface;
 
 // system imports
-
 import impresario.IModel;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -26,6 +25,11 @@ import model.Tree;
 
 import java.util.Properties;
 
+//date imports
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+
 /** The class containing the Tree View  for the Library application */
 //==============================================================
 public class AddTreeActionView extends View
@@ -33,10 +37,10 @@ public class AddTreeActionView extends View
 
 	// GUI components
 	protected TextField Barcode;
-	protected TextField Type;
+	protected TextField TreeType;
     protected TextField Notes;
-    protected TextField DateStatusUpdated;
-	static String Status[] = {"Active", "Inactive"};
+    static String DateStatusUpdated = java.time.LocalDate.now().toString();
+	static String Status[] = {"Avaliable","Sold","Damaged"};
 	protected ComboBox statusComboBox;
 
 	protected Button cancelButton;
@@ -114,15 +118,15 @@ public class AddTreeActionView extends View
 		grid.add(Barcode, 1, 1);
 
         //type
-		Text typeLabel = new Text(" Type : ");
+		Text typeLabel = new Text(" TreeType : ");
 		typeLabel.setFont(myFont);
 		typeLabel.setWrappingWidth(150);
 		typeLabel.setTextAlignment(TextAlignment.RIGHT);
 		grid.add(typeLabel, 0, 2);
 
-		Type = new TextField();
-		Type.setEditable(true);
-		grid.add(Type, 1, 2);
+		TreeType = new TextField();
+		TreeType.setEditable(true);
+		grid.add(TreeType, 1, 2);
 
         //notes
         Text notesLabel = new Text(" Notes : ");
@@ -152,9 +156,13 @@ public class AddTreeActionView extends View
 		dateStatusUpdatedLabel.setTextAlignment(TextAlignment.RIGHT);
 		grid.add(dateStatusUpdatedLabel, 0, 5);
 
-		DateStatusUpdated = new TextField();
-		DateStatusUpdated.setEditable(true);
-		grid.add(DateStatusUpdated, 1, 5);
+		/*DateStatusUpdated = new TextField();
+		DateStatusUpdated.setEditable(true);*/
+		Text DateStatusUpdatedDate = new Text(DateStatusUpdated);
+		dateStatusUpdatedLabel.setFont(myFont);
+		dateStatusUpdatedLabel.setWrappingWidth(150);
+		dateStatusUpdatedLabel.setTextAlignment(TextAlignment.RIGHT);
+		grid.add(DateStatusUpdatedDate, 1, 5);
 
         //submit
 		submitButton = new Button("Submit");
@@ -194,18 +202,18 @@ public class AddTreeActionView extends View
 	public void populateFields()
 	{
 		Barcode.setText((String)myModel.getState("Barcode"));
-		Type.setText((String)myModel.getState("Type"));
+		TreeType.setText((String)myModel.getState("TreeType"));
         Notes.setText((String)myModel.getState("Notes"));
         statusComboBox.getSelectionModel().select(0);
-        DateStatusUpdated.setText((String)myModel.getState("DateStatusUpdated"));		
+       // DateStatusUpdated.setText((String)myModel.getState("DateStatusUpdated"));		
 	}
 
 	public void processAction(Event evt)
 	{
 
-		if(Barcode.getText().isEmpty() || Type.getText().isEmpty())
+		if(Barcode.getText().isEmpty() || TreeType.getText().isEmpty())
 		{
-			displayErrorMessage("Please fill out Barcode and Type");
+			displayErrorMessage("Please fill out Barcode and TreeType");
 		}
 		else
 		{
@@ -217,10 +225,10 @@ public class AddTreeActionView extends View
 	{
 		Properties props = new Properties();
 		props.setProperty("Barcode", Barcode.getText());
-		props.setProperty("Type", Type.getText());
+		props.setProperty("TreeType", TreeType.getText());
 		props.setProperty("Notes", Notes.getText());
 		props.setProperty("Status", ""+statusComboBox.getValue());
-        props.setProperty("DateStatusUpdated", DateStatusUpdated.getText());
+        props.setProperty("DateStatusUpdated", DateStatusUpdated);
 
 		myModel.stateChangeRequest("ProcessAddTree", props);
 		displayMessage("Tree inserted!");

@@ -212,7 +212,7 @@ public class Tree extends EntityBase implements IView
 		Vector<String> v = new Vector<String>();
 
 		v.addElement(persistentState.getProperty("Barcode"));
-		v.addElement(persistentState.getProperty("Type"));
+		v.addElement(persistentState.getProperty("TreeType"));
 		v.addElement(persistentState.getProperty("Notes"));
 		v.addElement(persistentState.getProperty("Status"));
 		v.addElement(persistentState.getProperty("DateStatusUpdated"));
@@ -232,7 +232,7 @@ public class Tree extends EntityBase implements IView
 	public String toString()
 	{
 		return "Barcode: " + persistentState.getProperty("Barcode") +
-				"; Type: " + persistentState.getProperty("Type") +
+				"; TreeType: " + persistentState.getProperty("TreeType") +
 				"; Notes: " + persistentState.getProperty("Notes") +
 				"; Status: " + persistentState.getProperty("Status") +
 				"; DateStatusUpdated: " + persistentState.getProperty("DateStatusUpdated") + "\n";
