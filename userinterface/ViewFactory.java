@@ -13,6 +13,7 @@ public class ViewFactory {
 			case "RemoveTreeActionView": return new RemoveTreeActionView(model);
 			case "RemoveTreeConfirmationView": return new RemoveTreeConfirmationView(model);
 			case "RemoveTreeDoneView": return new RemoveTreeDoneView(model);
+			case "RegisterScoutView": return new RegisterScoutView(model);
 		}
 		return null;
 	}
