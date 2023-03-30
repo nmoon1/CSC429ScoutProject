@@ -20,6 +20,7 @@ public class ViewFactory {
 			case "RemoveScoutIDView": return new RemoveScoutIDView(model);
 			case "RemoveScoutListView": return new RemoveScoutListView(model);
 			case "RemoveScoutConfirmView": return new RemoveScoutConfirmView(model);
+			case "AddTreeTypeView": return new AddTreeTypeView(model);
 		}
 		return null;
 	}
