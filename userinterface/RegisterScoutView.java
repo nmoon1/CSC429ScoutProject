@@ -1,10 +1,6 @@
 package userinterface;
 
-import java.util.Date;
 import java.util.Properties;
-import java.util.regex.Pattern;
-
-import exception.InvalidPrimaryKeyException;
 import impresario.IModel;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -12,7 +8,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -22,7 +17,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-import model.Scout;
 
 public class RegisterScoutView extends View {
 	// GUI components
@@ -195,7 +189,7 @@ public class RegisterScoutView extends View {
    				
    				String error = (String)myModel.getState("Error");
    				if (error.length() != 0) displayErrorMessage(error);
-   				else if (vbox.getChildren().contains(successMessage))
+   				else if (!vbox.getChildren().contains(successMessage))
    					vbox.getChildren().add(successMessage); 
    		     }
     	});
