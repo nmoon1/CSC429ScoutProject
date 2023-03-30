@@ -9,6 +9,7 @@ public class ViewFactory {
 		switch (viewName) {
 			case "TLCView": return new TLCView(model);
 			case "AddTree": return new AddTreeActionView(model);
+			case "RegisterScoutView": return new RegisterScoutView(model);
 		}
 		return null;
 	}
