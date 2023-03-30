@@ -1,5 +1,7 @@
 package model;
 
+import java.time.LocalDate;
+import java.time.Year;
 import java.util.Date;
 import java.util.Properties;
 import java.util.regex.Pattern;
@@ -48,6 +50,9 @@ public class RegisterScoutAction extends Action {
 	@Override
 	public void stateChangeRequest(String key, Object value) {
 		switch (key) {
+			case "DoYourJob":
+				doYourJob();
+				break;
 			case "Submit":
 				errorMessage = "";
 				Properties scoutInfo = (Properties)value;
@@ -91,7 +96,7 @@ public class RegisterScoutAction extends Action {
    		    	}
    		    	
    		    	// Check DOB ranges
-   		    	Date currentDate = new Date();
+   		    	LocalDate currentDate = LocalDate.now();
    		    	int month = Integer.parseInt(dateOfBirth.substring(5, 7));
    		    	if (month < 1 || month > 12) {
    		    		errorMessage = "Birth month must be between 1 and 12";
@@ -108,9 +113,9 @@ public class RegisterScoutAction extends Action {
    		    	int year = Integer.parseInt(dateOfBirth.substring(0, 4));
    		    	if (year > currentDate.getYear() ||
    		    		(year == currentDate.getYear() &&
-   		    		(month > currentDate.getMonth() ||
-   		    		(month == currentDate.getMonth() &&
-   		    		day > currentDate.getDay()))))
+   		    		(month > currentDate.getMonthValue() ||
+   		    		(month == currentDate.getMonthValue() &&
+   		    		day > currentDate.getDayOfMonth()))))
    		    	{
    		    		errorMessage = "Date of birth cannot be after current date";
    		    		return;
