@@ -28,7 +28,7 @@ import java.util.Properties;
 
 /** The class containing the Tree View  for the Library application */
 //==============================================================
-public class AddTreeView extends View
+public class AddTreeActionView extends View
 {
 
 	// GUI components
@@ -47,9 +47,9 @@ public class AddTreeView extends View
 
 	// constructor for this class -- takes a model object
 	//----------------------------------------------------------
-	public AddTreeView(IModel Tree)
+	public AddTreeActionView(IModel Tree)
 	{
-		super(Tree, "AddTreeView");
+		super(Tree, "AddTreeActionView");
 
 		// create a container for showing the contents
 		VBox container = new VBox(10);
