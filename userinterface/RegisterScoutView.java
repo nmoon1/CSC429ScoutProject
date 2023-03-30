@@ -170,7 +170,7 @@ public class RegisterScoutView extends View {
        		     @Override
        		     public void handle(ActionEvent e) {
        		    	clearErrorMessage();
-       		    	myModel.stateChangeRequest("Home", null);   
+       		    	myModel.stateChangeRequest("CancelAction", null);   
             	  }
         	});
 		doneCont.getChildren().add(backButton);
@@ -183,106 +183,20 @@ public class RegisterScoutView extends View {
    		    	vbox.getChildren().remove(successMessage);
    		    	clearErrorMessage();
    		    	
-   		    	if (firstName.getText().length() == 0) {
-   		    		displayErrorMessage("First name cannot be empty");
-   		    		return;
-   		    	}
-   		    	
-   		    	if (lastName.getText().length() == 0) {
-   		    		displayErrorMessage("Last name cannot be empty");
-   		    		return;
-   		    	}
-   		    	
-   		    	if (dateOfBirth.getText().length() == 0) {
-   		    		displayErrorMessage("Date of birth cannot be empty");
-   		    		return;
-   		    	}
-   		    	
-   		    	if (phoneNumber.getText().length() == 0) {
-   		    		displayErrorMessage("Phone number cannot be empty");
-   		    		return;
-   		    	}
-   		    	
-   		    	if (email.getText().length() == 0) {
-   		    		displayErrorMessage("Email cannot be empty");
-   		    		return;
-   		    	}
-   		    	
-   		    	if (troopID.getText().length() == 0) {
-   		    		displayErrorMessage("Troop ID cannot be empty");
-   		    		return;
-   		    	}
-   		    	
-   		    	// Validate DOB format
-   		    	String dobText = dateOfBirth.getText();
-   		    	if (!Pattern.matches("^\\d{4}\\-\\d{2}\\-\\d{2}$", dobText)) {
-   		    		displayErrorMessage("Enter date of birth as YYYY-MM-DD");
-   		    		return;
-   		    	}
-   		    	
-   		    	// Check DOB ranges
-   		    	Date currentDate = new Date();
-   		    	int month = Integer.parseInt(dobText.substring(5, 7));
-   		    	if (month < 1 || month > 12) {
-   		    		displayErrorMessage("Birth month must be between 1 and 12");
-   		    		return;
-   		    	}
-
-   		    	int day = Integer.parseInt(dobText.substring(8));
-   		    	if (day < 1 || day > 31) {
-   		    		displayErrorMessage("Birth day must be between 1 and 31");
-   		    		return;
-   		    	}
-   		    	
-   		    	// Check if DOB exceeds the current date
-   		    	int year = Integer.parseInt(dobText.substring(0, 4));
-   		    	if (year > currentDate.getYear() ||
-   		    		(year == currentDate.getYear() &&
-   		    		(month > currentDate.getMonth() ||
-   		    		(month == currentDate.getMonth() &&
-   		    		day > currentDate.getDay()))))
-   		    	{
-   		    		displayErrorMessage("Date of birth cannot be after current date");
-   		    		return;
-   		    	}
-   		    	
-   		    	// Validate phone number
-   		    	String phone = phoneNumber.getText();
-   		    	if (Pattern.matches("^\\d{3}\\-\\d{3}\\-\\d{4}$", phone))
-   		    		phone = phone.substring(0, 3) + phone.substring(4, 7) + phone.substring(8);
-   		    	else if (Pattern.matches("^\\(\\d{3}\\)\\d{3}\\-\\d{4}$", phone))
-   		    		phone = phone.substring(1, 4) + phone.substring(5, 8) + phone.substring(9);
-   		    	else if (!Pattern.matches("^\\d{10}$", phone)) {
-   		    		displayErrorMessage("Phone number must be of the form XXXXXXXXXX or (XXX)XXX-XXXX or XXX-XXX-XXXX");
-   		    		return;
-   		    	}
-   		    	
-   		    	// Check if a scout with the same troop ID exists yet
-   		    	Scout tempScout = new Scout();
-   		    	try {
-   		    		tempScout.lookupAndStore("TroopID = " + troopID.getText());
-   		    		displayErrorMessage("Scout with troop ID \"" + troopID.getText() + "\" already exists");
-   		    		return;
-   		    	} catch (InvalidPrimaryKeyException ex) { }
-   		    	
    		    	Properties prop = new Properties();
    		    	prop.setProperty("LastName", lastName.getText());
    		    	prop.setProperty("FirstName", firstName.getText());
    		    	prop.setProperty("MiddleName", middleName.getText());
    		    	prop.setProperty("DateOfBirth", dateOfBirth.getText());
-   		    	prop.setProperty("PhoneNumber", phone);
+   		    	prop.setProperty("PhoneNumber", phoneNumber.getText());
    		    	prop.setProperty("Email", email.getText());
    				prop.setProperty("TroopID", troopID.getText());
-   		    	try {
-   		    		//myModel.stateChangeRequest("ScoutRegisterSubmit", prop);
-   		    		Scout scout = new Scout(prop);
-   		    		scout.update();
-   		    	
-   		    		if (vbox.getChildren().contains(successMessage))
-   		    			vbox.getChildren().add(successMessage);
-   		    	} catch (Exception err) {
-   		    		displayErrorMessage(err.getMessage());
-   		    	}
+   				myModel.stateChangeRequest("submit", prop);
+   				
+   				String error = (String)myModel.getState("error");
+   				if (error.length() != 0) displayErrorMessage(error);
+   				else if (vbox.getChildren().contains(successMessage))
+   					vbox.getChildren().add(successMessage); 
    		     }
     	});
 		doneCont.getChildren().add(submitButton);
