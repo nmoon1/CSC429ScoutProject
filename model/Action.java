@@ -55,7 +55,7 @@ abstract public class Action implements IView, IModel {
 
     protected void doYourJob() {
         try {
-            Scene newScene = createView();
+        	Scene newScene = createView();
             swapToView(newScene);
         } catch (Exception e) {
             new Event(Event.getLeafLevelClassName(this), "doYourJob", "Could not create new scene", Event.ERROR);
