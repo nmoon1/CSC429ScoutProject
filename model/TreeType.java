@@ -13,11 +13,7 @@ public class TreeType extends EntityBase implements IView {
     protected Properties dependencies;
     String updateStatusMessage = "";
 
-<<<<<<< HEAD
-    public TreeType(int treeTypeID) throws InvalidPrimaryKeyException 
-=======
     public TreeType(int treeTypeID) throws InvalidPrimaryKeyException
->>>>>>> 9a77c6b (starting addtreetype)
     {
         super(myTableName);
 
@@ -65,11 +61,7 @@ public class TreeType extends EntityBase implements IView {
         }
     }
 
-<<<<<<< HEAD
-    public TreeType(Properties props) 
-=======
     public TreeType(Properties props)
->>>>>>> 9a77c6b (starting addtreetype)
     {
         super(myTableName);
 
@@ -93,11 +85,7 @@ public class TreeType extends EntityBase implements IView {
 		updateStateInDatabase();
 	}
 
-<<<<<<< HEAD
-    private void updateStateInDatabase() 
-=======
     private void updateStateInDatabase()
->>>>>>> 9a77c6b (starting addtreetype)
     {
         try
         {
