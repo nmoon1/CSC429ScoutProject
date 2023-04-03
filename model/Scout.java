@@ -219,9 +219,20 @@ public class Scout extends EntityBase implements IView
 		myRegistry.updateSubscribers(key, this);
 	}
 	
-	public void updateStatusDate(Date date)
+	public void updateStatusDate()
 	{
-		persistentState.setProperty("DateStatusUpdated", date.getYear() + "-" + date.getMonth() + "-" + date.getDay());
+		updateStatusDate(LocalDate.now());
+	}
+	
+	public void updateStatusDate(LocalDate date)
+	{
+		String year = date.getYear() + "";
+		if (year.length() < 4) year = "0".repeat(4 - year.length()) + year;
+		String month = date.getMonthValue() + "";
+		if (month.length() < 2) month = "0" + month;
+		String day = date.getDayOfMonth() + "";
+		if (day.length() < 2) day = "0" + day;
+		persistentState.setProperty("DateStatusUpdated", year + "-" + month + "-" + day);
 	}
 
 	protected void initializeSchema(String tableName)
