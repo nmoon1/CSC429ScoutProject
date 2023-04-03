@@ -16,6 +16,9 @@ public class ViewFactory {
 			case "UpdateScoutIDView": return new UpdateScoutIDView(model);
 			case "UpdateScoutInfoView": return new UpdateScoutInfoView(model);
 			case "UpdateScoutListView": return new UpdateScoutListView(model);
+			case "RemoveScoutIDView": return new RemoveScoutIDView(model);
+			case "RemoveScoutListView": return new RemoveScoutListView(model);
+			case "RemoveScoutConfirmView": return new RemoveScoutConfirmView(model);
 		}
 		return null;
 	}

@@ -6,7 +6,8 @@ public class ActionFactory {
         switch(actionName) {
             case "RemoveTree": return new RemoveTreeAction();
             case "RegisterScout": return new RegisterScoutAction();
-            case "UpdateScout": return new UpdateScoutAction(); 
+            case "UpdateScout": return new UpdateScoutAction();
+            case "RemoveScout": return new RemoveScoutAction();
             default: return null;
         }
     }
