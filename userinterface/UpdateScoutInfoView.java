@@ -63,7 +63,7 @@ public class UpdateScoutInfoView extends View {
 		HBox container = new HBox();
 		container.setAlignment(Pos.CENTER);	
 
-		Text titleText = new Text(" Register New Scout ");
+		Text titleText = new Text(" Update Scout ");
 		titleText.setFont(Font.font("Arial", FontWeight.BOLD, 20));
 		titleText.setWrappingWidth(300);
 		titleText.setTextAlignment(TextAlignment.CENTER);
