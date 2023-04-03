@@ -1,13 +1,8 @@
 package model;
 
-import java.time.LocalDate;
 import java.util.Properties;
-import java.util.regex.Pattern;
-
 import exception.InvalidPrimaryKeyException;
 import javafx.scene.Scene;
-import userinterface.View;
-import userinterface.ViewFactory;
 
 public class RegisterScoutAction extends Action {
 
@@ -15,8 +10,7 @@ public class RegisterScoutAction extends Action {
 	private String errorMessage = "";
 	
 	protected RegisterScoutAction() throws Exception {
-		super();
-		
+		super();		
 	}
 
 	@Override
@@ -24,22 +18,14 @@ public class RegisterScoutAction extends Action {
 
 	@Override
 	protected Scene createView() {
-		Scene currentScene = (Scene)myViews.get(viewName);
-			
-		if (currentScene == null) {
-			// create our initial view
-			View newView = ViewFactory.createView(viewName, this); // USE VIEW FACTORY
-			currentScene = new Scene(newView);
-			myViews.put(viewName, currentScene);
-		}
-		
-		return currentScene;
+		return getOrCreateScene(viewName);
 	}
 
 	@Override
 	public Object getState(String key) {
 		switch (key) {
 			case "Error": return errorMessage;
+			case "Stage": return myStage;
 		}
 		
 		return null;
@@ -63,7 +49,7 @@ public class RegisterScoutAction extends Action {
    		    	// Check if a scout with the same troop ID exists yet
    		    	Scout tempScout = new Scout();
    		    	try {
-   		    		tempScout.lookupAndStore("TroopID = " + scoutInfo.getProperty("TroopID"));
+   		    		tempScout.lookupAndStore("TroopID = '" + scoutInfo.getProperty("TroopID") + "'");
    		    		errorMessage = "Scout with troop ID \"" + scoutInfo.getProperty("TroopID") + "\" already exists";
    		    		return;
    		    	} catch (InvalidPrimaryKeyException ex) { }

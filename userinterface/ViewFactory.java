@@ -10,6 +10,9 @@ public class ViewFactory {
 			case "TLCView": return new TLCView(model);
 			case "AddTree": return new AddTreeActionView(model);
 			case "RegisterScoutView": return new RegisterScoutView(model);
+			case "UpdateScoutIDView": return new UpdateScoutIDView(model);
+			case "UpdateScoutInfoView": return new UpdateScoutInfoView(model);
+			case "UpdateScoutListView": return new UpdateScoutListView(model);
 		}
 		return null;
 	}

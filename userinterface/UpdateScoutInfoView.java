@@ -1,6 +1,7 @@
 package userinterface;
 
 import java.util.Properties;
+
 import impresario.IModel;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -18,8 +19,9 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import model.Scout;
 
-public class RegisterScoutView extends View {
+public class UpdateScoutInfoView extends View {
 	// GUI components
 	protected TextField firstName, middleName, lastName, dateOfBirth, phoneNumber, email, troopID;
 
@@ -30,9 +32,9 @@ public class RegisterScoutView extends View {
 
 	// constructor for this class -- takes a model object
 	//----------------------------------------------------------
-	public RegisterScoutView(IModel model)
+	public UpdateScoutInfoView(IModel model)
 	{
-		super(model, "RegisterScoutView");
+		super(model, "UpdateScoutInfoView");
 
 		// create a container for showing the contents
 		VBox container = new VBox(10);
@@ -162,7 +164,7 @@ public class RegisterScoutView extends View {
    		     @Override
    		     public void handle(ActionEvent e) {
    		    	clearErrorMessage();
-   		    	myModel.stateChangeRequest("CancelAction", null);   
+   		    	myModel.stateChangeRequest("BackInfo", null);   
         	  }
     	});
 		doneCont.getChildren().add(backButton);
@@ -182,11 +184,11 @@ public class RegisterScoutView extends View {
    		    	prop.setProperty("PhoneNumber", phoneNumber.getText());
    		    	prop.setProperty("Email", email.getText());
    				prop.setProperty("TroopID", troopID.getText());
-   				myModel.stateChangeRequest("Submit", prop);
+   				myModel.stateChangeRequest("Update", prop);
    				
    				String error = (String)myModel.getState("Error");
    				if (error.length() != 0) displayErrorMessage(error);
-   				else displayMessage("Scout added");
+   				else displayMessage("Scout updated");
    				Stage stage = (Stage)myModel.getState("Stage");
    				statusLog.setWrappingWidth(stage.getWidth() - 50);
    				stage.sizeToScene();
@@ -212,13 +214,14 @@ public class RegisterScoutView extends View {
 	//-------------------------------------------------------------
 	public void populateFields()
 	{
-		firstName.setText("");
-		middleName.setText("");
-		lastName.setText("");
-		dateOfBirth.setText("");
-		phoneNumber.setText("");
-		email.setText("");
-		troopID.setText("");
+		Scout scout = (Scout)myModel.getState("Scout");
+		firstName.setText((String)scout.getState("FirstName"));
+		middleName.setText((String)scout.getState("MiddleName"));
+		lastName.setText((String)scout.getState("LastName"));
+		dateOfBirth.setText((String)scout.getState("DateOfBirth"));
+		phoneNumber.setText((String)scout.getState("PhoneNumber"));
+		email.setText((String)scout.getState("Email"));
+		troopID.setText((String)scout.getState("TroopID"));
 	}
 
 	/**

@@ -1,14 +1,20 @@
 package userinterface;
 
-import java.util.Properties;
 import impresario.IModel;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -18,10 +24,13 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import model.Scout;
+import model.ScoutCollection;
 
-public class RegisterScoutView extends View {
+public class UpdateScoutListView extends View {
 	// GUI components
-	protected TextField firstName, middleName, lastName, dateOfBirth, phoneNumber, email, troopID;
+	protected TextField scoutID;
+	protected TableView<ScoutTable> tableOfScouts;
 
 	protected Button backButton, submitButton;
 
@@ -30,9 +39,9 @@ public class RegisterScoutView extends View {
 
 	// constructor for this class -- takes a model object
 	//----------------------------------------------------------
-	public RegisterScoutView(IModel model)
+	public UpdateScoutListView(IModel model)
 	{
-		super(model, "RegisterScoutView");
+		super(model, "UpdateScoutListView");
 
 		// create a container for showing the contents
 		VBox container = new VBox(10);
@@ -50,6 +59,7 @@ public class RegisterScoutView extends View {
 
 		populateFields();
 
+		//myModel.subscribe("ServiceCharge", this);
 		myModel.subscribe("UpdateStatusMessage", this);
 	}
 
@@ -61,7 +71,7 @@ public class RegisterScoutView extends View {
 		HBox container = new HBox();
 		container.setAlignment(Pos.CENTER);	
 
-		Text titleText = new Text(" Register New Scout ");
+		Text titleText = new Text(" Update Scout ");
 		titleText.setFont(Font.font("Arial", FontWeight.BOLD, 20));
 		titleText.setWrappingWidth(300);
 		titleText.setTextAlignment(TextAlignment.CENTER);
@@ -76,82 +86,76 @@ public class RegisterScoutView extends View {
 	private VBox createFormContent()
 	{
 		VBox vbox = new VBox(15);
-
-		GridPane grid = new GridPane();
-        grid.setAlignment(Pos.CENTER);
-       	grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(25, 25, 25, 25));
+		
+		GridPane titleGrid = new GridPane();
+        titleGrid.setAlignment(Pos.CENTER);
+       	titleGrid.setHgap(10);
+        titleGrid.setVgap(10);
+        titleGrid.setPadding(new Insets(25, 25, 25, 25));
         
-        Text prompt = new Text("SCOUT INFORMATION");
+        Text prompt = new Text("SELECT SCOUT");
         prompt.setWrappingWidth(400);
         prompt.setTextAlignment(TextAlignment.CENTER);
         prompt.setFill(Color.BLACK);
-        grid.add(prompt, 0, 0, 2, 1);
+        titleGrid.add(prompt, 0, 0, 2, 1);
 
-		Text firstNameLabel = new Text(" First Name: ");
+		tableOfScouts = new TableView<ScoutTable>();
+		tableOfScouts.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+	
+		TableColumn scoutIdColumn = new TableColumn("ID");
+		scoutIdColumn.setMinWidth(25);
+		scoutIdColumn.setCellValueFactory(new PropertyValueFactory<ScoutTable, String>("scoutID"));
+		
+		TableColumn firstNameColumn = new TableColumn("First Name");
+		firstNameColumn.setMinWidth(50);
+		firstNameColumn.setCellValueFactory(new PropertyValueFactory<ScoutTable, String>("firstName"));
+		  
+		TableColumn middleNameColumn = new TableColumn("Middle Name");
+		middleNameColumn.setMinWidth(50);
+		middleNameColumn.setCellValueFactory(new PropertyValueFactory<ScoutTable, String>("middleName"));
+		
+		TableColumn lastNameColumn = new TableColumn("Last Name");
+		lastNameColumn.setMinWidth(50);
+		lastNameColumn.setCellValueFactory(new PropertyValueFactory<ScoutTable, String>("lastName"));
+		
+		TableColumn dobColumn = new TableColumn("Date of Birth");
+		dobColumn.setMinWidth(50);
+		dobColumn.setCellValueFactory(new PropertyValueFactory<ScoutTable, String>("dateOfBirth"));
+		
+		TableColumn phoneColumn = new TableColumn("Phone Number");
+		phoneColumn.setMinWidth(50);
+		phoneColumn.setCellValueFactory(new PropertyValueFactory<ScoutTable, String>("phoneNumber"));
+		
+		TableColumn emailColumn = new TableColumn("Email");
+		emailColumn.setMinWidth(50);
+		emailColumn.setCellValueFactory(new PropertyValueFactory<ScoutTable, String>("email"));
+		
+		TableColumn troopIDColumn = new TableColumn("Troop ID");
+		troopIDColumn.setMinWidth(50);
+		troopIDColumn.setCellValueFactory(new PropertyValueFactory<ScoutTable, String>("troopID"));
+
+		tableOfScouts.getColumns().addAll(scoutIdColumn, firstNameColumn, middleNameColumn,
+				lastNameColumn, dobColumn, phoneColumn, emailColumn, troopIDColumn);
+		
+		ScrollPane scrollPane = new ScrollPane();
+		scrollPane.setPrefSize(115, 150);
+		scrollPane.setContent(tableOfScouts);
+		
+		GridPane bottomGrid = new GridPane();
+		bottomGrid.setAlignment(Pos.CENTER);
+		bottomGrid.setHgap(10);
+		bottomGrid.setVgap(10);
+		bottomGrid.setPadding(new Insets(25, 25, 25, 25));
+		
+		Text scoutIDLabel = new Text(" Scout ID: ");
 		Font myFont = Font.font("Helvetica", FontWeight.BOLD, 12);
-		firstNameLabel.setFont(myFont);
-		firstNameLabel.setWrappingWidth(150);
-		firstNameLabel.setTextAlignment(TextAlignment.RIGHT);
-		grid.add(firstNameLabel, 0, 1);
+		scoutIDLabel.setFont(myFont);
+		scoutIDLabel.setWrappingWidth(150);
+		scoutIDLabel.setTextAlignment(TextAlignment.RIGHT);
+		bottomGrid.add(scoutIDLabel, 0, 1);
 
-		firstName = new TextField();
-		grid.add(firstName, 1, 1);
-
-		Text middleNameLabel = new Text(" Middle Name: ");
-		middleNameLabel.setFont(myFont);
-		middleNameLabel.setWrappingWidth(150);
-		middleNameLabel.setTextAlignment(TextAlignment.RIGHT);
-		grid.add(middleNameLabel, 0, 2);
-
-		middleName = new TextField();
-		grid.add(middleName, 1, 2);
-
-		Text lastNameLabel = new Text(" Last Name: ");
-		lastNameLabel.setFont(myFont);
-		lastNameLabel.setWrappingWidth(150);
-		lastNameLabel.setTextAlignment(TextAlignment.RIGHT);
-		grid.add(lastNameLabel, 0, 3);
-
-		lastName = new TextField();
-		grid.add(lastName, 1, 3);
-
-		Text dobLabel = new Text(" Date of Birth: ");
-		dobLabel.setFont(myFont);
-		dobLabel.setWrappingWidth(150);
-		dobLabel.setTextAlignment(TextAlignment.RIGHT);
-		grid.add(dobLabel, 0, 4);
-
-		dateOfBirth = new TextField();
-		grid.add(dateOfBirth, 1, 4);
-
-		Text phoneNumberLabel = new Text(" Phone Number: ");
-		phoneNumberLabel.setFont(myFont);
-		phoneNumberLabel.setWrappingWidth(150);
-		phoneNumberLabel.setTextAlignment(TextAlignment.RIGHT);
-		grid.add(phoneNumberLabel, 0, 5);
-
-		phoneNumber = new TextField();
-		grid.add(phoneNumber, 1, 5);
-
-		Text emailLabel = new Text(" Email: ");
-		emailLabel.setFont(myFont);
-		emailLabel.setWrappingWidth(150);
-		emailLabel.setTextAlignment(TextAlignment.RIGHT);
-		grid.add(emailLabel, 0, 6);
-
-		email = new TextField();
-		grid.add(email, 1, 6);
-
-		Text troopLabel = new Text(" Troop ID: ");
-		troopLabel.setFont(myFont);
-		troopLabel.setWrappingWidth(150);
-		troopLabel.setTextAlignment(TextAlignment.RIGHT);
-		grid.add(troopLabel, 0, 7);
-
-		troopID = new TextField();
-		grid.add(troopID, 1, 7);
+		scoutID = new TextField();
+		bottomGrid.add(scoutID, 1, 1);
 
 		HBox doneCont = new HBox(10);
 		doneCont.setAlignment(Pos.CENTER);
@@ -162,7 +166,7 @@ public class RegisterScoutView extends View {
    		     @Override
    		     public void handle(ActionEvent e) {
    		    	clearErrorMessage();
-   		    	myModel.stateChangeRequest("CancelAction", null);   
+   		    	myModel.stateChangeRequest("BackSearch", null);   
         	  }
     	});
 		doneCont.getChildren().add(backButton);
@@ -174,19 +178,10 @@ public class RegisterScoutView extends View {
    		     public void handle(ActionEvent e) {
    		    	clearErrorMessage();
    		    	
-   		    	Properties prop = new Properties();
-   		    	prop.setProperty("FirstName", firstName.getText());
-   		    	prop.setProperty("MiddleName", middleName.getText());
-   		    	prop.setProperty("LastName", lastName.getText());
-   		    	prop.setProperty("DateOfBirth", dateOfBirth.getText());
-   		    	prop.setProperty("PhoneNumber", phoneNumber.getText());
-   		    	prop.setProperty("Email", email.getText());
-   				prop.setProperty("TroopID", troopID.getText());
-   				myModel.stateChangeRequest("Submit", prop);
+   		    	myModel.stateChangeRequest("Select", scoutID.getText());
    				
    				String error = (String)myModel.getState("Error");
    				if (error.length() != 0) displayErrorMessage(error);
-   				else displayMessage("Scout added");
    				Stage stage = (Stage)myModel.getState("Stage");
    				statusLog.setWrappingWidth(stage.getWidth() - 50);
    				stage.sizeToScene();
@@ -194,12 +189,23 @@ public class RegisterScoutView extends View {
     	});
 		doneCont.getChildren().add(submitButton);
 	
-		vbox.getChildren().add(grid);
+		vbox.getChildren().add(titleGrid);
+		vbox.getChildren().add(scrollPane);
+		vbox.getChildren().add(bottomGrid);
 		vbox.getChildren().add(doneCont);
 
 		return vbox;
 	}
-
+	
+	private ObservableList<ScoutTable> getTableData(ScoutCollection scoutList)
+	{
+		ObservableList<ScoutTable> tableData = FXCollections.observableArrayList();
+		for (Scout scout : scoutList.scouts) {
+			tableData.add(new ScoutTable(scout));
+		}
+		
+		return tableData;
+	}
 
 	// Create the status log field
 	//-------------------------------------------------------------
@@ -212,13 +218,8 @@ public class RegisterScoutView extends View {
 	//-------------------------------------------------------------
 	public void populateFields()
 	{
-		firstName.setText("");
-		middleName.setText("");
-		lastName.setText("");
-		dateOfBirth.setText("");
-		phoneNumber.setText("");
-		email.setText("");
-		troopID.setText("");
+		scoutID.setText("");
+		tableOfScouts.setItems(getTableData((ScoutCollection)myModel.getState("ScoutList")));
 	}
 
 	/**
