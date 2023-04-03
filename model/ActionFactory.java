@@ -8,7 +8,8 @@ public class ActionFactory {
             //case "AddTree": return new AddTreeAction();
             //case "StartShift": return new StartShiftAction();
             case "RegisterScout": return new RegisterScoutAction();
-            case "UpdateScout": return new UpdateScoutAction(); 
+            case "UpdateScout": return new UpdateScoutAction();
+            case "RemoveScout": return new RemoveScoutAction();
             default: return null;
         }
     }

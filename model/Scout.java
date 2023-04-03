@@ -54,6 +54,14 @@ public class Scout extends EntityBase implements IView
 		
 		setDependencies();
 		persistentState = new Properties();
+		persistentState.setProperty("FirstName", "");
+		persistentState.setProperty("MiddleName", "");
+		persistentState.setProperty("LastName", "");
+		persistentState.setProperty("DateOfBirth", "");
+		persistentState.setProperty("PhoneNumber", "");
+		persistentState.setProperty("Email", "");
+		persistentState.setProperty("TroopID", "");
+		persistentState.setProperty("Status", "Active");
 		Enumeration allKeys = props.propertyNames();
 		while (allKeys.hasMoreElements())
 		{
