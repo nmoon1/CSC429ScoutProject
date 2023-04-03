@@ -45,6 +45,7 @@ public class Scout extends EntityBase implements IView
 		persistentState.setProperty("PhoneNumber", "");
 		persistentState.setProperty("Email", "");
 		persistentState.setProperty("TroopID", "");
+		persistentState.setProperty("Status", "Active");
 	}
 	
 	public Scout(Properties props)
@@ -192,7 +193,6 @@ public class Scout extends EntityBase implements IView
 	
 	public void setScout(Properties props)
 	{
-		persistentState.clear();
 		Enumeration allKeys = props.propertyNames();
 		while (allKeys.hasMoreElements())
 		{
