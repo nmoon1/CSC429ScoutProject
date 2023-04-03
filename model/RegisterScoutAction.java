@@ -54,9 +54,10 @@ public class RegisterScoutAction extends Action {
    		    		return;
    		    	} catch (InvalidPrimaryKeyException ex) { }
    		    	
-   		    	new Scout(scoutInfo).update();
+   		    	Scout scout = new Scout(scoutInfo);
+   		    	scout.updateStatusDate();
+   		    	scout.update();
 				break;
 		}
 	}
-	
 }

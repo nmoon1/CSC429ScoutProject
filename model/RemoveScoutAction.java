@@ -1,5 +1,62 @@
 package model;
 
-public class RemoveScoutAction {
+import java.util.Properties;
 
+import exception.InvalidPrimaryKeyException;
+import javafx.scene.Scene;
+
+public class RemoveScoutAction extends Action {
+
+	private static final String viewName = "RemoveScoutView";
+	private String errorMessage = "";
+	
+	protected RemoveScoutAction() throws Exception {
+		super();		
+	}
+
+	@Override
+	protected void setDependencies() { }
+
+	@Override
+	protected Scene createView() {
+		return getOrCreateScene(viewName);
+	}
+
+	@Override
+	public Object getState(String key) {
+		switch (key) {
+			case "Error": return errorMessage;
+			case "Stage": return myStage;
+		}
+		
+		return null;
+	}
+
+	@Override
+	public void stateChangeRequest(String key, Object value) {
+		switch (key) {
+			case "DoYourJob":
+				doYourJob();
+				break;
+			case "CancelAction":
+				myRegistry.updateSubscribers(key, this);
+				break;
+			case "Submit":
+				Properties scoutInfo = (Properties)value;
+				errorMessage = Scout.validate(scoutInfo);
+				if (errorMessage != null) return;
+				errorMessage = "";
+   		    	
+   		    	// Check if a scout with the same troop ID exists yet
+   		    	Scout tempScout = new Scout();
+   		    	try {
+   		    		tempScout.lookupAndStore("TroopID = '" + scoutInfo.getProperty("TroopID") + "'");
+   		    		errorMessage = "Scout with troop ID \"" + scoutInfo.getProperty("TroopID") + "\" already exists";
+   		    		return;
+   		    	} catch (InvalidPrimaryKeyException ex) { }
+   		    	
+   		    	new Scout(scoutInfo).update();
+				break;
+		}
+	}
 }
