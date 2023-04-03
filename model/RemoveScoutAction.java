@@ -3,7 +3,6 @@ package model;
 import java.util.ArrayList;
 import java.util.Properties;
 
-import exception.InvalidPrimaryKeyException;
 import javafx.scene.Scene;
 
 public class RemoveScoutAction extends Action {
@@ -51,7 +50,7 @@ public class RemoveScoutAction extends Action {
 			case "BackSearch":
 				swapToView(getOrCreateScene(idViewName));
 				break;
-			case "BackInfo":
+			case "BackConfirm":
 				swapToView(getOrCreateScene(listViewName));
 				break;
 			case "Select":
@@ -112,23 +111,11 @@ public class RemoveScoutAction extends Action {
 					swapToView(getOrCreateScene(listViewName));
 				}
 				break;
-			case "Update":
+			case "Remove":
 				{
-					Properties scoutInfo = (Properties)value;
-					scoutInfo.setProperty("ID", (String)selectedScout.getState("ID"));
-					errorMessage = Scout.validate(scoutInfo);
-					if (errorMessage != null) return;
 					errorMessage = "";
-	   		    	
-	   		    	// Check if a scout with the same troop ID exists yet
-	   		    	Scout tempScout = new Scout();
-	   		    	try {
-	   		    		tempScout.lookupAndStore("TroopID = '" + scoutInfo.getProperty("TroopID") + "' AND ID <> " + scoutInfo.getProperty("ID"));
-	   		    		errorMessage = "Scout with troop ID \"" + scoutInfo.getProperty("TroopID") + "\" already exists";
-	   		    		return;
-	   		    	} catch (InvalidPrimaryKeyException ex) { }
-	   		    	
-	   		    	selectedScout.setScout(scoutInfo);
+	   		    	selectedScout.setState("Status", "Inactive");
+	   		    	selectedScout.updateStatusDate();
 	   		    	selectedScout.update();
 				}
 				break;
