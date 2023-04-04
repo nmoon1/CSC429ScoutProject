@@ -143,6 +143,9 @@ public class Scout extends EntityBase implements IView
     	else if (!Pattern.matches("^\\d{10}$", phoneNumber))
     		return "Phone number must be of the form XXXXXXXXXX or (XXX)XXX-XXXX or XXX-XXX-XXXX";
     	
+    	// Verify email
+    	if (!email.contains("@")) return "Invalid email";
+    	
     	return null;
 	}
 	
