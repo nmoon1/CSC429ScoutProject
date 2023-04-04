@@ -1,1 +1,23 @@
 [4/4/23, 12:46 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: UpdateTreeType.java.lang.NullPointerException>
+[4/4/23, 1:33 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=14557) Duplicate entry '23' for key 'BarcodePrefix'>
+[4/4/23, 1:33 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=14557) Duplicate entry '23' for key 'BarcodePrefix'>
+[4/4/23, 1:35 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=14593) Duplicate entry '23' for key 'BarcodePrefix'>
+[4/4/23, 1:35 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=14593) Duplicate entry '25' for key 'BarcodePrefix'>
+[4/4/23, 1:35 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=14593) Duplicate entry '27' for key 'BarcodePrefix'>
+[4/4/23, 1:35 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=14593) Duplicate entry '28' for key 'BarcodePrefix'>
+[4/4/23, 1:36 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=14608) Duplicate entry '23' for key 'BarcodePrefix'>
+[4/4/23, 1:36 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=14608) Duplicate entry '23' for key 'BarcodePrefix'>
+[4/4/23, 1:37 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=14612) Duplicate entry '23' for key 'BarcodePrefix'>
+[4/4/23, 1:39 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=14639) Duplicate entry '23' for key 'BarcodePrefix'>
+[4/4/23, 1:39 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=14639) Duplicate entry '24' for key 'BarcodePrefix'>
+[4/4/23, 1:39 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=14639) Duplicate entry '26' for key 'BarcodePrefix'>
+[4/4/23, 1:39 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=14639) Duplicate entry '27' for key 'BarcodePrefix'>
+[4/4/23, 1:39 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=14639) Duplicate entry '28' for key 'BarcodePrefix'>
+[4/4/23, 1:40 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=14640) Duplicate entry '23' for key 'BarcodePrefix'>
+[4/4/23, 1:40 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=14640) Duplicate entry '24' for key 'BarcodePrefix'>
+[4/4/23, 1:40 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=14640) Duplicate entry '25' for key 'BarcodePrefix'>
+[4/4/23, 1:40 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=14640) Duplicate entry '26' for key 'BarcodePrefix'>
+[4/4/23, 1:40 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=14640) Duplicate entry '27' for key 'BarcodePrefix'>
+[4/4/23, 1:40 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=14640) Duplicate entry '28' for key 'BarcodePrefix'>
+[4/4/23, 1:40 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=14640) Duplicate entry '29' for key 'BarcodePrefix'>
+[4/4/23, 1:40 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=14640) Duplicate entry '34' for key 'BarcodePrefix'>

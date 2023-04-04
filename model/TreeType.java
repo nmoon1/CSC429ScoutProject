@@ -95,20 +95,19 @@ public class TreeType extends EntityBase implements IView {
                 whereClause.setProperty("ID",
                         persistentState.getProperty("ID"));
                 updatePersistentState(mySchema, persistentState, whereClause);
-                updateStatusMessage = "Tree type data for tree type id: " + persistentState.getProperty("ID") + " updated successfully in database!";
+                updateStatusMessage = "Tree Type updated successfully!";
             }
             else
             {
                 Integer treeTypeID =
                         insertAutoIncrementalPersistentState(mySchema, persistentState);
                 persistentState.setProperty("ID", "" + treeTypeID.intValue());
-                updateStatusMessage = "Tree type data for new tree type: " +  persistentState.getProperty("ID")
-                        + "installed successfully in database!";
+                updateStatusMessage = "Tree Type inserted successfully!";
             }
         }
         catch (SQLException ex)
         {
-            updateStatusMessage = "Error in installing book data in database!";
+            updateStatusMessage = "Tree Type already exists for that Barcode Prefix.";
         }
     }
 
