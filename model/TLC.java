@@ -131,6 +131,7 @@ public class TLC implements IView, IModel {
         try {
             Action action = ActionFactory.createAction(actionType);
             action.subscribe("CompleteAction", this);
+            action.subscribe("CancelAction", this);
             action.stateChangeRequest("DoYourJob", "");
         } catch(Exception e) {
             new Event(Event.getLeafLevelClassName(this), "createAction", "Unrecognized action: " + actionType + "." + e.toString(), Event.ERROR);

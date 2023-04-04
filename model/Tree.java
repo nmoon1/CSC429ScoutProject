@@ -24,6 +24,7 @@ public class Tree extends EntityBase implements IView
     private static final String myTableName = "Tree";
 	protected Properties dependencies;
 	private String updateStatusMessage = "";
+	private String removeStatusMessage = "";
 
 	// Empty Contstructor
 	// --------------------------------------------------------------------
@@ -38,7 +39,7 @@ public class Tree extends EntityBase implements IView
 
 	// Constructor for existing tree
 	//---------------------------------------------------------------------
-	public Tree(int Barcode) throws InvalidPrimaryKeyException
+	public Tree(String Barcode) throws InvalidPrimaryKeyException
 	{
 		super(myTableName);
 		
@@ -129,10 +130,14 @@ public class Tree extends EntityBase implements IView
 	//---------------------------------------------------------------------
 	public Object getState(String key)
 	{
-		if (key.equals("UpdateStatusMessage") == true)
-			return updateStatusMessage;
-
-		return persistentState.getProperty(key);
+		switch(key) {
+			case "UpdateStatusMessage":
+				return updateStatusMessage;
+			case "RemoveStatusMessage":
+				return removeStatusMessage;
+			default: 
+				return persistentState.getProperty(key);
+		}
 	}
 
 	//---------------------------------------------------------------------
@@ -183,6 +188,22 @@ public class Tree extends EntityBase implements IView
 			updateStatusMessage = "Error in installing tree data in database!";
 		}
 		//DEBUG System.out.println("updateStateInDatabase " + updateStatusMessage);
+	}
+
+	public int delete() {
+		Boolean treeSold = persistentState.getProperty("Status").equals("Sold");
+		if(treeSold) {
+			removeStatusMessage = "Cannot remove tree that is already sold.";
+			return 0;
+		}
+		try {
+			Properties whereClause = new Properties();
+			whereClause.setProperty("Barcode", persistentState.getProperty("Barcode"));
+			return deletePersistentState(mySchema, whereClause);
+		} catch (SQLException e) {
+			removeStatusMessage = "Error removing tree from the database!";
+			return 0;
+		}
 	}
 	
 	//---------------------------------------------------------------------
