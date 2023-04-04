@@ -1,5 +1,6 @@
 package model;
 
+import javafx.stage.Stage;
 import java.util.Properties;
 import javafx.scene.Scene;
 
@@ -8,12 +9,15 @@ import userinterface.ViewFactory;
 
 public class AddTreeAction extends Action {
 
+    private String addCompleteMessage = "";
+
     public AddTreeAction() throws Exception {
         super();
     }
 
     protected void setDependencies() {
         dependencies = new Properties();
+        
         dependencies.setProperty("Done", "CompleteAction");
         dependencies.setProperty("Cancel", "CancelAction");
         myRegistry.setDependencies(dependencies);
@@ -31,9 +35,12 @@ public class AddTreeAction extends Action {
     }
 
     public Object getState(String key) {
-        switch(key) {
-            default: return null;
-        }
+        if (key.equals("AddComplete"))
+		{
+			return addCompleteMessage;
+		}
+        else
+            return "";
     }
 
     public void stateChangeRequest(String key, Object value) {
@@ -43,6 +50,9 @@ public class AddTreeAction extends Action {
                 break;
             case "StartSession":
                 startSession((Properties)value);
+                break;
+            case "ProcessAddTree":
+                processNewTree((Properties) value);
                 break;
         }
         myRegistry.updateSubscribers(key, this);
@@ -57,4 +67,12 @@ public class AddTreeAction extends Action {
             System.out.println("Error starting session: " + e.toString());
         }
     }
+
+    public void processNewTree(Properties props){
+        
+       Tree tree = new Tree(props);
+       tree.update();
+       addCompleteMessage = "Tree added!";
+    }
+
 }

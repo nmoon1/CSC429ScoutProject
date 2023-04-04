@@ -25,6 +25,7 @@ public class Tree extends EntityBase implements IView
 	protected Properties dependencies;
 	private String updateStatusMessage = "";
 	private String removeStatusMessage = "";
+	private Boolean newTree = false;
 
 	// Empty Contstructor
 	// --------------------------------------------------------------------
@@ -107,6 +108,7 @@ public class Tree extends EntityBase implements IView
 				persistentState.setProperty(nextKey, nextValue);
 			}
 		}
+		newTree = true;
 	}
 
 	//---------------------------------------------------------------------
@@ -167,7 +169,7 @@ public class Tree extends EntityBase implements IView
 	{
 		try
 		{
-			if (persistentState.getProperty("Barcode") != null)
+			if (!newTree)
 			{
 				Properties whereClause = new Properties();
 				whereClause.setProperty("Barcode",
@@ -177,10 +179,9 @@ public class Tree extends EntityBase implements IView
 			}
 			else
 			{
-				int Barcode =
-					insertAutoIncrementalPersistentState(mySchema, persistentState);
-				persistentState.setProperty("Barcode", "" + Barcode);
-				updateStatusMessage = "Tree data for new tree : " +  persistentState.getProperty("Barcode" + "installed successfully in database!");
+				insertPersistentState(mySchema, persistentState);
+				updateStatusMessage = "Tree data for new tree : " +  persistentState.getProperty("Barcode") + " installed successfully in database!";
+				newTree = false;
 			}
 		}
 		catch (SQLException ex)

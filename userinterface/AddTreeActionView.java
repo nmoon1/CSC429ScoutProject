@@ -21,14 +21,15 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.control.*;
-import model.Tree;
 
 import java.util.Properties;
 
-//date imports
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
+//for messages
+import javafx.scene.paint.Color;
+import javafx.scene.text.TextAlignment;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 
 /** The class containing the Tree View  for the Library application */
 //==============================================================
@@ -46,8 +47,8 @@ public class AddTreeActionView extends View
 	protected Button cancelButton;
 	protected Button submitButton;
 
-	// For showing error message
-	//protected MessageView statusLog;
+	// for showing error message
+	protected MessageView statusLog;
 
 	// constructor for this class -- takes a model object
 	//----------------------------------------------------------
@@ -65,7 +66,7 @@ public class AddTreeActionView extends View
 		// create our GUI components, add them to this Container
 		container.getChildren().add(createFormContent());
 
-		//container.getChildren().add(createStatusLog("             "));
+		container.getChildren().add(createStatusLog("             "));
 
 		getChildren().add(container);
 
@@ -211,7 +212,7 @@ public class AddTreeActionView extends View
 	public void processAction(Event evt)
 	{
 
-		if(Barcode.getText().isEmpty() || TreeType.getText().isEmpty())
+		if(Barcode.getText().isEmpty() && TreeType.getText().isEmpty())
 		{
 			displayErrorMessage("Please fill out Barcode and TreeType");
 		}
@@ -223,15 +224,25 @@ public class AddTreeActionView extends View
 
 	private void insertTree()
 	{
+		System.out.println(statusComboBox.getValue());
 		Properties props = new Properties();
 		props.setProperty("Barcode", Barcode.getText());
-		props.setProperty("TreeType", TreeType.getText());
+		// props.setProperty("TreeType", TreeType.getText());
 		props.setProperty("Notes", Notes.getText());
-		props.setProperty("Status", ""+statusComboBox.getValue());
+		// props.setProperty("Status", statusComboBox.getValue());
         props.setProperty("DateStatusUpdated", DateStatusUpdated);
 
 		myModel.stateChangeRequest("ProcessAddTree", props);
 		displayMessage("Tree inserted!");
+	}
+
+	// Create the status log field
+	//-------------------------------------------------------------
+	protected MessageView createStatusLog(String initialMessage)
+	{
+		statusLog = new MessageView(initialMessage);
+
+		return statusLog;
 	}
 
 	/**
@@ -248,7 +259,7 @@ public class AddTreeActionView extends View
 	//----------------------------------------------------------
 	public void displayErrorMessage(String message)
 	{
-		//statusLog.displayErrorMessage(message);
+		statusLog.displayErrorMessage(message);
 	}
 
 	/**
@@ -257,7 +268,7 @@ public class AddTreeActionView extends View
 	//----------------------------------------------------------
 	public void displayMessage(String message)
 	{
-		//statusLog.displayMessage(message);
+		statusLog.displayMessage(message);
 	}
 
 	/**
@@ -266,7 +277,8 @@ public class AddTreeActionView extends View
 	//----------------------------------------------------------
 	public void clearErrorMessage()
 	{
-		//statusLog.clearErrorMessag
+		
+		statusLog.clearErrorMessage();
 	}
 
 }
