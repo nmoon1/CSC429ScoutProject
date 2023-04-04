@@ -192,6 +192,17 @@ public class RemoveScoutConfirmView extends View {
    		     }
     	});
 		doneCont.getChildren().add(searchButton);
+		
+		Button doneButton = new Button("Done");
+		doneButton.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+		doneButton.setOnAction(new EventHandler<ActionEvent>() {
+   		     @Override
+   		     public void handle(ActionEvent e) {
+   		    	clearErrorMessage();
+   		    	myModel.stateChangeRequest("CancelAction", null);   
+        	  }
+    	});
+		doneCont.getChildren().add(doneButton);
 	
 		vbox.getChildren().add(grid);
 		vbox.getChildren().add(doneCont);

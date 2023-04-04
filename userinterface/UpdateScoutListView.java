@@ -188,6 +188,17 @@ public class UpdateScoutListView extends View {
    		     }
     	});
 		doneCont.getChildren().add(submitButton);
+		
+		Button doneButton = new Button("Done");
+		doneButton.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+		doneButton.setOnAction(new EventHandler<ActionEvent>() {
+   		     @Override
+   		     public void handle(ActionEvent e) {
+   		    	clearErrorMessage();
+   		    	myModel.stateChangeRequest("CancelAction", null);   
+        	  }
+    	});
+		doneCont.getChildren().add(doneButton);
 	
 		vbox.getChildren().add(titleGrid);
 		vbox.getChildren().add(scrollPane);
