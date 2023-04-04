@@ -77,10 +77,16 @@ public class Scout extends EntityBase implements IView
 		String firstName = scoutInfo.getProperty("FirstName"); 
 		if (firstName != null && firstName.length() == 0)
 			return "First name cannot be empty";
+		if (firstName.length() > 25) return "First name is too long";
+		
+		String middleName = scoutInfo.getProperty("MiddleName");
+		if (middleName != null && middleName.length() > 25)
+			return "Middle name is too long";
     	
 		String lastName = scoutInfo.getProperty("LastName"); 
     	if (lastName != null && lastName.length() == 0)
     		return "Last name cannot be empty";
+    	if (firstName.length() > 25) return "Last name is too long";
     	
     	String dateOfBirth = scoutInfo.getProperty("DateOfBirth");
     	if (dateOfBirth != null && dateOfBirth.length() == 0)
@@ -95,7 +101,7 @@ public class Scout extends EntityBase implements IView
     		return "Email cannot be empty";
     	
     	String troopID = scoutInfo.getProperty("TroopID");
-    	if (troopID.length() == 0) return "Troop ID cannot be empty";
+    	if (!Pattern.matches("^\\d{5}$", troopID)) return "Troop ID must be of the form XXXXX";
     	
     	// Validate DOB format
     	if (!Pattern.matches("^\\d{4}\\-\\d{2}\\-\\d{2}$", dateOfBirth))

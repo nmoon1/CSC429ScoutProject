@@ -103,7 +103,7 @@ public class UpdateScoutAction extends Action {
 					
 					// Retrieve scouts from database
 					scoutCollection = new ScoutCollection();
-					scoutCollection.lookupAll(condition);
+					scoutCollection.lookupAll(condition + " AND Status <> 'Inactive'");
 					
 					if (scoutCollection.scouts.isEmpty()) {
 						// No scouts matching given criteria
@@ -118,17 +118,10 @@ public class UpdateScoutAction extends Action {
 				{
 					Properties scoutInfo = (Properties)value;
 					scoutInfo.setProperty("ID", (String)selectedScout.getState("ID"));
+					scoutInfo.setProperty("TroopID", (String)selectedScout.getState("TroopID"));
 					errorMessage = Scout.validate(scoutInfo);
 					if (errorMessage != null) return;
 					errorMessage = "";
-	   		    	
-	   		    	// Check if a scout with the same troop ID exists yet
-	   		    	Scout tempScout = new Scout();
-	   		    	try {
-	   		    		tempScout.lookupAndStore("TroopID = '" + scoutInfo.getProperty("TroopID") + "' AND ID <> " + scoutInfo.getProperty("ID"));
-	   		    		errorMessage = "Scout with troop ID \"" + scoutInfo.getProperty("TroopID") + "\" already exists";
-	   		    		return;
-	   		    	} catch (InvalidPrimaryKeyException ex) { }
 	   		    	
 	   		    	selectedScout.setScout(scoutInfo);
 	   		    	selectedScout.update();

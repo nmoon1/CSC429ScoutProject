@@ -23,7 +23,7 @@ import model.Scout;
 
 public class UpdateScoutInfoView extends View {
 	// GUI components
-	protected TextField firstName, middleName, lastName, dateOfBirth, phoneNumber, email, troopID;
+	protected TextField firstName, middleName, lastName, dateOfBirth, phoneNumber, email;
 
 	protected Button backButton, submitButton;
 
@@ -146,15 +146,6 @@ public class UpdateScoutInfoView extends View {
 		email = new TextField();
 		grid.add(email, 1, 6);
 
-		Text troopLabel = new Text(" Troop ID: ");
-		troopLabel.setFont(myFont);
-		troopLabel.setWrappingWidth(150);
-		troopLabel.setTextAlignment(TextAlignment.RIGHT);
-		grid.add(troopLabel, 0, 7);
-
-		troopID = new TextField();
-		grid.add(troopID, 1, 7);
-
 		HBox doneCont = new HBox(10);
 		doneCont.setAlignment(Pos.CENTER);
 		
@@ -183,7 +174,6 @@ public class UpdateScoutInfoView extends View {
    		    	prop.setProperty("DateOfBirth", dateOfBirth.getText());
    		    	prop.setProperty("PhoneNumber", phoneNumber.getText());
    		    	prop.setProperty("Email", email.getText());
-   				prop.setProperty("TroopID", troopID.getText());
    				myModel.stateChangeRequest("Update", prop);
    				
    				String error = (String)myModel.getState("Error");
@@ -232,7 +222,6 @@ public class UpdateScoutInfoView extends View {
 		dateOfBirth.setText((String)scout.getState("DateOfBirth"));
 		phoneNumber.setText((String)scout.getState("PhoneNumber"));
 		email.setText((String)scout.getState("Email"));
-		troopID.setText((String)scout.getState("TroopID"));
 	}
 
 	/**
