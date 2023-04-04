@@ -249,7 +249,13 @@ public class AddTreeTypeActionView extends View
 		}
 		else
 		{
-			insertTreeType();
+			try {
+				double costVal = Double.parseDouble(costEntered);
+				insertTreeType();
+			}
+			catch(Exception e) {
+				displayErrorMessage("Cost must be in double format.");
+			}
 		}
 	}
 
