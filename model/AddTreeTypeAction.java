@@ -60,6 +60,6 @@ public class AddTreeTypeAction extends Action {
     private void processAddTreeType(Properties props) {
         TreeType t = new TreeType(props);
         t.update();
-        addCompleteMessage = "Tree Type inserted successfully!";
+        addCompleteMessage = (String)t.getState("UpdateStatusMessage");
     }
 }
