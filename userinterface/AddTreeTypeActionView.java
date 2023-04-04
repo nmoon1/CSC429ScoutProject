@@ -189,7 +189,7 @@ public class AddTreeTypeActionView extends View
        		     @Override
        		     public void handle(ActionEvent e) {
        		    	clearErrorMessage();
-       		    	myModel.stateChangeRequest("Cancel", null);
+       		    	myModel.stateChangeRequest("CancelAction", null);
             	  }
         	});
 
