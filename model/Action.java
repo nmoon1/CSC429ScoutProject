@@ -14,6 +14,7 @@ import impresario.*;
 
 import userinterface.MainStageContainer;
 import userinterface.View;
+import userinterface.ViewFactory;
 import userinterface.WindowPosition;
 
 abstract public class Action implements IView, IModel {
@@ -32,6 +33,19 @@ abstract public class Action implements IView, IModel {
         }
         setDependencies();
     }
+    
+    protected Scene getOrCreateScene(String viewName) {
+		Scene scene = (Scene)myViews.get(viewName);
+		
+		if (scene == null) {
+			// create our initial view
+			View view = ViewFactory.createView(viewName, this); // USE VIEW FACTORY
+			scene = new Scene(view);
+			myViews.put(viewName, scene);
+		}
+		
+		return scene;
+	}
 
     protected abstract void setDependencies();
 
@@ -55,7 +69,7 @@ abstract public class Action implements IView, IModel {
 
     protected void doYourJob() {
         try {
-            Scene newScene = createView();
+        	Scene newScene = createView();
             swapToView(newScene);
         } catch (Exception e) {
             new Event(Event.getLeafLevelClassName(this), "doYourJob", "Could not create new scene", Event.ERROR);
@@ -63,7 +77,7 @@ abstract public class Action implements IView, IModel {
     }
 
     public void swapToView(Scene newScene) {
-        if(newScene == null) {
+        if (newScene == null) {
             System.out.println("Action.swapToView(): no view to display.");
             new Event(Event.getLeafLevelClassName(this), "swapToView", "Missing view to display", Event.ERROR);
             return;
