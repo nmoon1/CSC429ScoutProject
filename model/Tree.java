@@ -33,7 +33,13 @@ public class Tree extends EntityBase implements IView
 	{
 		super(myTableName);
 
+		setDependencies();
 		persistentState = new Properties();
+		persistentState.setProperty("Barcode", "");
+		persistentState.setProperty("TreeType", "");
+		persistentState.setProperty("Notes", "");
+		persistentState.setProperty("DateStatusUpdated", "");
+		persistentState.setProperty("Status", "Available");
 
 		//createAndShowBookView();
 	}
@@ -94,9 +100,17 @@ public class Tree extends EntityBase implements IView
 	public Tree(Properties props)
 	{
 		super(myTableName);
-
+		
 		setDependencies();
 		persistentState = new Properties();
+/*
+		persistentState = new Properties();
+		persistentState.setProperty("Barcode", "");
+		persistentState.setProperty("TreeType", "");
+		persistentState.setProperty("Notes", "");
+		persistentState.setProperty("DateStatusUpdated", "");
+		persistentState.setProperty("Status", "Available");
+*/
 		Enumeration allKeys = props.propertyNames();
 		while (allKeys.hasMoreElements() == true)
 		{
