@@ -255,6 +255,7 @@ public class AddTreeTypeActionView extends View
 			}
 			catch(Exception e) {
 				displayErrorMessage("Cost must be in double format.");
+				Cost.requestFocus();
 			}
 		}
 	}
@@ -276,7 +277,14 @@ public class AddTreeTypeActionView extends View
 	public void updateState(String key, Object value)
 	{
 		if (key.equals("AddComplete")) {
-			displayMessage((String)value);
+			if((String)value == "Tree Type inserted successfully!")
+			{
+				displayMessage((String)value);
+			}
+			else {
+				displayErrorMessage((String)value);
+				BarcodePrefix.requestFocus();
+			}
 		}
 	}
 
