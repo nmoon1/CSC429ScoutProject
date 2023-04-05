@@ -247,6 +247,7 @@ public class AddTreeActionView extends View {
 	 */
 	// ---------------------------------------------------------
 	public void updateState(String key, Object value) {
+		clearErrorMessage();
 	}
 
 	/**
