@@ -68,8 +68,8 @@ public class AddTreeActionView extends View {
 
 		populateFields();
 
-		myModel.subscribe("ServiceCharge", this);
 		myModel.subscribe("UpdateStatusMessage", this);
+		myModel.subscribe("TreeAdded", this);
 	}
 
 	// Create the Barcode container
@@ -216,22 +216,30 @@ public class AddTreeActionView extends View {
 	private void insertTree() {
 
 		Properties props = new Properties();
-		props.setProperty("Barcode", Barcode.getText());
+		// check that barcode is exactly 5 digits
+		String barcode = Barcode.getText();
+		if(barcode.length() != 5) {
+			displayErrorMessage("Barcode must be EXACTLY 5 digits.");
+			return;
+		}
+		props.setProperty("Barcode", barcode);
+
 		// set tree type to first 2 digits of barcode
-		TreeType = (Barcode.getText()).substring(0, 2);
+		TreeType = barcode.substring(0, 2);
+		props.setProperty("TreeType", TreeType);
 
-		// props.setProperty("TreeType", TreeType);
-		System.out.println("TREE TYPE: " + TreeType);
-
-		props.setProperty("Notes", Notes.getText());
+		String notes = Notes.getText() != null? Notes.getText(): "";
+		if(notes.length() > 200) {
+			displayErrorMessage("Notes must be less than 200 characters.");
+			return;
+		}
+		props.setProperty("Notes", notes);
 		// set date to today
 		DateStatusUpdated = java.time.LocalDate.now().toString();
 		props.setProperty("DateStatusUpdated", DateStatusUpdated);
 		props.setProperty("Status", "Available");
 
 		myModel.stateChangeRequest("ProcessAddTree", props);
-
-		displayMessage("Tree inserted!");
 	}
 
 	// Create the status log field
@@ -247,7 +255,16 @@ public class AddTreeActionView extends View {
 	 */
 	// ---------------------------------------------------------
 	public void updateState(String key, Object value) {
-		clearErrorMessage();
+		switch(key) {
+			case "UpdateStatusMessage":
+				String status = (String)myModel.getState("StatusMessage");
+				displayErrorMessage(status);
+				break;
+			case "TreeAdded":
+				String addCompleteMessage = (String)myModel.getState("AddComplete");
+				displayMessage(addCompleteMessage);
+				break;
+		}
 	}
 
 	/**
