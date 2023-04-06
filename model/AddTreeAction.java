@@ -62,9 +62,10 @@ public class AddTreeAction extends Action {
 
     public void processNewTree(Properties props){
         try {
-            // make tree type, get ID
+            // make tree type from tree type table, get ID
             TreeType treeType = new TreeType(props.getProperty("TreeType"));
             String id = (String)treeType.getState("ID");
+            //get the tree type id to access barcode prefix
             props.setProperty("TreeType", id);
         } catch (InvalidPrimaryKeyException e) {
             // update on gui
