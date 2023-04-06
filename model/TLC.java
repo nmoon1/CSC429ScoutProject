@@ -47,7 +47,6 @@ public class TLC implements IView, IModel {
 
     private void setDependencies() {
         dependencies = new Properties();
-        //TODO: set props
         myRegistry.setDependencies(dependencies);
     }
 

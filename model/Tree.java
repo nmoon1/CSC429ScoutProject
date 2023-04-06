@@ -25,6 +25,7 @@ public class Tree extends EntityBase implements IView
 	protected Properties dependencies;
 	private String updateStatusMessage = "";
 	private String removeStatusMessage = "";
+	private Boolean newTree = false;
 
 	// Empty Contstructor
 	// --------------------------------------------------------------------
@@ -32,7 +33,13 @@ public class Tree extends EntityBase implements IView
 	{
 		super(myTableName);
 
+		setDependencies();
 		persistentState = new Properties();
+		persistentState.setProperty("Barcode", "");
+		persistentState.setProperty("TreeType", "");
+		persistentState.setProperty("Notes", "");
+		persistentState.setProperty("DateStatusUpdated", "");
+		persistentState.setProperty("Status", "Available");
 
 		//createAndShowBookView();
 	}
@@ -93,9 +100,17 @@ public class Tree extends EntityBase implements IView
 	public Tree(Properties props)
 	{
 		super(myTableName);
-
+		
 		setDependencies();
 		persistentState = new Properties();
+/*
+		persistentState = new Properties();
+		persistentState.setProperty("Barcode", "");
+		persistentState.setProperty("TreeType", "");
+		persistentState.setProperty("Notes", "");
+		persistentState.setProperty("DateStatusUpdated", "");
+		persistentState.setProperty("Status", "Available");
+*/
 		Enumeration allKeys = props.propertyNames();
 		while (allKeys.hasMoreElements() == true)
 		{
@@ -107,6 +122,7 @@ public class Tree extends EntityBase implements IView
 				persistentState.setProperty(nextKey, nextValue);
 			}
 		}
+		newTree = true;
 	}
 
 	//---------------------------------------------------------------------
@@ -167,7 +183,7 @@ public class Tree extends EntityBase implements IView
 	{
 		try
 		{
-			if (persistentState.getProperty("Barcode") != null)
+			if (!newTree)
 			{
 				Properties whereClause = new Properties();
 				whereClause.setProperty("Barcode",
@@ -177,10 +193,9 @@ public class Tree extends EntityBase implements IView
 			}
 			else
 			{
-				int Barcode =
-					insertAutoIncrementalPersistentState(mySchema, persistentState);
-				persistentState.setProperty("Barcode", "" + Barcode);
-				updateStatusMessage = "Tree data for new tree : " +  persistentState.getProperty("Barcode" + "installed successfully in database!");
+				insertPersistentState(mySchema, persistentState);
+				updateStatusMessage = "Tree data for new tree : " +  persistentState.getProperty("Barcode") + " installed successfully in database!";
+				newTree = false;
 			}
 		}
 		catch (SQLException ex)
@@ -212,7 +227,7 @@ public class Tree extends EntityBase implements IView
 		Vector<String> v = new Vector<String>();
 
 		v.addElement(persistentState.getProperty("Barcode"));
-		v.addElement(persistentState.getProperty("Type"));
+		v.addElement(persistentState.getProperty("TreeType"));
 		v.addElement(persistentState.getProperty("Notes"));
 		v.addElement(persistentState.getProperty("Status"));
 		v.addElement(persistentState.getProperty("DateStatusUpdated"));
@@ -232,7 +247,7 @@ public class Tree extends EntityBase implements IView
 	public String toString()
 	{
 		return "Barcode: " + persistentState.getProperty("Barcode") +
-				"; Type: " + persistentState.getProperty("Type") +
+				"; TreeType: " + persistentState.getProperty("TreeType") +
 				"; Notes: " + persistentState.getProperty("Notes") +
 				"; Status: " + persistentState.getProperty("Status") +
 				"; DateStatusUpdated: " + persistentState.getProperty("DateStatusUpdated") + "\n";
