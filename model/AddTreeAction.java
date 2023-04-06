@@ -20,7 +20,7 @@ public class AddTreeAction extends Action {
 
     protected void setDependencies() {
         dependencies = new Properties();
-        
+
         dependencies.setProperty("Done", "CompleteAction");
         dependencies.setProperty("Cancel", "CancelAction");
         myRegistry.setDependencies(dependencies);
@@ -28,7 +28,7 @@ public class AddTreeAction extends Action {
 
     protected Scene createView() {
         Scene currentScene = myViews.get("AddTreeActionView");
-        if(currentScene == null) {
+        if (currentScene == null) {
             // create initial view
             View initialView = ViewFactory.createView("AddTreeActionView", this);
             currentScene = new Scene(initialView);
@@ -38,7 +38,7 @@ public class AddTreeAction extends Action {
     }
 
     public Object getState(String key) {
-        switch(key) {
+        switch (key) {
             case "AddComplete":
                 return addCompleteMessage;
             case "StatusMessage":
@@ -49,8 +49,8 @@ public class AddTreeAction extends Action {
     }
 
     public void stateChangeRequest(String key, Object value) {
-        switch(key) {
-            case "DoYourJob": 
+        switch (key) {
+            case "DoYourJob":
                 doYourJob();
                 break;
             case "ProcessAddTree":
@@ -60,12 +60,13 @@ public class AddTreeAction extends Action {
         myRegistry.updateSubscribers(key, this);
     }
 
-    public void processNewTree(Properties props){
+    // process the added new tree
+    public void processNewTree(Properties props) {
         try {
-            // make tree type from tree type table, get ID
+            // get TreeType from tree type table with ID
             TreeType treeType = new TreeType(props.getProperty("TreeType"));
-            String id = (String)treeType.getState("ID");
-            //get the tree type id to access barcode prefix
+            String id = (String) treeType.getState("ID");
+            // get the TreeType id to access barcode prefix
             props.setProperty("TreeType", id);
         } catch (InvalidPrimaryKeyException e) {
             // update on gui
@@ -82,13 +83,15 @@ public class AddTreeAction extends Action {
             return;
         } catch (InvalidPrimaryKeyException e) {
             // error means success here, we should not get a tree back
+
+            // create new tree
             tree = new Tree(props);
         }
 
         try {
             tree.update();
-        } catch(Exception e) {
-            statusMessage = (String)tree.getState("UpdateStatusMessage");
+        } catch (Exception e) {
+            statusMessage = (String) tree.getState("UpdateStatusMessage");
             stateChangeRequest("UpdateStatusMessage", "");
         }
 
