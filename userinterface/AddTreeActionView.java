@@ -133,6 +133,7 @@ public class AddTreeActionView extends View {
 
 		Notes = new TextArea();
 		Notes.setPrefSize(150,60);
+		Notes.setWrapText(true);
 		Notes.setEditable(true);
 		grid.add(Notes, 1, 2);
 
