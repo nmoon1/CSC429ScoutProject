@@ -2,6 +2,8 @@ package model;
 
 import javafx.stage.Stage;
 import java.util.Properties;
+
+import exception.InvalidPrimaryKeyException;
 import javafx.scene.Scene;
 
 import userinterface.View;
@@ -10,6 +12,7 @@ import userinterface.ViewFactory;
 public class AddTreeAction extends Action {
 
     private String addCompleteMessage = "";
+    private String statusMessage = "";
 
     public AddTreeAction() throws Exception {
         super();
@@ -35,21 +38,20 @@ public class AddTreeAction extends Action {
     }
 
     public Object getState(String key) {
-        if (key.equals("AddComplete"))
-		{
-			return addCompleteMessage;
-		}
-        else
-            return "";
+        switch(key) {
+            case "AddComplete":
+                return addCompleteMessage;
+            case "StatusMessage":
+                return statusMessage;
+            default:
+                return null;
+        }
     }
 
     public void stateChangeRequest(String key, Object value) {
         switch(key) {
             case "DoYourJob": 
                 doYourJob();
-                break;
-            case "StartSession":
-                startSession((Properties)value);
                 break;
             case "ProcessAddTree":
                 processNewTree((Properties) value);
@@ -58,21 +60,39 @@ public class AddTreeAction extends Action {
         myRegistry.updateSubscribers(key, this);
     }
 
-    public void startSession(Properties props) {
-        try {
-            Session session = new Session(props);
-            System.out.println(session);
-            session.save();
-        } catch(Exception e) {
-            System.out.println("Error starting session: " + e.toString());
-        }
-    }
-
     public void processNewTree(Properties props){
-        
-       Tree tree = new Tree(props);
-       tree.update();
-       addCompleteMessage = "Tree added!";
+        try {
+            // make tree type, get ID
+            TreeType treeType = new TreeType(props.getProperty("TreeType"));
+            String id = (String)treeType.getState("ID");
+            props.setProperty("TreeType", id);
+        } catch (InvalidPrimaryKeyException e) {
+            // update on gui
+            statusMessage = "ERROR: Invalid barcode";
+            stateChangeRequest("UpdateStatusMessage", "");
+            return;
+        }
+        Tree tree;
+        try {
+            String barcode = props.getProperty("Barcode");
+            tree = new Tree(barcode);
+            statusMessage = "Tree with barcode " + barcode + " already exists";
+            stateChangeRequest("UpdateStatusMessage", "");
+            return;
+        } catch (InvalidPrimaryKeyException e) {
+            // error means success here, we should not get a tree back
+            tree = new Tree(props);
+        }
+
+        try {
+            tree.update();
+        } catch(Exception e) {
+            statusMessage = (String)tree.getState("UpdateStatusMessage");
+            stateChangeRequest("UpdateStatusMessage", "");
+        }
+
+        addCompleteMessage = "Tree added successfully";
+        stateChangeRequest("TreeAdded", "");
     }
 
 }

@@ -13,13 +13,12 @@ public class TreeType extends EntityBase implements IView {
     protected Properties dependencies;
     String updateStatusMessage = "";
 
-    public TreeType(int treeTypeID) throws InvalidPrimaryKeyException
+    public TreeType(String prefix) throws InvalidPrimaryKeyException
     {
         super(myTableName);
 
         setDependencies();
-        String query = "SELECT * FROM " + myTableName + " WHERE ID = " + treeTypeID;
-
+        String query = "SELECT * FROM " + myTableName + " WHERE (BarcodePrefix = '" + prefix + "')";
         Vector<Properties> allDataRetrieved = getSelectQueryResult(query);
 
         // You must get one tree type at least
@@ -31,7 +30,7 @@ public class TreeType extends EntityBase implements IView {
             if (size != 1)
             {
                 throw new InvalidPrimaryKeyException("Multiple tree types matching id : "
-                        + treeTypeID + " found.");
+                        + prefix + " found.");
             }
             else
             {
@@ -57,7 +56,7 @@ public class TreeType extends EntityBase implements IView {
         else
         {
             throw new InvalidPrimaryKeyException("No tree type matching id : "
-                    + treeTypeID + " found.");
+                    + prefix + " found.");
         }
     }
 
