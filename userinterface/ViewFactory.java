@@ -21,7 +21,6 @@ public class ViewFactory {
 			case "RemoveScoutListView": return new RemoveScoutListView(model);
 			case "RemoveScoutConfirmView": return new RemoveScoutConfirmView(model);
 			case "AddTreeTypeActionView": return new AddTreeTypeActionView(model);
-			case "StartShiftActionView": return new StartShiftActionView(model);
 			case "AddTreeActionView": return new AddTreeActionView(model);
 		}
 		return null;

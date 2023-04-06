@@ -14,6 +14,14 @@ public class Session extends EntityBase implements IView {
     protected Properties dependencies;
     private String updateStatusMessage = "";
 
+    // empty constructor, used to instantiate and lookup open session
+
+    public Session() {
+        super(myTableName);
+        setDependencies();
+        findOpenSession();
+    }
+
     public Session(Properties props) {
         super(myTableName);
         setDependencies();
