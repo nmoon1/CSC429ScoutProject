@@ -38,7 +38,7 @@ public class AddTreeActionView extends View {
 	// GUI components
 	protected TextField Barcode;
 	protected String TreeType;
-	protected TextField Notes;
+	protected TextArea Notes;
 	protected String DateStatusUpdated;
 
 	protected Button cancelButton;
@@ -131,7 +131,8 @@ public class AddTreeActionView extends View {
 		notesLabel.setTextAlignment(TextAlignment.RIGHT);
 		grid.add(notesLabel, 0, 2);
 
-		Notes = new TextField();
+		Notes = new TextArea();
+		Notes.setPrefSize(150,60);
 		Notes.setEditable(true);
 		grid.add(Notes, 1, 2);
 
