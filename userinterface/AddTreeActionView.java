@@ -170,19 +170,11 @@ public class AddTreeActionView extends View {
 	}
 
 	public void processAction(Event evt) {
-
-		String barcode = Barcode.getText();
-
-		// return error if there is no text in the barcode field
-		if (barcode.isEmpty()) {
-			displayErrorMessage("Please fill out Barcode field");
-		} 
-		// return error if there are alphabetic characters in the barcode
-		else if (barcode.matches(".*[a-zA-z].*")){
-			displayErrorMessage("Barcode must be digits only");
-		}
-		else {
+		try {
 			insertTree();
+		} catch (Exception e) {
+			// this should only catch if the barcode field is empty
+			displayErrorMessage("Please fill out Barcode field");
 		}
 	}
 
@@ -191,12 +183,14 @@ public class AddTreeActionView extends View {
 
 		Properties props = new Properties();
 
-		// check that barcode is exactly 5 digits
 		String barcode = Barcode.getText();
-		if (barcode.length() != 5) {
+
+		// check that barcode is exactly 5 digits
+		if (!barcode.matches("^\\d{5}$") || barcode.isEmpty()) {
 			displayErrorMessage("Barcode must be EXACTLY 5 digits.");
 			return;
 		}
+
 		// set Barcode in database to the inputted barcode
 		props.setProperty("Barcode", barcode);
 
