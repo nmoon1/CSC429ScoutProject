@@ -244,7 +244,7 @@ public class Scout extends EntityBase implements IView
 	public void updateStatusDate(LocalDate date)
 	{
 		String year = date.getYear() + "";
-		if (year.length() < 4) year = "0".repeat(4 - year.length()) + year;
+		while (year.length() < 4) year = "0" + year;
 		String month = date.getMonthValue() + "";
 		if (month.length() < 2) month = "0" + month;
 		String day = date.getDayOfMonth() + "";

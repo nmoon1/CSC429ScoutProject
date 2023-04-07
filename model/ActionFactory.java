@@ -11,6 +11,7 @@ public class ActionFactory {
             case "AddTreeType": return new AddTreeTypeAction();
             case "StartShift": return new StartShiftAction();
             case "AddTree": return new AddTreeAction();
+            case "UpdateTreeType": return new UpdateTreeTypeAction();
             default: return null;
         }
     }
