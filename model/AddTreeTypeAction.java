@@ -10,7 +10,7 @@ import userinterface.ViewFactory;
 
 public class AddTreeTypeAction extends Action {
 
-	private String addCompleteMessage = "";
+	private String addMessage = "";
 
     public AddTreeTypeAction() throws Exception {
         super();
@@ -18,7 +18,7 @@ public class AddTreeTypeAction extends Action {
 
     protected void setDependencies() {
         dependencies = new Properties();
-        dependencies.setProperty("ProcessAddTreeType", "AddComplete");
+        dependencies.setProperty("ProcessAddTreeType", "AddMessage");
 
         myRegistry.setDependencies(dependencies);
     }
@@ -37,9 +37,9 @@ public class AddTreeTypeAction extends Action {
     }
 
     public Object getState(String key) {
-        if (key.equals("AddComplete"))
+        if (key.equals("AddMessage"))
 		{
-			return addCompleteMessage;
+			return addMessage;
 		}
         else
             return "";
@@ -60,6 +60,15 @@ public class AddTreeTypeAction extends Action {
     private void processAddTreeType(Properties props) {
         TreeType t = new TreeType(props);
         t.update();
-        addCompleteMessage = (String)t.getState("UpdateStatusMessage");
+
+        if(t.getState("UpdateStatusMessage").equals("")) {
+            addMessage = "Tree Type inserted successfully!";
+        }
+        else if (((String)t.getState("UpdateStatusMessage")).contains("Duplicate entry")){
+            addMessage = "Tree Type already exists for that Barcode Prefix.";
+        }
+        else {
+            addMessage = "Error inserting into database.";
+        }
     }
 }
