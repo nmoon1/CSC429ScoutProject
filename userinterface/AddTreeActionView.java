@@ -38,7 +38,7 @@ public class AddTreeActionView extends View {
 	// GUI components
 	protected TextField Barcode;
 	protected String TreeType;
-	protected TextField Notes;
+	protected TextArea Notes;
 	protected String DateStatusUpdated;
 
 	protected Button cancelButton;
@@ -99,7 +99,7 @@ public class AddTreeActionView extends View {
 		grid.setVgap(10);
 		grid.setPadding(new Insets(25, 25, 25, 25));
 
-		// barcode
+		// barcode label
 		Text barcodeLabel = new Text(" Barcode : ");
 		Font myFont = Font.font("Helvetica", FontWeight.BOLD, 12);
 		barcodeLabel.setFont(myFont);
@@ -107,22 +107,10 @@ public class AddTreeActionView extends View {
 		barcodeLabel.setTextAlignment(TextAlignment.RIGHT);
 		grid.add(barcodeLabel, 0, 1);
 
+		// barcode input
 		Barcode = new TextField();
 		Barcode.setEditable(true);
 		grid.add(Barcode, 1, 1);
-
-		// type
-		/*
-		 * Text typeLabel = new Text(" TreeType : ");
-		 * typeLabel.setFont(myFont);
-		 * typeLabel.setWrappingWidth(150);
-		 * typeLabel.setTextAlignment(TextAlignment.RIGHT);
-		 * grid.add(typeLabel, 0, 2);
-		 * 
-		 * TreeType = new TextField();
-		 * TreeType.setEditable(true);
-		 * grid.add(TreeType, 1, 2);
-		 */
 
 		// notes
 		Text notesLabel = new Text(" Notes : ");
@@ -131,36 +119,12 @@ public class AddTreeActionView extends View {
 		notesLabel.setTextAlignment(TextAlignment.RIGHT);
 		grid.add(notesLabel, 0, 2);
 
-		Notes = new TextField();
+		// notes input
+		Notes = new TextArea();
+		Notes.setPrefSize(150, 60);
+		Notes.setWrapText(true);
 		Notes.setEditable(true);
 		grid.add(Notes, 1, 2);
-
-		// status
-		/*
-		 * Text statusLabel = new Text(" Status : ");
-		 * statusLabel.setFont(myFont);
-		 * statusLabel.setWrappingWidth(150);
-		 * statusLabel.setTextAlignment(TextAlignment.RIGHT);
-		 * grid.add(statusLabel, 0, 4);
-		 * 
-		 * statusComboBox = new ComboBox(FXCollections.observableArrayList(Status));
-		 * grid.add(statusComboBox, 1, 4);
-		 */
-
-		// date status updated
-		/*
-		 * Text dateStatusUpdatedLabel = new Text(" Date Status Updated : ");
-		 * dateStatusUpdatedLabel.setFont(myFont);
-		 * dateStatusUpdatedLabel.setWrappingWidth(150);
-		 * dateStatusUpdatedLabel.setTextAlignment(TextAlignment.RIGHT);
-		 * grid.add(dateStatusUpdatedLabel, 0, 4);
-		 * 
-		 * Text DateStatusUpdatedDate = new Text(DateStatusUpdated);
-		 * dateStatusUpdatedLabel.setFont(myFont);
-		 * dateStatusUpdatedLabel.setWrappingWidth(150);
-		 * dateStatusUpdatedLabel.setTextAlignment(TextAlignment.RIGHT);
-		 * grid.add(DateStatusUpdatedDate, 1, 4);
-		 */
 
 		// submit
 		submitButton = new Button("Submit");
@@ -180,7 +144,9 @@ public class AddTreeActionView extends View {
 
 			@Override
 			public void handle(ActionEvent e) {
+				// clear messages on submit
 				clearErrorMessage();
+				// send the change request
 				myModel.stateChangeRequest("Cancel", null);
 			}
 		});
@@ -201,44 +167,53 @@ public class AddTreeActionView extends View {
 		Barcode.setText((String) myModel.getState("Barcode"));
 
 		Notes.setText((String) myModel.getState("Notes"));
-
 	}
 
 	public void processAction(Event evt) {
-
-		if (Barcode.getText().isEmpty()) {
-			displayErrorMessage("Please fill out Barcode field");
-		} else {
+		try {
 			insertTree();
+		} catch (Exception e) {
+			// this should only catch if the barcode field is empty
+			displayErrorMessage("Please fill out Barcode field");
 		}
 	}
 
+	// add tree to the database
 	private void insertTree() {
 
 		Properties props = new Properties();
-		// check that barcode is exactly 5 digits
+
 		String barcode = Barcode.getText();
-		if(barcode.length() != 5) {
+
+		// check that barcode is exactly 5 digits
+		if (!barcode.matches("^\\d{5}$") || barcode.isEmpty()) {
 			displayErrorMessage("Barcode must be EXACTLY 5 digits.");
 			return;
 		}
+
+		// set Barcode in database to the inputted barcode
 		props.setProperty("Barcode", barcode);
 
-		// set tree type to first 2 digits of barcode
+		// set TreeType to first 2 digits of barcode
 		TreeType = barcode.substring(0, 2);
 		props.setProperty("TreeType", TreeType);
 
-		String notes = Notes.getText() != null? Notes.getText(): "";
-		if(notes.length() > 200) {
+		// if Notes is not empty, get what was input. if it is empty, set to empty
+		// string
+		String notes = Notes.getText() != null ? Notes.getText() : "";
+		// make sure it is correct length
+		if (notes.length() > 200) {
 			displayErrorMessage("Notes must be less than 200 characters.");
 			return;
 		}
 		props.setProperty("Notes", notes);
-		// set date to today
+		// set DateStatusUpdated to today's date
 		DateStatusUpdated = java.time.LocalDate.now().toString();
 		props.setProperty("DateStatusUpdated", DateStatusUpdated);
+		// set default Status to be Available
 		props.setProperty("Status", "Available");
 
+		// toggle ProcessAddTree in AddTreeAction.java
 		myModel.stateChangeRequest("ProcessAddTree", props);
 	}
 
@@ -255,13 +230,13 @@ public class AddTreeActionView extends View {
 	 */
 	// ---------------------------------------------------------
 	public void updateState(String key, Object value) {
-		switch(key) {
+		switch (key) {
 			case "UpdateStatusMessage":
-				String status = (String)myModel.getState("StatusMessage");
+				String status = (String) myModel.getState("StatusMessage");
 				displayErrorMessage(status);
 				break;
 			case "TreeAdded":
-				String addCompleteMessage = (String)myModel.getState("AddComplete");
+				String addCompleteMessage = (String) myModel.getState("AddComplete");
 				displayMessage(addCompleteMessage);
 				break;
 		}
