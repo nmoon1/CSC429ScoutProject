@@ -29,7 +29,7 @@ public class TreeType extends EntityBase implements IView {
             // There should be EXACTLY one tree type. More than that is an error
             if (size != 1)
             {
-                throw new InvalidPrimaryKeyException("Multiple tree types matching id : "
+                throw new InvalidPrimaryKeyException("Multiple tree types matching barcode prefix : "
                         + prefix + " found.");
             }
             else
@@ -52,10 +52,10 @@ public class TreeType extends EntityBase implements IView {
 
             }
         }
-        // If no account found for this user name, throw an exception
+        // If no tree type found for this barcode prefix, throw an exception
         else
         {
-            throw new InvalidPrimaryKeyException("No tree type matching id : "
+            throw new InvalidPrimaryKeyException("No tree type matching barcode prefix : "
                     + prefix + " found.");
         }
     }
@@ -94,19 +94,17 @@ public class TreeType extends EntityBase implements IView {
                 whereClause.setProperty("ID",
                         persistentState.getProperty("ID"));
                 updatePersistentState(mySchema, persistentState, whereClause);
-                updateStatusMessage = "Tree Type updated successfully!";
             }
             else
             {
                 Integer treeTypeID =
                         insertAutoIncrementalPersistentState(mySchema, persistentState);
                 persistentState.setProperty("ID", "" + treeTypeID.intValue());
-                updateStatusMessage = "Tree Type inserted successfully!";
             }
         }
         catch (SQLException ex)
         {
-            updateStatusMessage = "Tree Type already exists for that Barcode Prefix.";
+            updateStatusMessage = ex.getMessage();
         }
     }
 

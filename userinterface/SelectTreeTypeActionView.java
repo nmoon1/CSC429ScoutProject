@@ -29,14 +29,13 @@ import javafx.beans.value.ObservableValue;
 import javafx.beans.value.ChangeListener;
 import javafx.application.Platform;
 
+
 /** The class containing the Tree View  for the Library application */
 //==============================================================
-public class AddTreeTypeActionView extends View
+public class SelectTreeTypeActionView extends View
 {
 
 	// GUI components
-	protected TextField TypeDescription;
-	protected TextField Cost;
     protected TextField BarcodePrefix;
 
 	protected Button cancelButton;
@@ -47,9 +46,9 @@ public class AddTreeTypeActionView extends View
 
 	// constructor for this class -- takes a model object
 	//----------------------------------------------------------
-	public AddTreeTypeActionView(IModel addTreeType)
+	public SelectTreeTypeActionView(IModel selectTreeType)
 	{
-		super(addTreeType, "AddTreeTypeActionView");
+		super(selectTreeType, "SelectTreeTypeActionView");
 
 		// create a container for showing the contents
 		VBox container = new VBox(10);
@@ -66,8 +65,8 @@ public class AddTreeTypeActionView extends View
 		getChildren().add(container);
 
 		populateFields();
-
-		myModel.subscribe("AddMessage", this);
+		
+		myModel.subscribe("SelectMessage", this);
 	}
 
 
@@ -78,7 +77,7 @@ public class AddTreeTypeActionView extends View
 		HBox container = new HBox();
 		container.setAlignment(Pos.CENTER);	
 
-		Text titleText = new Text(" Add A New TreeType ");
+		Text titleText = new Text(" Update an Existing Tree Type ");
 		titleText.setFont(Font.font("Arial", FontWeight.BOLD, 20));
 		titleText.setWrappingWidth(300);
 		titleText.setTextAlignment(TextAlignment.CENTER);
@@ -99,50 +98,15 @@ public class AddTreeTypeActionView extends View
        	grid.setHgap(10);
         grid.setVgap(10);
         grid.setPadding(new Insets(25, 25, 25, 25));
-
-        // type description
-		Text typeDescriptionLabel = new Text(" Type Description : ");
+		
 		Font myFont = Font.font("Helvetica", FontWeight.BOLD, 12);
-		typeDescriptionLabel.setFont(myFont);
-		typeDescriptionLabel.setWrappingWidth(150);
-		typeDescriptionLabel.setTextAlignment(TextAlignment.RIGHT);
-		grid.add(typeDescriptionLabel, 0, 1);
-
-		TypeDescription = new TextField();
-		TypeDescription.setOnAction(new EventHandler<ActionEvent>() {
-
-       		     @Override
-       		     public void handle(ActionEvent e) {
-       		     	processAction(e);    
-            	     }
-        	});
-		TypeDescription.setEditable(true);
-		grid.add(TypeDescription, 1, 1);
-
-        // cost
-		Text costLabel = new Text(" Cost : ");
-		costLabel.setFont(myFont);
-		costLabel.setWrappingWidth(150);
-		costLabel.setTextAlignment(TextAlignment.RIGHT);
-		grid.add(costLabel, 0, 2);
-
-		Cost = new TextField();
-		Cost.setOnAction(new EventHandler<ActionEvent>() {
-
-       		     @Override
-       		     public void handle(ActionEvent e) {
-       		     	processAction(e);    
-            	     }
-        	});
-		Cost.setEditable(true);
-		grid.add(Cost, 1, 2);
 
         // barcode prefix
         Text barcodePrefixLabel = new Text(" Barcode Prefix : ");
 		barcodePrefixLabel.setFont(myFont);
 		barcodePrefixLabel.setWrappingWidth(150);
 		barcodePrefixLabel.setTextAlignment(TextAlignment.RIGHT);
-		grid.add(barcodePrefixLabel, 0, 3);
+		grid.add(barcodePrefixLabel, 0, 1);
 
 		BarcodePrefix = new TextField();
 		BarcodePrefix.setEditable(true);
@@ -167,7 +131,7 @@ public class AddTreeTypeActionView extends View
        		     	processAction(e);    
             	    }
         	});
-		grid.add(BarcodePrefix, 1, 3);
+		grid.add(BarcodePrefix, 1, 1);
 
         //submit
 		submitButton = new Button("Submit");
@@ -213,8 +177,6 @@ public class AddTreeTypeActionView extends View
 	//-------------------------------------------------------------
 	public void populateFields()
 	{
-		TypeDescription.setText("");
-		Cost.setText("");
         BarcodePrefix.setText("");	
 	}
 
@@ -222,31 +184,9 @@ public class AddTreeTypeActionView extends View
 	{
 		clearErrorMessage();
 
-		String typeDescriptionEntered = TypeDescription.getText();
-		String costEntered = Cost.getText();
 		String barcodePrefixEntered = BarcodePrefix.getText();
 
-		if ((typeDescriptionEntered == null) || (typeDescriptionEntered.length() == 0))
-		{
-			displayErrorMessage("Please enter a type description!");
-			TypeDescription.requestFocus();
-		}
-		else if (typeDescriptionEntered.length() > 25)
-		{
-			displayErrorMessage("Type description must be 25 characters or less.");
-			TypeDescription.requestFocus();
-		}
-		else if ((costEntered == null) || (costEntered.length() == 0))
-		{
-			displayErrorMessage("Please enter a cost!");
-			Cost.requestFocus();
-		}
-		else if (costEntered.length() > 20)
-		{
-			displayErrorMessage("Cost must be 20 characters or less.");
-			Cost.requestFocus();
-		}
-		else if ((barcodePrefixEntered == null) || (barcodePrefixEntered.length() == 0))
+		if ((barcodePrefixEntered == null) || (barcodePrefixEntered.length() == 0))
 		{
 			displayErrorMessage("Please enter a barcode prefix!");
 			BarcodePrefix.requestFocus();
@@ -258,25 +198,8 @@ public class AddTreeTypeActionView extends View
 		}
 		else
 		{
-			try {
-				double costVal = Double.parseDouble(costEntered);
-				insertTreeType();
-			}
-			catch(Exception e) {
-				displayErrorMessage("Cost must be in double format.");
-				Cost.requestFocus();
-			}
+			myModel.stateChangeRequest("RetrieveTreeType", barcodePrefixEntered);
 		}
-	}
-
-	private void insertTreeType()
-	{
-		Properties props = new Properties();
-		props.setProperty("TypeDescription", TypeDescription.getText());
-		props.setProperty("Cost", Cost.getText());
-		props.setProperty("BarcodePrefix", BarcodePrefix.getText());
-
-		myModel.stateChangeRequest("ProcessAddTreeType", props);
 	}
 
 	/**
@@ -285,18 +208,10 @@ public class AddTreeTypeActionView extends View
 	//---------------------------------------------------------
 	public void updateState(String key, Object value)
 	{
-		if (key.equals("AddMessage")) {
-			if(((String)value).equals("Tree Type inserted successfully!")) {
-				displayMessage((String)value);
-			}
-			else if(((String)value).equals("Tree Type already exists for that Barcode Prefix.")){
-				displayErrorMessage((String)value);
-				BarcodePrefix.requestFocus();
-			}
-			else {
-				displayErrorMessage((String)value);
-			}
-		}
+		switch(key) {
+            case "SelectMessage":			
+					displayErrorMessage((String)value);
+        }
 	}
 
 	/**

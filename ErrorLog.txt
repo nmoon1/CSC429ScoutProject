@@ -1,27 +1,31 @@
 [4/4/23, 12:46 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: UpdateTreeType.java.lang.NullPointerException>
-[4/4/23, 1:33 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=14557) Duplicate entry '23' for key 'BarcodePrefix'>
-[4/4/23, 1:33 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=14557) Duplicate entry '23' for key 'BarcodePrefix'>
-[4/4/23, 1:35 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=14593) Duplicate entry '23' for key 'BarcodePrefix'>
-[4/4/23, 1:35 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=14593) Duplicate entry '25' for key 'BarcodePrefix'>
-[4/4/23, 1:35 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=14593) Duplicate entry '27' for key 'BarcodePrefix'>
-[4/4/23, 1:35 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=14593) Duplicate entry '28' for key 'BarcodePrefix'>
-[4/4/23, 1:36 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=14608) Duplicate entry '23' for key 'BarcodePrefix'>
-[4/4/23, 1:36 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=14608) Duplicate entry '23' for key 'BarcodePrefix'>
-[4/4/23, 1:37 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=14612) Duplicate entry '23' for key 'BarcodePrefix'>
-[4/4/23, 1:39 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=14639) Duplicate entry '23' for key 'BarcodePrefix'>
-[4/4/23, 1:39 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=14639) Duplicate entry '24' for key 'BarcodePrefix'>
-[4/4/23, 1:39 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=14639) Duplicate entry '26' for key 'BarcodePrefix'>
-[4/4/23, 1:39 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=14639) Duplicate entry '27' for key 'BarcodePrefix'>
-[4/4/23, 1:39 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=14639) Duplicate entry '28' for key 'BarcodePrefix'>
-[4/4/23, 1:40 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=14640) Duplicate entry '23' for key 'BarcodePrefix'>
-[4/4/23, 1:40 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=14640) Duplicate entry '24' for key 'BarcodePrefix'>
-[4/4/23, 1:40 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=14640) Duplicate entry '25' for key 'BarcodePrefix'>
-[4/4/23, 1:40 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=14640) Duplicate entry '26' for key 'BarcodePrefix'>
-[4/4/23, 1:40 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=14640) Duplicate entry '27' for key 'BarcodePrefix'>
-[4/4/23, 1:40 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=14640) Duplicate entry '28' for key 'BarcodePrefix'>
-[4/4/23, 1:40 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=14640) Duplicate entry '29' for key 'BarcodePrefix'>
-[4/4/23, 1:40 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=14640) Duplicate entry '34' for key 'BarcodePrefix'>
-[4/6/23, 1:19 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1054: (conn=21436) Unknown column '21abc' in 'where clause'>
-[4/6/23, 1:34 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1054: (conn=21849) Unknown column '21abc' in 'where clause'>
-[4/6/23, 1:34 PM]|Tree|insertPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=21849) Duplicate entry '21abc' for key 'PRIMARY'>
-[4/6/23, 1:35 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1054: (conn=21895) Unknown column '21pls' in 'where clause'>
+[4/6/23, 1:27 PM]|UpdateTreeTypeAction|doYourJob|Error|NOTAG|null<Could not create new scene>
+[4/6/23, 1:27 PM]|UpdateTreeTypeAction|doYourJob|Error|NOTAG|null<Could not create new scene>
+[4/6/23, 1:27 PM]|UpdateTreeTypeAction|doYourJob|Error|NOTAG|null<Could not create new scene>
+[4/6/23, 1:27 PM]|UpdateTreeTypeAction|doYourJob|Error|NOTAG|null<Could not create new scene>
+[4/7/23, 12:07 PM]|TreeType|updatePersistentState|Error|NOTAG|null<SQL Exception: 1406: (conn=29044) Data too long for column 'TypeDescription' at row 1>
+[4/7/23, 12:07 PM]|TreeType|updatePersistentState|Error|NOTAG|null<SQL Exception: 1406: (conn=29044) Data too long for column 'TypeDescription' at row 1>
+[4/7/23, 12:28 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1406: (conn=29097) Data too long for column 'TypeDescription' at row 1>
+[4/7/23, 12:36 PM]|TreeType|updatePersistentState|Error|NOTAG|null<SQL Exception: 1406: (conn=29192) Data too long for column 'Cost' at row 1>
+[4/7/23, 12:36 PM]|TreeType|updatePersistentState|Error|NOTAG|null<SQL Exception: 1406: (conn=29192) Data too long for column 'Cost' at row 1>
+[4/7/23, 12:52 PM]|TreeType|updatePersistentState|Error|NOTAG|null<SQL Exception: 1406: (conn=29217) Data too long for column 'Cost' at row 1>
+[4/7/23, 12:52 PM]|TreeType|updatePersistentState|Error|NOTAG|null<SQL Exception: 1406: (conn=29217) Data too long for column 'Cost' at row 1>
+[4/7/23, 12:56 PM]|TreeType|updatePersistentState|Error|NOTAG|null<SQL Exception: 1406: (conn=29223) Data too long for column 'Cost' at row 1>
+[4/7/23, 12:56 PM]|TreeType|updatePersistentState|Error|NOTAG|null<SQL Exception: 1406: (conn=29223) Data too long for column 'Cost' at row 1>
+[4/7/23, 12:57 PM]|TreeType|updatePersistentState|Error|NOTAG|null<SQL Exception: 1406: (conn=29224) Data too long for column 'Cost' at row 1>
+[4/7/23, 1:01 PM]|TreeType|updatePersistentState|Error|NOTAG|null<SQL Exception: 1406: (conn=29229) Data too long for column 'Cost' at row 1>
+[4/7/23, 1:03 PM]|TreeType|updatePersistentState|Error|NOTAG|null<SQL Exception: 1406: (conn=29230) Data too long for column 'Cost' at row 1>
+[4/7/23, 1:10 PM]|TreeType|updatePersistentState|Error|NOTAG|null<SQL Exception: 1406: (conn=29232) Data too long for column 'Cost' at row 1>
+[4/7/23, 1:11 PM]|TreeType|updatePersistentState|Error|NOTAG|null<SQL Exception: 1406: (conn=29232) Data too long for column 'Cost' at row 1>
+[4/7/23, 1:30 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=29272) Duplicate entry '20' for key 'BarcodePrefix'>
+[4/7/23, 1:32 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=29272) Duplicate entry '20' for key 'BarcodePrefix'>
+[4/7/23, 1:32 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=29272) Duplicate entry '19' for key 'BarcodePrefix'>
+[4/7/23, 1:33 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=29276) Duplicate entry '19' for key 'BarcodePrefix'>
+[4/7/23, 1:35 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1406: (conn=29276) Data too long for column 'Cost' at row 1>
+[4/7/23, 1:41 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=29304) Duplicate entry '17' for key 'BarcodePrefix'>
+[4/7/23, 1:41 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=29304) Duplicate entry '16' for key 'BarcodePrefix'>
+[4/7/23, 1:41 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=29304) Duplicate entry '15' for key 'BarcodePrefix'>
+[4/7/23, 1:41 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1406: (conn=29304) Data too long for column 'Cost' at row 1>
+[4/7/23, 1:41 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1406: (conn=29304) Data too long for column 'Cost' at row 1>
+[4/7/23, 1:43 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=29306) Duplicate entry '12' for key 'BarcodePrefix'>
+[4/7/23, 1:44 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=29306) Duplicate entry '11' for key 'BarcodePrefix'>
