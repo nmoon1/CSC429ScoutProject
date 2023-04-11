@@ -1,5 +1,6 @@
 options.txt
 sources.txt
+ErrorLog.txt
 compile.bat
 run-only.bat
 run.bat
@@ -11,6 +12,7 @@ run.bat
 .settings/
 .idea/
 
+
 *.class
 
-ErrorLog.txt
+
