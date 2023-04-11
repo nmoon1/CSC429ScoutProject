@@ -41,15 +41,36 @@ public class UpdateTreeActionView extends View {
     public UpdateTreeActionView(IModel model) {
         super(model, "UpdateTreeActionView");
 
-        VBox container = createFormContents();
+        VBox container = new VBox(10);
+        container.setAlignment(Pos.CENTER);
+        VBox form = createFormContents();
+        Node title = createTitle();
+
+        container.getChildren().add(title);
+        container.getChildren().add(form);
 
         getChildren().add(container);
         myModel.subscribe("LookupTreeError", this);
         myModel.subscribe("TreeUpdated", this);
     }
 
+    private Node createTitle() {
+		HBox container = new HBox();
+		container.setAlignment(Pos.CENTER);	
+
+		Text titleText = new Text(" Update A Tree ");
+		titleText.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+		titleText.setWrappingWidth(300);
+		titleText.setTextAlignment(TextAlignment.CENTER);
+		titleText.setFill(Color.DARKGREEN);
+		container.getChildren().add(titleText);
+		
+		return container;
+	}
+
     private VBox createFormContents() {
         VBox container = new VBox(10);
+        container.setAlignment(Pos.CENTER);
         container.setPadding(new Insets(20));
         
         Label barcodeLabel = new Label("Please enter tree barcode: ");

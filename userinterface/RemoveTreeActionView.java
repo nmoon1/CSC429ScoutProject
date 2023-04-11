@@ -36,11 +36,30 @@ public class RemoveTreeActionView extends View {
 
     public RemoveTreeActionView(IModel model) {
         super(model, "RemoveTreeActionView");
-        VBox container = createFormContents();
+        VBox container = new VBox(10);
+        container.setAlignment(Pos.CENTER);
+        Node title = createTitle();
+        VBox form = createFormContents();
+        container.getChildren().add(title);
+        container.getChildren().add(form);
         getChildren().add(container);
         myModel.subscribe("RemoveError", this);
         myModel.subscribe("LookupTreeError", this);
     }
+
+    private Node createTitle() {
+		HBox container = new HBox();
+		container.setAlignment(Pos.CENTER);	
+
+		Text titleText = new Text(" Remove A Tree ");
+		titleText.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+		titleText.setWrappingWidth(300);
+		titleText.setTextAlignment(TextAlignment.CENTER);
+		titleText.setFill(Color.DARKGREEN);
+		container.getChildren().add(titleText);
+		
+		return container;
+	}
 
     private VBox createFormContents() {
         VBox container = new VBox(10);
