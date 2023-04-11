@@ -1,18 +1,20 @@
 package model;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Properties;
+import java.util.regex.Pattern;
 
 import javafx.scene.Scene;
 
 public class SellTreeAction extends Action {
 
-	private static final String barcodeViewName = "UpdateScoutIDView";
-	private static final String costViewName = "UpdateScoutListView";
-	private static final String infoViewName = "UpdateScoutInfoView";
+	private static final String barcodeViewName = "SellTreeBarcodeView";
+	private static final String costViewName = "SellTreeCostView";
+	private static final String infoViewName = "SellTreeInfoView";
 	private String errorMessage = "";
-	private ScoutCollection scoutCollection = null;
-	private Scout selectedScout = null;
+	private String cost = "";
 	
 	protected SellTreeAction() throws Exception {
 		super();
@@ -31,6 +33,7 @@ public class SellTreeAction extends Action {
 		switch (key) {
 			case "Error": return errorMessage;
 			case "Stage": return myStage;
+			case "Cost": return cost;
 		}
 		
 		return null;
@@ -45,81 +48,128 @@ public class SellTreeAction extends Action {
 			case "CancelAction":
 				myRegistry.updateSubscribers(key, this);
 				break;
-			case "BackSearch":
+			case "BackCost":
 				swapToView(getOrCreateScene(barcodeViewName));
 				break;
 			case "BackInfo":
 				swapToView(getOrCreateScene(costViewName));
 				break;
-			case "Select":
+			case "SubmitBarcode":
 				{
 					errorMessage = "";
-					String id = (String)value;
-					for (Scout scout : scoutCollection.scouts) {
-						if (scout.getState("ID").equals(id)) {
-							selectedScout = scout;
-							swapToView(getOrCreateScene(infoViewName));
-							return;
-						}
-					}
-					errorMessage = "No scout with ID matching \"" + id + "\"";
-				}
-				break;
-			case "Search":
-				{
-					Properties scoutInfo = (Properties)value;
-					ArrayList<String> keys = new ArrayList<String>();
-					ArrayList<String> values = new ArrayList<String>();
-					for (String propKey : new String[] { "ID", "FirstName", "MiddleName", "LastName", "DateOfBirth", "PhoneNumber", "Email", "TroopID" }) {
-						String propValue = scoutInfo.getProperty(propKey); 
-						if (propValue.length() != 0) {
-							keys.add(propKey);
-							values.add(propValue);
-						}
-					}
 					
-					if (keys.isEmpty()) {
-						// No information entered
-						errorMessage = "Fill at least one field";
+					// Validate session
+					Session session = (Session)getState("Session");
+					if (session == null) {
+						errorMessage = "No current session started";
 						return;
 					}
 					
-					// Construct SQL condition string
-					String condition = "";
-					boolean first = true;
-					for (int i = 0; i < keys.size(); i++) {
-						if (!first) condition += " AND ";
-						first = false;
-						String key2 = keys.get(i);
-						condition += key2 + " = ";
-						if (key2.equals("ID")) condition += values.get(i);
-						else condition += "'" + values.get(i) + "'";
-					}
-					
-					// Retrieve scouts from database
-					scoutCollection = new ScoutCollection();
-					scoutCollection.lookupAll(condition + " AND Status <> 'Inactive'");
-					
-					if (scoutCollection.scouts.isEmpty()) {
-						// No scouts matching given criteria
-						errorMessage = "No scouts found matching search criteria \"" + condition + "\"";
+					// Validate barcode
+					String barcode = (String)value;
+					if (!Pattern.matches("^\\d{5}$", barcode)) {
+						errorMessage = "Barcode must be 5 digits";
 						return;
 					}
 					
-					swapToView(getOrCreateScene(costViewName));
+					// Get tree type cost
+					String prefix = barcode.substring(0, 2); 
+					try {
+						TreeType treeType = new TreeType(prefix);
+						cost = (String)treeType.getState("Cost");
+						swapToView(getOrCreateScene(costViewName));
+					} catch (Exception e) {
+						errorMessage = "No tree type with barcode prefix matching \"" + prefix + "\"";
+					}
 				}
 				break;
-			case "Update":
+			case "SubmitCost":
+				errorMessage = "";
+
+				// Validate cost is a dollar value
+				cost = (String)value;
+				if (!Pattern.matches("^\\d+(\\.\\d\\d?)?$", cost)) {
+					errorMessage = "Invalid cost";
+					return;
+				}
+				
+				//Session
+				swapToView(getOrCreateScene(infoViewName));
+				break;
+			case "SubmitInfo":
 				{
-					Properties scoutInfo = (Properties)value;
-					scoutInfo.setProperty("ID", (String)selectedScout.getState("ID"));
-					scoutInfo.setProperty("TroopID", (String)selectedScout.getState("TroopID"));
-					errorMessage = Scout.validate(scoutInfo);
-					if (errorMessage != null) return;
-					errorMessage = "";
-	   		    	
-	   		    	selectedScout.setScout(scoutInfo);
-	   		    	selectedScout.update();
+					// Validate session
+					Session session = (Session)getState("Session");
+					if (session == null) {
+						errorMessage = "No current session started";
+						return;
+					}
+					
+					Properties customerInfo = (Properties)value;
+					
+					// Validate customer name
+					String custName = customerInfo.getProperty("Name");
+					if (custName == null || custName.length() == 0) {
+						errorMessage = "Name cannot be empty";
+						return;
+					}
+					
+					if (custName.length() > 50) {
+						errorMessage = "Name is too long";
+						return;
+					}
+					
+					// Validate phone number
+					String phoneNumber = customerInfo.getProperty("PhoneNumber");
+			    	if (phoneNumber.length() == 0) {
+			    		errorMessage = "Phone number cannot be empty";
+			    		return;
+			    	}
+			    	
+			    	if (Pattern.matches("^\\d{3}\\-\\d{3}\\-\\d{4}$", phoneNumber))
+			    		phoneNumber = phoneNumber.substring(0, 3) + phoneNumber.substring(4, 7) + phoneNumber.substring(8);
+			    	else if (Pattern.matches("^\\(\\d{3}\\)\\d{3}\\-\\d{4}$", phoneNumber))
+			    		phoneNumber = phoneNumber.substring(1, 4) + phoneNumber.substring(5, 8) + phoneNumber.substring(9);
+			    	else if (!Pattern.matches("^\\d{10}$", phoneNumber)) {
+			    		errorMessage = "Phone number must be of the form XXXXXXXXXX or (XXX)XXX-XXXX or XXX-XXX-XXXX";
+			    		return;
+			    	}
+			    	
+			    	// Validate email
+			    	String email = customerInfo.getProperty("Email");
+			    	if (!email.contains("@")) {
+			    		errorMessage = "Invalid email";
+			    		return;
+			    	}
+					
+			    	// Time is HHMM
+					Properties transactionProps = new Properties();
+					transactionProps.setProperty("CustomerName", custName);
+					transactionProps.setProperty("CustomerPhone", phoneNumber);
+					transactionProps.setProperty("CustomerEmail", email);
+					transactionProps.setProperty("PaymentMethod", customerInfo.getProperty("PaymentMethod"));
+					transactionProps.setProperty("SessionID", (String)session.getState("ID"));
+					transactionProps.setProperty("TransactionAmount", cost);
+					
+					// Format current date
+					LocalDateTime date = LocalDateTime.now();
+					String year = date.getYear() + "";
+					while (year.length() < 4) year = "0" + year;
+					String month = date.getMonthValue() + "";
+					if (month.length() < 2) month = "0" + month;
+					String day = date.getDayOfMonth() + "";
+					if (day.length() < 2) day = "0" + day;
+					transactionProps.setProperty("TransactionDate", year + "-" + month + "-" + day);
+					
+					// Format current time
+					String hour = date.getHour() + "";
+					if (hour.length() < 2) hour = "0" + hour;
+					String minute = date.getMinute() + "";
+					if (minute.length() < 2) minute = "0" + minute;
+					transactionProps.setProperty("TransactionTime", hour + minute);
+					
+					Transaction transaction = new Transaction(transactionProps);
+					transaction.updateStatusDate();
 				}
 				break;
 		}
