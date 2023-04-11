@@ -114,6 +114,9 @@ public class UpdateTreeActionView extends View {
         switch(key) {
             case "LookupTreeError":
                 statusLog.displayErrorMessage("ERROR! Tree with barcode + " + barcode.getText() + " does not exist!");
+                // maybe put a helper method somewhwere to do this
+                Stage stage = MainStageContainer.getInstance();
+                stage.sizeToScene();
                 break;
             case "TreeUpdated":
                 displayTreeUpdated();
