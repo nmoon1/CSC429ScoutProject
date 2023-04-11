@@ -24,6 +24,8 @@ public class ViewFactory {
 			case "AddTreeActionView": return new AddTreeActionView(model);
 			case "SelectTreeTypeActionView": return new SelectTreeTypeActionView(model);
 			case "UpdateTreeTypeActionView": return new UpdateTreeTypeActionView(model);
+			case "UpdateTreeActionView": return new UpdateTreeActionView(model);
+			case "UpdateTreeEditView": return new UpdateTreeEditView(model);
 		}
 		return null;
 	}

@@ -138,6 +138,10 @@ public class Tree extends EntityBase implements IView {
 		myRegistry.updateSubscribers(key, this);
 	}
 
+	public void setState(String key, String value) {
+		persistentState.setProperty(key, value);
+	}
+
 	// ---------------------------------------------------------------------
 	public void updateState(String key, Object value) {
 		stateChangeRequest(key, value);
