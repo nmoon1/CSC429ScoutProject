@@ -14,6 +14,14 @@ public class Session extends EntityBase implements IView {
     protected Properties dependencies;
     private String updateStatusMessage = "";
 
+    // empty constructor, used to instantiate and lookup open session
+
+    public Session() {
+        super(myTableName);
+        setDependencies();
+        findOpenSession();
+    }
+
     public Session(Properties props) {
         super(myTableName);
         setDependencies();
@@ -27,6 +35,25 @@ public class Session extends EntityBase implements IView {
 				persistentState.setProperty(nextKey, nextValue);
 			}
 		}
+    }
+
+    private void findOpenSession() {
+        String query = "SELECT * FROM " + myTableName + " WHERE EndTime IS NULL";
+
+        Vector<Properties> allData = getSelectQueryResult(query);
+        // TODO: might need to throw error if multiple entries found
+        if(allData == null || allData.size() != 1) 
+            return;
+        Properties data = allData.elementAt(0);
+        persistentState = new Properties();
+        Enumeration keys = data.propertyNames();
+        while(keys.hasMoreElements()) {
+            String nextKey = (String)keys.nextElement();
+            String value = data.getProperty(nextKey);
+            if(value != null) {
+                persistentState.setProperty(nextKey, value);
+            }
+        }
     }
 
     private void setDependencies() {
