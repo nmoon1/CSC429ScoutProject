@@ -30,3 +30,7 @@
 [4/7/23, 1:43 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=29306) Duplicate entry '12' for key 'BarcodePrefix'>
 [4/7/23, 1:44 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=29306) Duplicate entry '11' for key 'BarcodePrefix'>
 [4/18/23, 12:46 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: SellTree.java.lang.NullPointerException: Cannot invoke "model.Action.subscribe(String, impresario.IView)" because "action" is null>
+[4/18/23 2:45 PM]|JDBCBroker|JDBCBroker|Error|NOTAG|null<Could not load driver class[org.mariadb.jdbc.Driver]>
+[4/18/23 2:45 PM]|Main|Main.<init>|Error|NOTAG|null<Unable to create TLC object>
+[4/18/23 2:45 PM]|JDBCBroker|JDBCBroker|Error|NOTAG|null<Could not load driver class[org.mariadb.jdbc.Driver]>
+[4/18/23 2:45 PM]|Main|Main.<init>|Error|NOTAG|null<Unable to create TLC object>
