@@ -12,7 +12,7 @@ public class ScoutTable {
     	middleName = new SimpleStringProperty((String)scout.getState("MiddleName"));
     	lastName = new SimpleStringProperty((String)scout.getState("LastName"));
     	dateOfBirth = new SimpleStringProperty((String)scout.getState("DateOfBirth"));
-    	phoneNumber = new SimpleStringProperty((String)scout.getState("PhoneNumber"));
+    	phoneNumber = new SimpleStringProperty(scout.getFormattedPhoneNumber());
     	email = new SimpleStringProperty((String)scout.getState("Email"));
     	troopID = new SimpleStringProperty((String)scout.getState("TroopID"));
     }

@@ -160,6 +160,14 @@ public class Scout extends EntityBase implements IView
 		return persistentState.getProperty("FirstName") + " " + persistentState.getProperty("LastName"); 
 	}
 	
+	public String getFormattedPhoneNumber()
+	{
+		String phoneNumber = persistentState.getProperty("PhoneNumber");
+		if (phoneNumber == null) return "";
+		if (phoneNumber.length() != 10) return phoneNumber;
+		return phoneNumber.substring(0, 3) + "-" + phoneNumber.substring(3, 6) + "-" + phoneNumber.substring(6);
+	}
+	
 	public void lookupAndStore(String condition) throws InvalidPrimaryKeyException
 	{
 		Vector<Properties> allDataRetrieved = getSelectQueryResult("SELECT * FROM " + myTableName + " WHERE (" + condition + ")");

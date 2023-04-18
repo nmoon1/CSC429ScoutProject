@@ -228,7 +228,7 @@ public class RemoveScoutConfirmView extends View {
 		middleName.setText((String)scout.getState("MiddleName"));
 		lastName.setText((String)scout.getState("LastName"));
 		dateOfBirth.setText((String)scout.getState("DateOfBirth"));
-		phoneNumber.setText((String)scout.getState("PhoneNumber"));
+		phoneNumber.setText(scout.getFormattedPhoneNumber());
 		email.setText((String)scout.getState("Email"));
 		troopID.setText((String)scout.getState("TroopID"));
 	}
