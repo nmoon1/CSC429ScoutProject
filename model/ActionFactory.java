@@ -13,6 +13,7 @@ public class ActionFactory {
             case "AddTree": return new AddTreeAction();
             case "UpdateTreeType": return new UpdateTreeTypeAction();
             case "UpdateTree": return new UpdateTreeAction();
+            case "EndShift": return new EndShiftAction();
             default: return null;
         }
     }
