@@ -2,6 +2,8 @@ package userinterface;
 
 // system imports
 import javafx.event.Event;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -13,6 +15,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -29,29 +32,33 @@ import java.util.Vector;
 // project imports
 import impresario.IModel;
 
-public class RemoveTreeActionView extends View {
+public class UpdateTreeActionView extends View {
 
-    private TextField barcodeInput;
-    private Text status;
+    private TextField barcode;
 
-    public RemoveTreeActionView(IModel model) {
-        super(model, "RemoveTreeActionView");
+    protected MessageView statusLog;
+
+    public UpdateTreeActionView(IModel model) {
+        super(model, "UpdateTreeActionView");
+
         VBox container = new VBox(10);
         container.setAlignment(Pos.CENTER);
-        Node title = createTitle();
         VBox form = createFormContents();
+        Node title = createTitle();
+
         container.getChildren().add(title);
         container.getChildren().add(form);
+
         getChildren().add(container);
-        myModel.subscribe("RemoveError", this);
         myModel.subscribe("LookupTreeError", this);
+        myModel.subscribe("TreeUpdated", this);
     }
 
     private Node createTitle() {
 		HBox container = new HBox();
 		container.setAlignment(Pos.CENTER);	
 
-		Text titleText = new Text(" Remove A Tree ");
+		Text titleText = new Text(" Update A Tree ");
 		titleText.setFont(Font.font("Arial", FontWeight.BOLD, 20));
 		titleText.setWrappingWidth(300);
 		titleText.setTextAlignment(TextAlignment.CENTER);
@@ -63,61 +70,62 @@ public class RemoveTreeActionView extends View {
 
     private VBox createFormContents() {
         VBox container = new VBox(10);
-        container.setPadding(new Insets(15, 5, 5, 5));
         container.setAlignment(Pos.CENTER);
-        Text label = new Text("Enter tree barcode: ");
-        container.getChildren().add(label);
-        barcodeInput = new TextField();
-        barcodeInput.setOnAction( action -> {
-            String barcode = barcodeInput.getText();
-            submitBarcode(barcode);
-        });
-        container.getChildren().add(barcodeInput);
-
-        HBox btnContainer = new HBox(100);
-        btnContainer.setAlignment(Pos.CENTER);
-
-        Button submit = new Button("Submit");
-        submit.setFont(Font.font("Arial", FontWeight.BOLD, 14));
-        submit.setTextAlignment(TextAlignment.CENTER);
-        submit.setOnAction( action -> {
-            String barcode = barcodeInput.getText();
-            submitBarcode(barcode);
-        });
+        container.setPadding(new Insets(20));
         
+        Label barcodeLabel = new Label("Please enter tree barcode: ");
+        barcode = new TextField();
+        barcode.setOnAction( action -> {
+            submitBarcode();
+        });
         Button cancel = new Button("Cancel");
-        cancel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
-        cancel.setTextAlignment(TextAlignment.CENTER);
         cancel.setOnAction( action -> {
             myModel.stateChangeRequest("Cancel", "");
         });
-
+        Button submit = new Button("submit");
+        submit.setOnAction( action -> {
+            submitBarcode();
+        });
+        HBox btnContainer = new HBox(10);
+        btnContainer.setAlignment(Pos.CENTER);
         btnContainer.getChildren().add(cancel);
         btnContainer.getChildren().add(submit);
 
-        status = new Text("  ");
-        status.setFill(Color.RED);
-        status.setWrappingWidth(300);
+        statusLog = new MessageView("");
 
-        container.getChildren().add(status);
+        container.getChildren().add(barcodeLabel);
+        container.getChildren().add(barcode);
         container.getChildren().add(btnContainer);
+        container.getChildren().add(statusLog);
 
         return container;
     }
 
-    private void submitBarcode(String barcode) {
-        myModel.stateChangeRequest("BarcodeSubmitted", barcode);
+    private void submitBarcode(){
+        String bcode = barcode.getText();
+        if(!bcode.matches("^\\d{5}$") || bcode.isEmpty()) {
+            statusLog.displayErrorMessage("ERROR! Barcode must be EXACTLY 5 digits.");
+            return;
+        } 
+        myModel.stateChangeRequest("BarcodeSubmitted", bcode);
     }
 
     public void updateState(String key, Object value) {
         switch(key) {
-            case "RemoveError":
-                status.setText((String)myModel.getState("RemoveStatusMessage"));
-                break;
             case "LookupTreeError":
-                status.setText("Tree not found. Please try another barcode.");
+                statusLog.displayErrorMessage("ERROR! Tree with barcode + " + barcode.getText() + " does not exist!");
+                // maybe put a helper method somewhwere to do this
+                Stage stage = MainStageContainer.getInstance();
+                stage.sizeToScene();
                 break;
+            case "TreeUpdated":
+                displayTreeUpdated();
         }
+        
     }
-    
+
+    private void displayTreeUpdated() {
+        barcode.setText("");
+        statusLog.displayMessage("Tree with barcode " + myModel.getState("Barcode") + " updated successfully.");
+    }
 }
