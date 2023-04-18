@@ -29,7 +29,6 @@ import model.ScoutCollection;
 
 public class RemoveScoutListView extends View {
 	// GUI components
-	protected TextField scoutID;
 	protected TableView<ScoutTable> tableOfScouts;
 
 	protected Button backButton, submitButton;
@@ -140,22 +139,6 @@ public class RemoveScoutListView extends View {
 		ScrollPane scrollPane = new ScrollPane();
 		scrollPane.setPrefSize(115, 150);
 		scrollPane.setContent(tableOfScouts);
-		
-		GridPane bottomGrid = new GridPane();
-		bottomGrid.setAlignment(Pos.CENTER);
-		bottomGrid.setHgap(10);
-		bottomGrid.setVgap(10);
-		bottomGrid.setPadding(new Insets(25, 25, 25, 25));
-		
-		Text scoutIDLabel = new Text(" Scout ID: ");
-		Font myFont = Font.font("Helvetica", FontWeight.BOLD, 12);
-		scoutIDLabel.setFont(myFont);
-		scoutIDLabel.setWrappingWidth(150);
-		scoutIDLabel.setTextAlignment(TextAlignment.RIGHT);
-		bottomGrid.add(scoutIDLabel, 0, 1);
-
-		scoutID = new TextField();
-		bottomGrid.add(scoutID, 1, 1);
 
 		HBox doneCont = new HBox(10);
 		doneCont.setAlignment(Pos.CENTER);
@@ -176,9 +159,10 @@ public class RemoveScoutListView extends View {
 		submitButton.setOnAction(new EventHandler<ActionEvent>() {
    		     @Override
    		     public void handle(ActionEvent e) {
+   		    	if (tableOfScouts.getSelectionModel().getSelectedIndex() == -1) return;
    		    	clearErrorMessage();
    		    	
-   		    	myModel.stateChangeRequest("Select", scoutID.getText());
+   		    	myModel.stateChangeRequest("Select", tableOfScouts.getSelectionModel().getSelectedItem().getScoutID());
    				
    				String error = (String)myModel.getState("Error");
    				if (error.length() != 0) displayErrorMessage(error);
@@ -202,7 +186,6 @@ public class RemoveScoutListView extends View {
 	
 		vbox.getChildren().add(titleGrid);
 		vbox.getChildren().add(scrollPane);
-		vbox.getChildren().add(bottomGrid);
 		vbox.getChildren().add(doneCont);
 
 		return vbox;
@@ -229,7 +212,6 @@ public class RemoveScoutListView extends View {
 	//-------------------------------------------------------------
 	public void populateFields()
 	{
-		scoutID.setText("");
 		tableOfScouts.setItems(getTableData((ScoutCollection)myModel.getState("ScoutList")));
 	}
 
