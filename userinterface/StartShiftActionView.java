@@ -459,7 +459,6 @@ public class StartShiftActionView extends View {
         props.setProperty("StartingCash", cash);
 
         myModel.stateChangeRequest("StartSession", props);
-        System.out.println(date + "\n" + startTime + "\n" + endTime + "\n" + cash);
     }
 
     /*
