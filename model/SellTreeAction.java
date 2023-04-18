@@ -65,6 +65,18 @@ public class SellTreeAction extends Action {
 						return;
 					}
 					
+					// Make sure that the tree exists and is not sold
+					try {
+						Tree tree = new Tree(barcode);
+						if (tree.getState("Status").equals("Sold")) {
+							errorMessage = "Tree with barcode " + barcode + " has already been sold";
+							return;
+						}
+					} catch (Exception e) {
+						errorMessage = "No tree exists with barcode " + barcode;
+						return;
+					}
+					
 					// Get tree type cost
 					String prefix = barcode.substring(0, 2); 
 					try {
@@ -73,6 +85,7 @@ public class SellTreeAction extends Action {
 						swapToView(getOrCreateScene(costViewName));
 					} catch (Exception e) {
 						errorMessage = "No tree type with barcode prefix matching \"" + prefix + "\"";
+						return;
 					}
 				}
 				break;
