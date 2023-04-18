@@ -26,6 +26,10 @@ public class ViewFactory {
 			case "UpdateTreeTypeActionView": return new UpdateTreeTypeActionView(model);
 			case "UpdateTreeActionView": return new UpdateTreeActionView(model);
 			case "UpdateTreeEditView": return new UpdateTreeEditView(model);
+			case "SellTreeBarcodeView": return new SellTreeBarcodeView(model);
+			case "SellTreeCostView": return new SellTreeCostView(model);
+			case "SellTreeInfoView": return new SellTreeInfoView(model);
+			case "SellTreeDoneWindow": return new SellTreeDoneWindow(model);
 			case "EndShiftActionView": return new EndShiftActionView(model);
 		}
 		return null;

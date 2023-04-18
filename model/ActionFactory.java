@@ -10,12 +10,10 @@ public class ActionFactory {
             case "RemoveScout": return new RemoveScoutAction();
             case "AddTreeType": return new AddTreeTypeAction();
             case "StartShift": return new StartShiftAction();
-            case "EndShift": return new EndShiftAction();
-
             case "AddTree": return new AddTreeAction();
             case "UpdateTreeType": return new UpdateTreeTypeAction();
             case "UpdateTree": return new UpdateTreeAction();
-
+            case "EndShift": return new EndShiftAction();
             default: return null;
         }
     }

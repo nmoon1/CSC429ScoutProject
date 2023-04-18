@@ -59,6 +59,20 @@ public class TLC implements IView, IModel {
             myViews.put("TLCView", currentScene);
         }
 
+        // check for open session
+        // if open session -> enable end shift and sell tree
+        // else -> disabled end shift and sell tree
+        Session currentSession = new Session();
+        String sessionID = (String)currentSession.getState("ID");
+        if(sessionID == null) {
+            // no open session, disable end shift and sell tree
+            stateChangeRequest("DisableButtons", "");
+        } else {
+            //open session, enable buttons
+            stateChangeRequest("EnableButtons", "");
+        }
+
+
         swapToView(currentScene);
     }
 
@@ -92,7 +106,7 @@ public class TLC implements IView, IModel {
                 doAction(key);
                 break;
             case "CompleteAction":
-            case "CancelAction":         
+            case "CancelAction":
                 createAndShowTLCView();
                 break;   
         }
