@@ -1,8 +1,6 @@
 package model;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
@@ -13,8 +11,10 @@ public class SellTreeAction extends Action {
 	private static final String barcodeViewName = "SellTreeBarcodeView";
 	private static final String costViewName = "SellTreeCostView";
 	private static final String infoViewName = "SellTreeInfoView";
+	private static final String doneViewName = "SellTreeDoneWindow";
 	private String errorMessage = "";
 	private String cost = "";
+	private String barcode = "";
 	
 	protected SellTreeAction() throws Exception {
 		super();
@@ -58,15 +58,8 @@ public class SellTreeAction extends Action {
 				{
 					errorMessage = "";
 					
-					// Validate session
-					Session session = (Session)getState("Session");
-					if (session == null) {
-						errorMessage = "No current session started";
-						return;
-					}
-					
 					// Validate barcode
-					String barcode = (String)value;
+					barcode = (String)value;
 					if (!Pattern.matches("^\\d{5}$", barcode)) {
 						errorMessage = "Barcode must be 5 digits";
 						return;
@@ -93,17 +86,14 @@ public class SellTreeAction extends Action {
 					return;
 				}
 				
-				//Session
 				swapToView(getOrCreateScene(infoViewName));
 				break;
 			case "SubmitInfo":
 				{
+					errorMessage = "";
+					
 					// Validate session
-					Session session = (Session)getState("Session");
-					if (session == null) {
-						errorMessage = "No current session started";
-						return;
-					}
+					Session session = new Session();
 					
 					Properties customerInfo = (Properties)value;
 					
@@ -150,6 +140,7 @@ public class SellTreeAction extends Action {
 					transactionProps.setProperty("PaymentMethod", customerInfo.getProperty("PaymentMethod"));
 					transactionProps.setProperty("SessionID", (String)session.getState("ID"));
 					transactionProps.setProperty("TransactionAmount", cost);
+					transactionProps.setProperty("TransactionType", "Tree Sale");
 					
 					// Format current date
 					LocalDateTime date = LocalDateTime.now();
@@ -168,8 +159,21 @@ public class SellTreeAction extends Action {
 					if (minute.length() < 2) minute = "0" + minute;
 					transactionProps.setProperty("TransactionTime", hour + minute);
 					
+					// Retrieve Tree
+					Tree tree;
+					try {
+						tree = new Tree(barcode);
+					} catch (Exception e) {
+						errorMessage = "Could not find a tree with barcode " + barcode;
+						return;
+					}
+					tree.setState("Status", "Sold");
+					tree.update();
+					
 					Transaction transaction = new Transaction(transactionProps);
 					transaction.updateStatusDate();
+					transaction.update();
+					swapToView(getOrCreateScene(doneViewName));
 				}
 				break;
 		}
