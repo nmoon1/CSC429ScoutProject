@@ -1,5 +1,6 @@
 options.txt
 sources.txt
+ErrorLog.txt
 compile.bat
 run-only.bat
 run.bat
@@ -9,5 +10,9 @@ run.bat
 .project
 .vscode/
 .settings/
+.idea/
+
 
 *.class
+
+
