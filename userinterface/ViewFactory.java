@@ -30,6 +30,7 @@ public class ViewFactory {
 			case "SellTreeCostView": return new SellTreeCostView(model);
 			case "SellTreeInfoView": return new SellTreeInfoView(model);
 			case "SellTreeDoneWindow": return new SellTreeDoneWindow(model);
+			case "EndShiftActionView": return new EndShiftActionView(model);
 		}
 		return null;
 	}
