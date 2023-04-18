@@ -60,13 +60,13 @@ public class StartShiftActionView extends View {
     private TextField endMin;
     private TextField startingCash;
 
-    // private ComboBox<String> scoutComboBox;
     private TextField companion;
     private TextField companionHour;
     private TextField scoutStartHour;
     private TextField scoutStartMin;
     private TextField scoutEndHour;
     private TextField scoutEndMin;
+    private ComboBox<Scout> scoutComboBox;
     ObservableList<Scout> data = FXCollections.observableArrayList();
 
     // for showing error message
@@ -181,20 +181,13 @@ public class StartShiftActionView extends View {
         Label scoutLabel = new Label("Scout:");
         grid.add(scoutLabel, 1, 5);
 
-        ComboBox<Scout> scoutComboBox = new ComboBox<>(
+        scoutComboBox = new ComboBox<>(
                 FXCollections.observableArrayList(
                         new Scout("Jon", "Jones", 208),
                         new Scout("Jake", "Gyllenhaal", 302),
                         new Scout("Juice", "Wrld", 999),
                         new Scout("Bob", "Marley", 305)));
 
-        Scout selectedScout = scoutComboBox.getValue();
-
-        if (selectedScout != null) {
-            String first = selectedScout.getFirst();
-            String last = selectedScout.getLast();
-            int troop = selectedScout.getTroop();
-        }
         scoutComboBox.setPrefWidth(200);
         scoutComboBox.setDisable(true);
         scoutComboBox.setPromptText("Select a Scout");
@@ -205,11 +198,11 @@ public class StartShiftActionView extends View {
         grid.add(companionLabel, 1, 6);
 
         HBox companionBox = new HBox(10);
-        TextField companion = new TextField();
+        companion = new TextField();
         companion.setPrefWidth(100);
 
         Label companionHourLabel = new Label("Hour:");
-        TextField companionHour = new TextField();
+        companionHour = new TextField();
         companionHour.setPrefWidth(50);
         companionBox.getChildren().addAll(companion, companionHourLabel, companionHour);
         companionBox.setDisable(true);
@@ -220,14 +213,12 @@ public class StartShiftActionView extends View {
         grid.add(scoutStartLabel, 1, 7);
 
         HBox scoutStartBox = new HBox(10);
-        TextField scoutStartHour = new TextField();
+        scoutStartHour = new TextField();
         scoutStartHour.setPrefWidth(75);
-        scoutStartHour.setOnAction(event -> AddScout(event));
 
         Label scoutStartHourLabel = new Label("H");
-        TextField scoutStartMin = new TextField();
+        scoutStartMin = new TextField();
         scoutStartMin.setPrefWidth(75);
-        scoutStartMin.setOnAction(event -> AddScout(event));
 
         Label scoutStartMinLabel = new Label("M");
         scoutStartBox.setDisable(true);
@@ -239,14 +230,12 @@ public class StartShiftActionView extends View {
         grid.add(scoutEndLabel, 1, 8);
 
         HBox scoutEndBox = new HBox(10);
-        TextField scoutEndHour = new TextField();
+        scoutEndHour = new TextField();
         scoutEndHour.setPrefWidth(75);
-        scoutEndHour.setOnAction(event -> AddScout(event));
 
         Label scoutEndHourLabel = new Label("H");
-        TextField scoutEndMin = new TextField();
+        scoutEndMin = new TextField();
         scoutEndMin.setPrefWidth(75);
-        scoutEndMin.setOnAction(event -> AddScout(event));
 
         Label scoutEndMinLabel = new Label("M");
         scoutEndBox.setDisable(true);
@@ -259,15 +248,18 @@ public class StartShiftActionView extends View {
         addScoutBtn.setTextAlignment(TextAlignment.CENTER);
         addScoutBtn.setDisable(true);
         addScoutBtn.setOnAction(event -> {
+            // Check if any required fields are null or empty
+            if (scoutComboBox.getValue() == null || companion.getText().isEmpty() || scoutStartHour.getText().isEmpty()
+                    || scoutStartMin.getText().isEmpty() || scoutEndHour.getText().isEmpty() || scoutEndMin.getText().isEmpty() || companionHour.getText().isEmpty()) {
+                // Display an error message and return
+                displayErrorMessage("Please fill out all Scout fields");
+                return;
+            }
             // Get the selected scout from the combo box
             Scout selectedScouts = scoutComboBox.getValue();
-
             // Add the selected scout to the table
             data.add(selectedScouts);
-
-            // Clear the selection in the combo box
-            scoutComboBox.getSelectionModel().clearSelection();
-
+            // add to database
             AddScout(event);
         });
         grid.add(addScoutBtn, 1, 9);
@@ -305,13 +297,17 @@ public class StartShiftActionView extends View {
         lastCol.setPrefWidth(150);
         troopCol.setPrefWidth(75);
 
-        // Set the table to dynamically resize to fit the number of rows
-        table.setPrefHeight(Region.USE_COMPUTED_SIZE);
-        table.setMaxHeight(Double.MAX_VALUE);
+        // Set the table height to show 4 rows without scrolling
         table.setFixedCellSize(25);
         table.prefHeightProperty().bind(Bindings.size(table.getItems()).multiply(table.getFixedCellSize()).add(28));
 
-        grid.add(table, 1, 10, 4, 2);
+        // Create a scroll pane and add the table to it
+        ScrollPane scrollPane = new ScrollPane(table);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setPrefViewportHeight(71);
+
+        // Add the scroll pane to the grid
+        grid.add(scrollPane, 1, 10, 4, 2);
 
         /*
          * ----------------------
@@ -326,7 +322,7 @@ public class StartShiftActionView extends View {
             if (startDatePicker.getValue() == null || startHour.getText().isEmpty() || startMin.getText().isEmpty()
                     || endHour.getText().isEmpty() || endMin.getText().isEmpty() || startingCash.getText().isEmpty()) {
                 // Display an error message and return
-                
+                displayErrorMessage("Please fill out all Session fields");
                 return;
             }
             // disable start session
@@ -424,9 +420,14 @@ public class StartShiftActionView extends View {
     }
 
     /*
+     * --------------------
      * start session
+     * --------------------
      */
     public void StartSession(Event event) {
+        // clear error message
+        clearErrorMessage();
+
         // Get the selected year, month, and day values from the DatePicker
         LocalDate selectedDate = startDatePicker.getValue();
         int year = selectedDate.getYear();
@@ -459,14 +460,20 @@ public class StartShiftActionView extends View {
         props.setProperty("StartingCash", cash);
 
         myModel.stateChangeRequest("StartSession", props);
+        // display success message
+        displayMessage("Session added!");
     }
 
     /*
      * add scount
      */
     public void AddScout(Event event) {
+        // clear error messages
+        clearErrorMessage();
 
-        // String scout = scoutComboBox.getValue();
+        Scout selectedScout = scoutComboBox.getValue();
+        String scout = selectedScout.toString();
+
         String comp = companion.getText();
         String compH = companionHour.getText();
         String scoutStartH = scoutStartHour.getText();
@@ -474,16 +481,30 @@ public class StartShiftActionView extends View {
         String scoutEndH = scoutEndHour.getText();
         String scoutEndM = scoutEndMin.getText();
 
-        Properties props = new Properties();
-        // props.setProperty("Scout", scout);
-        props.setProperty("Companion", comp);
-        props.setProperty("CompanionHour", compH);
-        props.setProperty("ScoutStartHour", scoutStartH);
-        props.setProperty("ScoutStartMin", scoutStartM);
-        props.setProperty("ScoutEndHour", scoutEndH);
-        props.setProperty("ScoutEndMin", scoutEndM);
+        String ScoutStartTime = scoutStartH + ":" + scoutStartM;
+        String ScoutEndTime = scoutEndH + ":" + scoutEndM;
 
-        myModel.stateChangeRequest("AddScout", props);
+        ///Properties props = new Properties();
+        //props.setProperty("Scout", scout);
+        //props.setProperty("Companion", comp);
+        //props.setProperty("CompanionHour", compH);
+        //props.setProperty("ScoutStartTime", ScoutStartTime);
+        //props.setProperty("ScoutEndTime", ScoutEndTime);
+
+        //myModel.stateChangeRequest("AddShift", props);
+        System.out.println(scout + " " + comp + " " + compH + " " + ScoutStartTime + " " + ScoutEndTime);
+
+        // clear input fields
+        scoutComboBox.getSelectionModel().clearSelection();
+        companion.clear();
+        companionHour.clear();
+        scoutStartHour.clear();
+        scoutStartMin.clear();
+        scoutEndHour.clear();
+        scoutEndMin.clear();
+
+        //display success message
+        displayMessage("Scout added!");
     }
 
     /*
