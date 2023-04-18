@@ -8,11 +8,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -34,7 +30,7 @@ public class StartShiftActionView extends View {
     private TextField startDate;
     private TextField startTime;
     private TextField startCash;
-    
+
     public StartShiftActionView(IModel model) {
         super(model, "StartShiftActionView");
 
@@ -43,6 +39,19 @@ public class StartShiftActionView extends View {
         container.getChildren().add(createFormContents());
 
         getChildren().add(container);
+    }
+    private Node createTitle() {
+        HBox container = new HBox();
+        container.setAlignment(Pos.TOP_CENTER);
+
+        Text titleText = new Text("Start Shift");
+        titleText.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        titleText.setWrappingWidth(300);
+        titleText.setTextAlignment(TextAlignment.CENTER);
+        titleText.setFill(Color.DARKGREEN);
+        container.getChildren().add(titleText);
+
+        return container;
     }
 
     private VBox createFormContents() {
@@ -59,7 +68,7 @@ public class StartShiftActionView extends View {
         grid.add(startDateLabel, 0, 0);
 
         startDate = new TextField();
-        startDate.setOnAction( event -> {
+        startDate.setOnAction(event -> {
             submit(event);
         });
         grid.add(startDate, 1, 0);
@@ -70,7 +79,7 @@ public class StartShiftActionView extends View {
         grid.add(startTimeLabel, 0, 1);
 
         startTime = new TextField();
-        startTime.setOnAction( event -> {
+        startTime.setOnAction(event -> {
             submit(event);
         });
         grid.add(startTime, 1, 1);
@@ -81,10 +90,19 @@ public class StartShiftActionView extends View {
         grid.add(startCashLabel, 0, 2);
 
         startCash = new TextField();
-        startCash.setOnAction( event -> {
+        startCash.setOnAction(event -> {
             submit(event);
         });
         grid.add(startCash, 1, 2);
+
+        Text notesLabel = new Text("Notes:");
+        notesLabel.setWrappingWidth(150);
+        notesLabel.setTextAlignment(TextAlignment.RIGHT);
+        grid.add(notesLabel, 0, 3);
+
+        TextArea notesTextArea = new TextArea();
+        notesTextArea.setPrefRowCount(4);
+        grid.add(notesTextArea, 1, 3);
 
         HBox btnContainer = new HBox(100);
         btnContainer.setAlignment(Pos.CENTER);
@@ -92,16 +110,18 @@ public class StartShiftActionView extends View {
         Button cancelBtn = new Button("Cancel");
         cancelBtn.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         cancelBtn.setTextAlignment(TextAlignment.CENTER);
-        cancelBtn.setOnAction( event -> {
+        cancelBtn.setOnAction(event -> {
             myModel.stateChangeRequest("Cancel", null);
         });
 
         Button submitBtn = new Button("Submit");
         submitBtn.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         submitBtn.setTextAlignment(TextAlignment.CENTER);
-        submitBtn.setOnAction( event -> {
+        submitBtn.setOnAction(event -> {
             submit(event);
         });
+        container.getChildren().add(createTitle());
+
         btnContainer.getChildren().add(cancelBtn);
         btnContainer.getChildren().add(submitBtn);
 
@@ -110,6 +130,7 @@ public class StartShiftActionView extends View {
 
         return container;
     }
+
 
     public void submit(Event event) {
         String date = startDate.getText();
