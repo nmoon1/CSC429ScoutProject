@@ -57,6 +57,10 @@ public class UpdateTreeAction extends Action {
     private void lookupTree(String barcode) {
         try {
             myTree = new Tree(barcode);
+            if(myTree.getState("Status").equals("Sold")) {
+                stateChangeRequest("TreeSoldError", "");
+                return;
+            }
             Scene newScene = getOrCreateScene("UpdateTreeEditView");
             swapToView(newScene);
         } catch(InvalidPrimaryKeyException e) {

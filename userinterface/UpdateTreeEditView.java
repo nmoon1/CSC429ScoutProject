@@ -54,7 +54,6 @@ public class UpdateTreeEditView extends View {
         Label statusLabel = new Label("Status: ");
         ObservableList<String> options = FXCollections.observableArrayList(
             "Available",
-            "Sold",
             "Damaged"
         );
         statusInput = new ComboBox<String>(options);
