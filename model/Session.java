@@ -67,7 +67,21 @@ public class Session extends EntityBase implements IView {
     }
 
     public void stateChangeRequest(String key, Object value) {
+        switch(key) {
+            case "UpdateProps":
+                updateProps((Properties) value);
+                break;
+        }
         myRegistry.updateSubscribers(key, this);
+    }
+
+    private void updateProps(Properties props) {
+        Enumeration keys = props.propertyNames();
+        while(keys.hasMoreElements()) {
+            String nextKey = (String)keys.nextElement();
+            String nextVal = props.getProperty(nextKey);
+            persistentState.setProperty(nextKey, nextVal); // don't think we need a null check here
+        }
     }
 
     public void updateState(String key, Object value) {
