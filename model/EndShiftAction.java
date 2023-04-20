@@ -85,8 +85,7 @@ public class EndShiftAction extends Action {
         props.setProperty("EndingCash", String.valueOf(endCash));
         props.setProperty("TotalCheckTransactionsAmount", String.valueOf(totalCheckSales));
         props.setProperty("Notes", notes);
-        currentSession.updateState("UpdateProps", props);
-        currentSession.save();
+        currentSession.save(props);
         stateChangeRequest("ShiftEnded", "");
     }
     
