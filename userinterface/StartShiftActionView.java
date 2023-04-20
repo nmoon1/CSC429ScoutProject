@@ -32,258 +32,347 @@ import java.util.Vector;
 import impresario.IModel;
 
 import javafx.scene.control.DatePicker;
+import java.time.LocalDate;
+
 import javafx.scene.control.ComboBox;
 import javafx.collections.FXCollections;
+
 import javafx.scene.control.TableView;
+import javafx.collections.ObservableList;
+import javafx.scene.control.TableColumn;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
+import javafx.util.Callback;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.TableCell;
+import javafx.scene.layout.Region;
+import javafx.beans.binding.Bindings;
+import javafx.scene.control.ScrollPane;
+import java.util.Calendar;
+import java.text.SimpleDateFormat;
 
 public class StartShiftActionView extends View {
 
-    private TextField startDate;
+    private DatePicker startDatePicker;
     private TextField startHour;
     private TextField startMin;
     private TextField endHour;
     private TextField endMin;
-    private ComboBox<String> scoutComboBox;
+    private TextField startingCash;
+
     private TextField companion;
     private TextField companionHour;
     private TextField scoutStartHour;
     private TextField scoutStartMin;
     private TextField scoutEndHour;
     private TextField scoutEndMin;
-    private TextField startingCash;
+    private ComboBox<Scout> scoutComboBox;
+    ObservableList<Scout> data = FXCollections.observableArrayList();
 
-    private TextField startCash;
+    // for showing error message
+    protected MessageView statusLog;
 
     public StartShiftActionView(IModel model) {
         super(model, "StartShiftActionView");
 
         VBox container = new VBox(10);
         container.setPadding(new Insets(15, 5, 5, 5));
+
+        container.getChildren().add(createTitle());
+
+        // create our GUI components, add them to this Container
         container.getChildren().add(createFormContents());
 
+        container.getChildren().add(createStatusLog("             "));
+
         getChildren().add(container);
+
+        // populateFields();
+
+        myModel.subscribe("UpdateStatusMessage", this);
+        myModel.subscribe("ShiftStarted", this);
+    }
+
+    private Node createTitle() {
+        HBox container = new HBox();
+        container.setAlignment(Pos.CENTER);
+
+        Text titleText = new Text(" Start Shift ");
+        titleText.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        titleText.setWrappingWidth(300);
+        titleText.setTextAlignment(TextAlignment.CENTER);
+        titleText.setFill(Color.DARKGREEN);
+        container.getChildren().add(titleText);
+
+        return container;
     }
 
     private VBox createFormContents() {
         VBox container = new VBox(10);
+        container.setPadding(new Insets(25));
+
         GridPane grid = new GridPane();
-        grid.setAlignment(Pos.TOP_RIGHT);
+        grid.setAlignment(Pos.CENTER);
+        // grid.setStyle("-fx-background-color: #f5f5f5;");
         grid.setHgap(10);
         grid.setVgap(10);
-        grid.setPadding(new Insets(25, 25, 25, 25));
 
-        // start date
-        // ---------------------------------------
+        /*
+         * ---------------------------
+         * session
+         * ---------------------------
+         */
+        // Start Date
+        Label startDateLabel = new Label("Start Date:");
+        grid.add(startDateLabel, 1, 0);
 
-        Text startDateLabel = new Text("Start Date:");
-        startDateLabel.setWrappingWidth(150);
-        startDateLabel.setTextAlignment(TextAlignment.RIGHT);
-        grid.add(startDateLabel, 0, 0);
+        startDatePicker = new DatePicker();
+        startDatePicker.setPrefWidth(200);
+        grid.add(startDatePicker, 2, 0);
 
-        DatePicker startDatePicker = new DatePicker();
-        startDatePicker.setOnAction(event -> {
-            submit(event);
-        });
-        grid.add(startDatePicker, 1, 0);
+        // Start Time
+        Label startTimeLabel = new Label("Start Time:");
+        grid.add(startTimeLabel, 1, 1);
 
-        // start time
-        // ---------------------------------------
-
-        Text startTimeLabel = new Text("Start Time:");
-        startTimeLabel.setWrappingWidth(150);
-        startTimeLabel.setTextAlignment(TextAlignment.RIGHT);
-        grid.add(startTimeLabel, 0, 1);
+        HBox startTimeBox = new HBox(10);
 
         startHour = new TextField();
-        startHour.setPrefWidth(75); // Set the preferred width of the TextField
-        startHour.setOnAction(event -> submit(event));
-        grid.add(startHour, 1, 1);
-
-        Label hourLabel = new Label("H");
-        grid.add(hourLabel, 2, 1);
+        startHour.setPrefWidth(75);
+        Label startHourLabel = new Label("H");
 
         startMin = new TextField();
-        startMin.setPrefWidth(75); // Set the preferred width of the TextField
-        startMin.setOnAction(event -> submit(event));
-        grid.add(startMin, 3, 1);
+        startMin.setPrefWidth(75);
+        Label startMinLabel = new Label("M");
 
-        Label minLabel = new Label("M");
-        grid.add(minLabel, 4, 1);
+        startTimeBox.getChildren().addAll(startHour, startHourLabel, startMin, startMinLabel);
+        grid.add(startTimeBox, 2, 1);
 
-        // end time
-        // ---------------------------------------
+        // End Time
+        Label endTimeLabel = new Label("End Time:");
+        grid.add(endTimeLabel, 1, 2);
 
-        Text endTimeLabel = new Text("End Time:");
-        endTimeLabel.setWrappingWidth(150);
-        endTimeLabel.setTextAlignment(TextAlignment.RIGHT);
-        grid.add(endTimeLabel, 0, 2);
+        HBox endTimeBox = new HBox(10);
 
         endHour = new TextField();
-        endHour.setPrefWidth(75); // Set the preferred width of the TextField
-        endHour.setOnAction(event -> submit(event));
-        grid.add(endHour, 1, 2);
-
-        Label endhourLabel = new Label("H");
-        grid.add(endhourLabel, 2, 2);
+        endHour.setPrefWidth(75);
+        Label endHourLabel = new Label("H");
 
         endMin = new TextField();
-        endMin.setPrefWidth(75); // Set the preferred width of the TextField
-        endMin.setOnAction(event -> submit(event));
-        grid.add(endMin, 3, 2);
+        endMin.setPrefWidth(75);
+        Label endMinLabel = new Label("M");
 
-        Label endminLabel = new Label("M");
-        grid.add(endminLabel, 4, 2);
+        endTimeBox.getChildren().addAll(endHour, endHourLabel, endMin, endMinLabel);
+        grid.add(endTimeBox, 2, 2);
 
-        // starting cash
-        // ---------------------------------------
-
-        Text startingCashLabel = new Text("Starting Cash:");
-        startingCashLabel.setWrappingWidth(150);
-        startingCashLabel.setTextAlignment(TextAlignment.RIGHT);
-        grid.add(startingCashLabel, 0, 3);
+        // Starting Cash
+        Label startingCashLabel = new Label("Starting Cash:");
+        grid.add(startingCashLabel, 1, 3);
 
         startingCash = new TextField();
-        startingCash.setPrefWidth(75); // Set the preferred width of the TextField
-        startingCash.setOnAction(event -> submit(event));
-        grid.add(startingCash, 1, 3);
+        grid.add(startingCash, 2, 3);
 
-        // add session button
-        // ---------------------------------------
+        /*
+         * ---------------------------
+         * add scout
+         * ---------------------------
+         */
 
-        Button addSessionBtn = new Button("Add Session");
-        addSessionBtn.setFont(Font.font("Arial", FontWeight.BOLD, 14));
-        addSessionBtn.setTextAlignment(TextAlignment.CENTER);
-        grid.add(addSessionBtn, 4, 4);
+        // Scout Selection
+        Label scoutLabel = new Label("Scout:");
+        grid.add(scoutLabel, 1, 5);
 
-        // scout combo box
-        // ---------------------------------------
+        scoutComboBox = new ComboBox<>(
+                FXCollections.observableArrayList(
+                        new Scout("Jon", "Jones", 208),
+                        new Scout("Jake", "Gyllenhaal", 302),
+                        new Scout("Juice", "Wrld", 999),
+                        new Scout("Bob", "Marley", 305)));
 
-        Text scoutLabel = new Text("Scout:");
-        scoutLabel.setWrappingWidth(150);
-        scoutLabel.setTextAlignment(TextAlignment.RIGHT);
-        grid.add(scoutLabel, 0, 5);
+        scoutComboBox.setPrefWidth(200);
+        scoutComboBox.setDisable(true);
+        scoutComboBox.setPromptText("Select a Scout");
+        grid.add(scoutComboBox, 2, 5);
 
-        scoutComboBox = new ComboBox<String>(FXCollections.observableArrayList("Scout 1", "Scout 2", "Scout 3"));
-        scoutComboBox.setPrefWidth(150);
-        scoutComboBox.setOnAction(event -> {
-            submit(event);
-        });
-        grid.add(scoutComboBox, 1, 5);
+        // Companion Start Time
+        Label companionLabel = new Label("Companion:");
+        grid.add(companionLabel, 1, 6);
 
-        // companion
-        // ---------------------------------------
-
-        Text companionLabel = new Text("Companion:");
-        companionLabel.setWrappingWidth(150);
-        companionLabel.setTextAlignment(TextAlignment.RIGHT);
-        grid.add(companionLabel, 0, 6);
-
+        HBox companionBox = new HBox(10);
         companion = new TextField();
-        companion.setPrefWidth(75); // Set the preferred width of the TextField
-        companion.setOnAction(event -> submit(event));
-        grid.add(companion, 1, 6);
+        companion.setPrefWidth(100);
 
-        // companion hour
         Label companionHourLabel = new Label("Hour:");
-        grid.add(companionHourLabel, 2, 6);
-
         companionHour = new TextField();
-        companionHour.setPrefWidth(75); // Set the preferred width of the TextField
-        companionHour.setOnAction(event -> submit(event));
-        grid.add(companionHour, 3, 6);
+        companionHour.setPrefWidth(50);
+        companionBox.getChildren().addAll(companion, companionHourLabel, companionHour);
+        companionBox.setDisable(true);
+        grid.add(companionBox, 2, 6);
 
-        // scout start
-        // ---------------------------------------
+        // Scout Start Time
+        Label scoutStartLabel = new Label("Scout Start Time:");
+        grid.add(scoutStartLabel, 1, 7);
 
-        Text scoutStartLabel = new Text("Scout Start:");
-        scoutStartLabel.setWrappingWidth(150);
-        scoutStartLabel.setTextAlignment(TextAlignment.RIGHT);
-        grid.add(scoutStartLabel, 0, 7);
-
-        // start hour
+        HBox scoutStartBox = new HBox(10);
         scoutStartHour = new TextField();
-        scoutStartHour.setPrefWidth(75); // Set the preferred width of the TextField
-        scoutStartHour.setOnAction(event -> submit(event));
-        grid.add(scoutStartHour, 1, 7);
+        scoutStartHour.setPrefWidth(75);
 
         Label scoutStartHourLabel = new Label("H");
-        grid.add(scoutStartHourLabel, 2, 7);
-
-        // start min
         scoutStartMin = new TextField();
-        scoutStartMin.setPrefWidth(75); // Set the preferred width of the TextField
-        scoutStartMin.setOnAction(event -> submit(event));
-        grid.add(scoutStartMin, 3, 7);
+        scoutStartMin.setPrefWidth(75);
 
         Label scoutStartMinLabel = new Label("M");
-        grid.add(scoutStartMinLabel, 4, 7);
+        scoutStartBox.setDisable(true);
+        scoutStartBox.getChildren().addAll(scoutStartHour, scoutStartHourLabel, scoutStartMin, scoutStartMinLabel);
+        grid.add(scoutStartBox, 2, 7);
 
-        // scout end
-        // ---------------------------------------
+        // Scout End Time
+        Label scoutEndLabel = new Label("Scout End Time:");
+        grid.add(scoutEndLabel, 1, 8);
 
-        Text scoutEndLabel = new Text("Scout End:");
-        scoutEndLabel.setWrappingWidth(150);
-        scoutEndLabel.setTextAlignment(TextAlignment.RIGHT);
-        grid.add(scoutEndLabel, 0, 8);
-
-        // end hour
+        HBox scoutEndBox = new HBox(10);
         scoutEndHour = new TextField();
-        scoutEndHour.setPrefWidth(75); // Set the preferred width of the TextField
-        scoutEndHour.setOnAction(event -> submit(event));
-        grid.add(scoutEndHour, 1, 8);
+        scoutEndHour.setPrefWidth(75);
 
         Label scoutEndHourLabel = new Label("H");
-        grid.add(scoutEndHourLabel, 2, 8);
-
-        // end min
         scoutEndMin = new TextField();
-        scoutEndMin.setPrefWidth(75); // Set the preferred width of the TextField
-        scoutEndMin.setOnAction(event -> submit(event));
-        grid.add(scoutEndMin, 3, 8);
+        scoutEndMin.setPrefWidth(75);
 
         Label scoutEndMinLabel = new Label("M");
-        grid.add(scoutEndMinLabel, 4, 8);
+        scoutEndBox.setDisable(true);
+        scoutEndBox.getChildren().addAll(scoutEndHour, scoutEndHourLabel, scoutEndMin, scoutEndMinLabel);
+        grid.add(scoutEndBox, 2, 8);
 
-        // add scout button
-        // ---------------------------------------
-
+        // Add Scout Button
         Button addScoutBtn = new Button("Add Scout");
         addScoutBtn.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         addScoutBtn.setTextAlignment(TextAlignment.CENTER);
-        grid.add(addScoutBtn, 4, 9);
+        addScoutBtn.setDisable(true);
+        addScoutBtn.setOnAction(event -> {
+            // Check if any required fields are null or empty
+            if (scoutComboBox.getValue() == null || companion.getText().isEmpty() || scoutStartHour.getText().isEmpty()
+                    || scoutStartMin.getText().isEmpty() || scoutEndHour.getText().isEmpty() || scoutEndMin.getText().isEmpty() || companionHour.getText().isEmpty()) {
+                // Display an error message and return
+                displayErrorMessage("Please fill out all Scout fields");
+                return;
+            }
+            // Get the selected scout from the combo box
+            Scout selectedScouts = scoutComboBox.getValue();
+            // Add the selected scout to the table
+            data.add(selectedScouts);
+            // add to database
+            AddScout(event);
+        });
+        grid.add(addScoutBtn, 1, 9);
 
-        // scouts staffing shift table
-        // ---------------------------------------
+        /*
+         * ---------------------------
+         * scout table
+         * ---------------------------
+         */
+        // Create table and set placeholder text
+        TableView<Scout> table = new TableView<>();
+        Label placeholderLabel = new Label("No data available.");
+        placeholderLabel.setPadding(new Insets(20, 20, 20, 20));
+        table.setPlaceholder(placeholderLabel);
 
-        Text scoutTableLabel = new Text("Scouts Staffing Shift:");
-        scoutTableLabel.setWrappingWidth(150);
-        scoutTableLabel.setTextAlignment(TextAlignment.RIGHT);
-        grid.add(scoutTableLabel, 0, 10);
+        // first column
+        TableColumn<Scout, String> firstCol = new TableColumn<>("First");
+        firstCol.setCellValueFactory(new PropertyValueFactory<>("First"));
 
-        TableView table = new TableView();
-        table.setPlaceholder(new Label("No data available."));
-        grid.add(table, 1, 10, 4, 2);
+        // last column
+        TableColumn<Scout, Integer> lastCol = new TableColumn<>("Last");
+        lastCol.setCellValueFactory(new PropertyValueFactory<>("Last"));
 
-        // start shift / cancel button
-        // ---------------------------------------
+        // troop id column
+        TableColumn<Scout, Integer> troopCol = new TableColumn<>("Troop ID");
+        troopCol.setCellValueFactory(new PropertyValueFactory<>("Troop"));
 
+        // Add columns to the table
+        table.getColumns().addAll(firstCol, lastCol, troopCol);
+
+        table.setItems(data);
+
+        // Set column widths
+        firstCol.setPrefWidth(150);
+        lastCol.setPrefWidth(150);
+        troopCol.setPrefWidth(75);
+
+        // Set the table height to show 4 rows without scrolling
+        table.setFixedCellSize(25);
+        table.prefHeightProperty().bind(Bindings.size(table.getItems()).multiply(table.getFixedCellSize()).add(28));
+
+        // Create a scroll pane and add the table to it
+        ScrollPane scrollPane = new ScrollPane(table);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setPrefViewportHeight(71);
+
+        // Add the scroll pane to the grid
+        grid.add(scrollPane, 1, 10, 4, 2);
+
+        /*
+         * ----------------------
+         * start session button
+         * ----------------------
+         */
+        Button startSessionBtn = new Button("Add Session");
+        startSessionBtn.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+        startSessionBtn.setTextAlignment(TextAlignment.CENTER);
+        startSessionBtn.setOnAction(event -> {
+            // Check if any required fields are null or empty
+            if (startDatePicker.getValue() == null || startHour.getText().isEmpty() || startMin.getText().isEmpty()
+                    || endHour.getText().isEmpty() || endMin.getText().isEmpty() || startingCash.getText().isEmpty()) {
+                // Display an error message and return
+                displayErrorMessage("Please fill out all Session fields");
+                return;
+            }
+            // disable start session
+            startDatePicker.setDisable(true);
+            startHour.setDisable(true);
+            startMin.setDisable(true);
+            endHour.setDisable(true);
+            endMin.setDisable(true);
+            startingCash.setDisable(true);
+            startSessionBtn.setDisable(true);
+
+            // enable add scout
+            addScoutBtn.setDisable(false);
+            scoutEndBox.setDisable(false);
+            scoutStartBox.setDisable(false);
+            scoutComboBox.setDisable(false);
+            companionBox.setDisable(false);
+
+            StartSession(event);
+        });
+        grid.add(startSessionBtn, 1, 4);
+
+        /*
+         * ---------------------------
+         * start shift / cancel button
+         * ---------------------------
+         */
         HBox btnContainer = new HBox(100);
         btnContainer.setAlignment(Pos.CENTER);
 
+        // cancell button
         Button cancelBtn = new Button("Cancel");
         cancelBtn.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         cancelBtn.setTextAlignment(TextAlignment.CENTER);
         cancelBtn.setOnAction(event -> {
+
             myModel.stateChangeRequest("Cancel", null);
         });
 
+        // start shift button
         Button submitBtn = new Button("Start Shift");
         submitBtn.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         submitBtn.setTextAlignment(TextAlignment.CENTER);
         submitBtn.setOnAction(event -> {
-            submit(event);
+            Final(event);
         });
+
+        // cancel buttom
         btnContainer.getChildren().add(cancelBtn);
+        // submit button
         btnContainer.getChildren().add(submitBtn);
 
         container.getChildren().add(grid);
@@ -292,34 +381,166 @@ public class StartShiftActionView extends View {
         return container;
     }
 
-    public void submit(Event event) {
-        String date = startDate.getText();
-        String time = startHour.getText();
-        String cash = startCash.getText();
+    // Create the status log field
+    // -------------------------------------------------------------
+    protected MessageView createStatusLog(String initialMessage) {
+        statusLog = new MessageView(initialMessage);
 
-        // TODO: better validation and display error message in GUI
-        if (date == null) {
-            System.out.println("Please enter a start date.");
-            return;
+        return statusLog;
+    }
+
+    // scouts constructor
+    private class Scout {
+        private final String first;
+        private final String last;
+        private final int troop;
+
+        public Scout(String first, String last, int troop) {
+            this.first = first;
+            this.last = last;
+            this.troop = troop;
         }
-        if (time == null) {
-            System.out.println("Please enter a start time.");
-            return;
+
+        public String getFirst() {
+            return first;
         }
-        if (cash == null) {
-            System.out.println("Please enter starting cash.");
+
+        public String getLast() {
+            return last;
         }
+
+        public int getTroop() {
+            return troop;
+        }
+
+        @Override
+        public String toString() {
+            return first + " " + last + " (Troop " + troop + ")";
+        }
+    }
+
+    /*
+     * --------------------
+     * start session
+     * --------------------
+     */
+    public void StartSession(Event event) {
+        // clear error message
+        clearErrorMessage();
+
+        // Get the selected year, month, and day values from the DatePicker
+        LocalDate selectedDate = startDatePicker.getValue();
+        int year = selectedDate.getYear();
+        int month = selectedDate.getMonthValue();
+        int dayOfMonth = selectedDate.getDayOfMonth();
+
+        // Create a Calendar object and set its year, month, and day values
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, month - 1); // Note: JavaFX months start from 1
+        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+        // Format the Calendar object into a string
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String date = dateFormat.format(calendar.getTime());
+
+        String startTimeH = startHour.getText();
+        String startTimeM = startMin.getText();
+        String endTimeH = endHour.getText();
+        String endTimeM = endMin.getText();
+        String cash = startingCash.getText();
+
+        String startTime = startTimeH + ":" + startTimeM;
+        String endTime = endTimeH + ":" + endTimeM;
 
         Properties props = new Properties();
         props.setProperty("StartDate", date);
-        props.setProperty("StartTime", time);
+        props.setProperty("StartTime", startTime);
+        props.setProperty("EndTime", endTime);
         props.setProperty("StartingCash", cash);
 
         myModel.stateChangeRequest("StartSession", props);
+        // display success message
+        displayMessage("Session added!");
+    }
 
+    /*
+     * add scount
+     */
+    public void AddScout(Event event) {
+        // clear error messages
+        clearErrorMessage();
+
+        Scout selectedScout = scoutComboBox.getValue();
+        String scout = selectedScout.toString();
+
+        String comp = companion.getText();
+        String compH = companionHour.getText();
+        String scoutStartH = scoutStartHour.getText();
+        String scoutStartM = scoutStartMin.getText();
+        String scoutEndH = scoutEndHour.getText();
+        String scoutEndM = scoutEndMin.getText();
+
+        String ScoutStartTime = scoutStartH + ":" + scoutStartM;
+        String ScoutEndTime = scoutEndH + ":" + scoutEndM;
+
+        ///Properties props = new Properties();
+        //props.setProperty("Scout", scout);
+        //props.setProperty("Companion", comp);
+        //props.setProperty("CompanionHour", compH);
+        //props.setProperty("ScoutStartTime", ScoutStartTime);
+        //props.setProperty("ScoutEndTime", ScoutEndTime);
+
+        //myModel.stateChangeRequest("AddShift", props);
+        System.out.println(scout + " " + comp + " " + compH + " " + ScoutStartTime + " " + ScoutEndTime);
+
+        // clear input fields
+        scoutComboBox.getSelectionModel().clearSelection();
+        companion.clear();
+        companionHour.clear();
+        scoutStartHour.clear();
+        scoutStartMin.clear();
+        scoutEndHour.clear();
+        scoutEndMin.clear();
+
+        //display success message
+        displayMessage("Scout added!");
+    }
+
+    /*
+     * finish
+     */
+    public void Final(Event event) {
+        clearErrorMessage();
+        displayErrorMessage("Error adding to database");
     }
 
     public void updateState(String key, Object value) {
 
+    }
+
+    /**
+     * Display error message
+     */
+    // ----------------------------------------------------------
+    public void displayErrorMessage(String message) {
+        statusLog.displayErrorMessage(message);
+    }
+
+    /**
+     * Display info message
+     */
+    // ----------------------------------------------------------
+    public void displayMessage(String message) {
+        statusLog.displayMessage(message);
+    }
+
+    /**
+     * Clear error message
+     */
+    // ----------------------------------------------------------
+    public void clearErrorMessage() {
+
+        statusLog.clearErrorMessage();
     }
 }

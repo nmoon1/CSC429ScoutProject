@@ -8,8 +8,12 @@ import userinterface.ViewFactory;
 
 public class StartShiftAction extends Action {
 
+    protected ScoutCollection allScouts = new ScoutCollection();
+
     public StartShiftAction() throws Exception {
         super();
+
+        allScouts.lookupAll();
     }
 
     protected void setDependencies() {
@@ -31,9 +35,12 @@ public class StartShiftAction extends Action {
     }
 
     public Object getState(String key) {
-        switch(key) {
-            default: return null;
-        }
+        if (key.equals("GetScouts"))
+		{
+			return allScouts;
+		}
+        else
+            return null;
     }
 
     public void stateChangeRequest(String key, Object value) {
@@ -44,17 +51,33 @@ public class StartShiftAction extends Action {
             case "StartSession":
                 startSession((Properties)value);
                 break;
+            case "AddShift":
+                addShift((Properties)value);
+                break;
         }
         myRegistry.updateSubscribers(key, this);
     }
 
-    public void startSession(Properties props) {
+    private void startSession(Properties props) {
         try {
             Session session = new Session(props);
-            System.out.println(session);
             session.save();
+
         } catch(Exception e) {
             System.out.println("Error starting session: " + e.toString());
+        }
+    }
+
+    private void addShift(Properties props) {
+        try {
+            Session se = new Session();
+            props.setProperty("SessionID", (String)se.getState("ID"));
+            
+            Shift shift = new Shift(props);
+            shift.save();
+            
+        } catch(Exception e) {
+            System.out.println("Error adding shift: " + e.toString());
         }
     }
 }
