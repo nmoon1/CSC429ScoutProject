@@ -23,6 +23,11 @@ public class Scout extends EntityBase implements IView
 	private String updateStatusMessage = "";
 	protected MessageView statusLog;
 	
+	/**
+	 * Retrieves a Scout from the database using the provided ID
+	 * @param scoutId The Scout's ID
+	 * @throws InvalidPrimaryKeyException
+	 */
 	public Scout(String scoutId) throws InvalidPrimaryKeyException
 	{
 		super(myTableName);
@@ -32,6 +37,9 @@ public class Scout extends EntityBase implements IView
 		lookupAndStore("ID = " + scoutId);
 	}
 	
+	/**
+	 * Creates an empty Scout and sets its default values
+	 */
 	public Scout()
 	{
 		super(myTableName);
@@ -48,6 +56,10 @@ public class Scout extends EntityBase implements IView
 		persistentState.setProperty("Status", "Active");
 	}
 	
+	/**
+	 * Creates an Scout with the given properties and initializes unprovided properties with default values
+	 * @param props The properties to initialize the Scout with
+	 */
 	public Scout(Properties props)
 	{
 		super(myTableName);
@@ -72,6 +84,11 @@ public class Scout extends EntityBase implements IView
 		}
 	}
 	
+	/**
+	 * Checks if the given properties are valid to create a new Scout with. May modify the PhoneNumber property.
+	 * @param scoutInfo The properties to validate. May modify the PhoneNumber property.
+	 * @return Returns a String containing an error message if the properties are invalid or null otherwise.
+	 */
 	public static String validate(Properties scoutInfo)
 	{
 		String firstName = scoutInfo.getProperty("FirstName"); 
@@ -155,11 +172,19 @@ public class Scout extends EntityBase implements IView
     	return null;
 	}
 	
+	/**
+	 * Gets the first and last name of the Scout
+	 * @return The full name of the Scout
+	 */
 	public String getFullName()
 	{
 		return persistentState.getProperty("FirstName") + " " + persistentState.getProperty("LastName"); 
 	}
 	
+	/**
+	 * Returns the phone number formatted as XXX-XXX-XXXX if it is of correct length
+	 * @return The formatted phone number
+	 */
 	public String getFormattedPhoneNumber()
 	{
 		String phoneNumber = persistentState.getProperty("PhoneNumber");
@@ -168,6 +193,11 @@ public class Scout extends EntityBase implements IView
 		return phoneNumber.substring(0, 3) + "-" + phoneNumber.substring(3, 6) + "-" + phoneNumber.substring(6);
 	}
 	
+	/**
+	 * Queries the database and stores the Scout record if exactly 1 is found
+	 * @param condition The WHERE condition to send the SQL query with
+	 * @throws InvalidPrimaryKeyException Will throw InvalidPrimaryKeyException if there is not exactly 1 match
+	 */
 	public void lookupAndStore(String condition) throws InvalidPrimaryKeyException
 	{
 		Vector<Properties> allDataRetrieved = getSelectQueryResult("SELECT * FROM " + myTableName + " WHERE (" + condition + ")");
@@ -192,6 +222,9 @@ public class Scout extends EntityBase implements IView
 		}
 	}
 	
+	/*
+	 * Stores the Scout in the database
+	 */
 	public void update() 
 	{
 		try
@@ -216,6 +249,10 @@ public class Scout extends EntityBase implements IView
 		}
 	}
 	
+	/**
+	 * Sets all properties of the scout to the given properties
+	 * @param props The properties to set the Scout to
+	 */
 	public void setScout(Properties props)
 	{
 		Enumeration allKeys = props.propertyNames();
@@ -244,11 +281,18 @@ public class Scout extends EntityBase implements IView
 		myRegistry.updateSubscribers(key, this);
 	}
 	
+	/**
+	 * Updates the DateStatusUpdated with the current date
+	 */
 	public void updateStatusDate()
 	{
 		updateStatusDate(LocalDate.now());
 	}
 	
+	/**
+	 * Updates the DateStatusUpdated with the given date
+	 * @param date
+	 */
 	public void updateStatusDate(LocalDate date)
 	{
 		String year = date.getYear() + "";
