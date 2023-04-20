@@ -223,7 +223,7 @@ public class Scout extends EntityBase implements IView
 	}
 	
 	/*
-	 * Stores the Scout in the database
+	 * Stores or updates the Scout in the database
 	 */
 	public void update() 
 	{

@@ -22,6 +22,11 @@ public class Transaction extends EntityBase implements IView
 	private String updateStatusMessage = "";
 	protected MessageView statusLog;
 	
+	/**
+	 * Retrieves the Transaction record from the database with an ID matching the given ID
+	 * @param ID The transaction ID to match
+	 * @throws InvalidPrimaryKeyException
+	 */
 	public Transaction(String ID) throws InvalidPrimaryKeyException
 	{
 		super(myTableName);
@@ -31,6 +36,9 @@ public class Transaction extends EntityBase implements IView
 		lookupAndStore("ID = " + ID);
 	}
 	
+	/**
+	 * Creates a new Transaction with default values
+	 */
 	public Transaction()
 	{
 		super(myTableName);
@@ -40,6 +48,10 @@ public class Transaction extends EntityBase implements IView
 		SetDefaultValues();
 	}
 	
+	/**
+	 * Creates a new Transaction from the given properties and sets unprovided properties to default values
+	 * @param props The properties to create the Transaction from
+	 */
 	public Transaction(Properties props)
 	{
 		super(myTableName);
@@ -57,6 +69,9 @@ public class Transaction extends EntityBase implements IView
 		}
 	}
 	
+	/**
+	 * Sets the default values of the Transaction
+	 */
 	private void SetDefaultValues()
 	{
 		persistentState.setProperty("SessionID", "");
@@ -71,6 +86,11 @@ public class Transaction extends EntityBase implements IView
 		persistentState.setProperty("DateStatusUpdated", "");
 	}
 	
+	/**
+	 * Queries the database and stores the Transaction record if exactly 1 is found
+	 * @param condition The WHERE condition to send the SQL query with
+	 * @throws InvalidPrimaryKeyException Will throw InvalidPrimaryKeyException if there is not exactly 1 match
+	 */
 	public void lookupAndStore(String condition) throws InvalidPrimaryKeyException
 	{
 		Vector<Properties> allDataRetrieved = getSelectQueryResult("SELECT * FROM " + myTableName + " WHERE (" + condition + ")");
@@ -95,6 +115,9 @@ public class Transaction extends EntityBase implements IView
 		}
 	}
 	
+	/**
+	 * Stores or updates the Transaction in the database
+	 */
 	public void update() 
 	{
 		try
@@ -119,6 +142,10 @@ public class Transaction extends EntityBase implements IView
 		}
 	}
 	
+	/**
+	 * Sets all properties of the Transaction to the given properties
+	 * @param props The properties to set the Transaction to
+	 */
 	public void setProperties(Properties props)
 	{
 		Enumeration allKeys = props.propertyNames();
@@ -147,11 +174,11 @@ public class Transaction extends EntityBase implements IView
 		myRegistry.updateSubscribers(key, this);
 	}
 	
-	public void updateStatusDate()
-	{
-		updateStatusDate(LocalDate.now());
-	}
-	
+	/**
+	 * Formats a LocalDate into the format required by the database
+	 * @param date The LocalDate
+	 * @return A string formatted as YYYY-MM-DD
+	 */
 	public static String dateToString(LocalDate date)
 	{
 		String year = date.getYear() + "";
@@ -163,6 +190,18 @@ public class Transaction extends EntityBase implements IView
 		return year + "-" + month + "-" + day;
 	}
 	
+	/**
+	 * Updates the DateStatusUpdated with the current date
+	 */
+	public void updateStatusDate()
+	{
+		updateStatusDate(LocalDate.now());
+	}
+	
+	/**
+	 * Updates the DateStatusUpdated with the given date
+	 * @param date
+	 */
 	public void updateStatusDate(LocalDate date)
 	{
 		persistentState.setProperty("DateStatusUpdated", dateToString(date));
