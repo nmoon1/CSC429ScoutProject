@@ -367,7 +367,7 @@ public class StartShiftActionView extends View {
         submitBtn.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         submitBtn.setTextAlignment(TextAlignment.CENTER);
         submitBtn.setOnAction(event -> {
-            Finish(event);
+            Final(event);
         });
 
         // cancel buttom
@@ -390,7 +390,7 @@ public class StartShiftActionView extends View {
     }
 
     // scouts constructor
-    public class Scout {
+    private class Scout {
         private final String first;
         private final String last;
         private final int troop;
@@ -510,8 +510,9 @@ public class StartShiftActionView extends View {
     /*
      * finish
      */
-    public void Finish(Event event) {
-
+    public void Final(Event event) {
+        clearErrorMessage();
+        displayErrorMessage("Error adding to database");
     }
 
     public void updateState(String key, Object value) {
