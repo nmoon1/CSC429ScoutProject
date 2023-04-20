@@ -24,6 +24,7 @@ public class TLCView extends View {
 
     private Button endShiftBtn;
     private Button sellTreeBtn;
+    private Button startShiftBtn;
 
     public TLCView(IModel model) {
         super(model, "TLCView");
@@ -41,7 +42,7 @@ public class TLCView extends View {
         Button removeTreeBtn = makeButton("Remove Tree", "RemoveTree");
         Button addTreeTypeBtn = makeButton("Add Tree Type", "AddTreeType");
         Button updateTreeTypeBtn = makeButton("Update Tree Type", "UpdateTreeType");
-        Button startShiftBtn = makeButton("Start Shift", "StartShift");
+        startShiftBtn = makeButton("Start Shift", "StartShift");
         endShiftBtn = makeButton("End Shift", "EndShift");
         sellTreeBtn = makeButton("Sell Tree", "SellTree");
         Button doneBtn = makeDoneButton();
@@ -110,6 +111,7 @@ public class TLCView extends View {
     private void toggleButtonDisabled(Boolean disabled) {
         endShiftBtn.setDisable(disabled);
         sellTreeBtn.setDisable(disabled);
+        startShiftBtn.setDisable(!disabled);
     }
     
 }
