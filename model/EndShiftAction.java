@@ -41,6 +41,8 @@ public class EndShiftAction extends Action {
             case "DoYourJob":
                 calcEndingSales();
                 doYourJob();
+            case "CancelAction":
+                myRegistry.updateSubscribers(key, this);
                 break;
         }
         myRegistry.updateSubscribers(key, this);

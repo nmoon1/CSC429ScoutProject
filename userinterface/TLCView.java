@@ -22,6 +22,9 @@ import javafx.stage.Stage;
 
 public class TLCView extends View {
 
+    private Button endShiftBtn;
+    private Button sellTreeBtn;
+
     public TLCView(IModel model) {
         super(model, "TLCView");
 
@@ -39,8 +42,8 @@ public class TLCView extends View {
         Button addTreeTypeBtn = makeButton("Add Tree Type", "AddTreeType");
         Button updateTreeTypeBtn = makeButton("Update Tree Type", "UpdateTreeType");
         Button startShiftBtn = makeButton("Start Shift", "StartShift");
-        Button endShiftBtn = makeButton("End Shift", "EndShift");
-        Button sellTreeBtn = makeButton("Sell Tree", "SellTree");
+        endShiftBtn = makeButton("End Shift", "EndShift");
+        sellTreeBtn = makeButton("Sell Tree", "SellTree");
         Button doneBtn = makeDoneButton();
 
         container.getChildren().add(title);
@@ -58,15 +61,17 @@ public class TLCView extends View {
         container.getChildren().add(doneBtn);
 
         getChildren().add(container);
+        myModel.subscribe("DisableButtons", this);
+        myModel.subscribe("EnableButtons", this);
     }
 
     private Node makeTitle() {
-		Text title = new Text("Christmas Tree Sale System");
-		title.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-		title.setTextAlignment(TextAlignment.CENTER);
-		title.setFill(Color.DARKGREEN);
-		return title;
-	}
+        Text title = new Text("Christmas Tree Sale System");
+        title.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        title.setTextAlignment(TextAlignment.CENTER);
+        title.setFill(Color.DARKGREEN);
+        return title;
+    }
 
     private Button makeButton(String label, String action) {
         Button btn = new Button(label);
@@ -83,16 +88,28 @@ public class TLCView extends View {
     }
 
     private Button makeDoneButton() {
-		Button btn = new Button("Done");
-		setButtonStyles(btn);
-		btn.setOnAction( event -> {
-			System.exit(0);
-		});
-		return btn;
-	}
+        Button btn = new Button("Done");
+        setButtonStyles(btn);
+        btn.setOnAction( event -> {
+            System.exit(0);
+        });
+        return btn;
+    }
 
     public void updateState(String key, Object value) {
-        // TODO: add necessary state updates
+        switch(key) {
+            case "DisableButtons":
+                toggleButtonDisabled(true);
+                break;
+            case "EnableButtons":
+                toggleButtonDisabled(false);
+                break;
+        }
     }
-    
+
+    private void toggleButtonDisabled(Boolean disabled) {
+//        endShiftBtn.setDisable(disabled);
+//        sellTreeBtn.setDisable(disabled);
+    }
+
 }

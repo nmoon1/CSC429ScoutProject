@@ -29,7 +29,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.application.Platform;
 
 public class EndShiftActionView extends View{
-
+    protected TextArea Notes;
     protected MessageView statusLog;
     public EndShiftActionView(IModel model) {
         super(model, "EndShiftActionView");
@@ -51,14 +51,24 @@ public class EndShiftActionView extends View{
         Text cash = new Text("Ending Cash: " + endingCash);
         Text check = new Text("Total Check Sales: " + totalCheckSales);
         HBox btnContainer = new HBox(10);
+
+        Notes = new TextArea();
+        Notes.setPrefSize(150, 60);
+        Notes.setWrapText(true);
+//        Notes.setEditable(true);
+        container.getChildren().add(Notes);
+
         Button cancel = new Button("Cancel");
         cancel.setOnAction( action -> {
-            myModel.stateChangeRequest("Cancel", "");
+            myModel.stateChangeRequest("CancelAction", "");
+                                        //change to action
         });
         Button confirm = new Button("Confirm");
         confirm.setOnAction( action -> {
-            myModel.stateChangeRequest("Confirm", "");
+            myModel.stateChangeRequest("Confirm", Notes.getText());
+
         });
+
         btnContainer.getChildren().add(cancel);
         btnContainer.getChildren().add(confirm);
         container.getChildren().add(cash);
@@ -75,7 +85,6 @@ public class EndShiftActionView extends View{
                 statusLog.displayMessage("The Shift has ended");
             case"NotesError":
                 statusLog.displayErrorMessage("Notes were entered incorrectly");
-
                 break;
         }
 
