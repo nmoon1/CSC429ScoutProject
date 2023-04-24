@@ -108,3 +108,100 @@
 [4/18/23 1:11 PM]|JDBCBroker|JDBCBroker|Error|NOTAG|null<Could not load driver class[org.mariadb.jdbc.Driver]>
 [4/18/23 1:19 PM]|JDBCBroker|JDBCBroker|Error|NOTAG|null<Could not load driver class[org.mariadb.jdbc.Driver]>
 [4/18/23 1:21 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: SellTree.java.lang.NullPointerException>
+[4/20/23 4:22 PM]|JDBCBroker|JDBCBroker|Error|NOTAG|null<Could not load driver class[org.mariadb.jdbc.Driver]>
+[4/20/23 4:22 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/20/23 4:22 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/20/23 4:22 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/20/23 4:22 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: SellTree.java.lang.NullPointerException>
+[4/20/23 4:22 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/20/23 4:22 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/20/23 4:22 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/20/23 4:22 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/20/23 4:22 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/20/23 4:22 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/20/23 4:23 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/20/23 4:23 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/20/23 4:23 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/20/23 4:23 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/20/23 4:23 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: SellTree.java.lang.NullPointerException>
+[4/20/23 4:23 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: SellTree.java.lang.NullPointerException>
+[4/20/23 4:23 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: SellTree.java.lang.NullPointerException>
+[4/20/23 4:23 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: SellTree.java.lang.NullPointerException>
+[4/20/23 4:23 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/20/23 4:23 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/20/23 4:36 PM]|JDBCBroker|JDBCBroker|Error|NOTAG|null<Could not load driver class[org.mariadb.jdbc.Driver]>
+[4/20/23 4:36 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/20/23 4:36 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: SellTree.java.lang.NullPointerException>
+[4/20/23 4:36 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/20/23 4:36 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/20/23 4:36 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/20/23 4:36 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/20/23 4:37 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/20/23 4:37 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/20/23 4:37 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/20/23 4:37 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: SellTree.java.lang.NullPointerException>
+[4/20/23 4:37 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/20/23 4:37 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/20/23 4:37 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/20/23 4:38 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: SellTree.java.lang.NullPointerException>
+[4/20/23 4:38 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: SellTree.java.lang.NullPointerException>
+[4/20/23 4:38 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: SellTree.java.lang.NullPointerException>
+[4/20/23 4:38 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: SellTree.java.lang.NullPointerException>
+[4/20/23 4:40 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: SellTree.java.lang.NullPointerException>
+[4/20/23 4:41 PM]|JDBCBroker|JDBCBroker|Error|NOTAG|null<Could not load driver class[org.mariadb.jdbc.Driver]>
+[4/20/23 4:41 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/20/23 4:41 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/20/23 4:41 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/20/23 4:41 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/20/23 4:41 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/20/23 4:41 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/20/23 4:41 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/20/23 4:41 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: SellTree.java.lang.NullPointerException>
+[4/20/23 4:41 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: SellTree.java.lang.NullPointerException>
+[4/20/23 4:41 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: SellTree.java.lang.NullPointerException>
+[4/20/23 4:41 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: SellTree.java.lang.NullPointerException>
+[4/20/23 4:41 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: SellTree.java.lang.NullPointerException>
+[4/20/23 4:41 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: SellTree.java.lang.NullPointerException>
+[4/20/23 4:41 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: SellTree.java.lang.NullPointerException>
+[4/22/23 2:35 PM]|JDBCBroker|JDBCBroker|Error|NOTAG|null<Could not load driver class[org.mariadb.jdbc.Driver]>
+[4/22/23 2:35 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/22/23 2:35 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: SellTree.java.lang.NullPointerException>
+[4/22/23 2:35 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/22/23 2:37 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: SellTree.java.lang.NullPointerException>
+[4/22/23 2:37 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: SellTree.java.lang.NullPointerException>
+[4/22/23 2:37 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: SellTree.java.lang.NullPointerException>
+[4/22/23 2:37 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/22/23 2:37 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/22/23 2:37 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/22/23 2:44 PM]|JDBCBroker|JDBCBroker|Error|NOTAG|null<Could not load driver class[org.mariadb.jdbc.Driver]>
+[4/22/23 2:44 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/22/23 2:44 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/22/23 2:44 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: SellTree.java.lang.NullPointerException>
+[4/22/23 2:44 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: SellTree.java.lang.NullPointerException>
+[4/22/23 2:45 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: SellTree.java.lang.NullPointerException>
+[4/22/23 2:45 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: SellTree.java.lang.NullPointerException>
+[4/22/23 2:45 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: SellTree.java.lang.NullPointerException>
+[4/22/23 2:45 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: SellTree.java.lang.NullPointerException>
+[4/22/23 2:45 PM]|JDBCBroker|JDBCBroker|Error|NOTAG|null<Could not load driver class[org.mariadb.jdbc.Driver]>
+[4/22/23 2:45 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/24/23 11:29 AM]|JDBCBroker|JDBCBroker|Error|NOTAG|null<Could not load driver class[org.mariadb.jdbc.Driver]>
+[4/24/23 11:29 AM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/24/23 11:29 AM]|JDBCBroker|JDBCBroker|Error|NOTAG|null<Could not load driver class[org.mariadb.jdbc.Driver]>
+[4/24/23 11:29 AM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/24/23 11:39 AM]|JDBCBroker|JDBCBroker|Error|NOTAG|null<Could not load driver class[org.mariadb.jdbc.Driver]>
+[4/24/23 11:40 AM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/24/23 11:40 AM]|JDBCBroker|JDBCBroker|Error|NOTAG|null<Could not load driver class[org.mariadb.jdbc.Driver]>
+[4/24/23 11:40 AM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/24/23 11:40 AM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/24/23 11:40 AM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/24/23 11:40 AM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/24/23 11:40 AM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/24/23 11:40 AM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/24/23 11:40 AM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/24/23 11:40 AM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/24/23 11:40 AM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: SellTree.java.lang.NullPointerException>
+[4/24/23 11:40 AM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/24/23 11:40 AM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/24/23 11:40 AM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/24/23 11:40 AM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
+[4/24/23 11:40 AM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: EndShift.java.lang.NullPointerException>
