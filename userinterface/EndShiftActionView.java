@@ -30,10 +30,16 @@ import javafx.application.Platform;
 
 public class EndShiftActionView extends View{
 
+    protected MessageView statusLog;
     public EndShiftActionView(IModel model) {
         super(model, "EndShiftActionView");
         VBox container = createFormContents();
         getChildren().add(container);
+
+        myModel.subscribe("ShiftEnded", this);
+        myModel.subscribe("NotesError", this);
+
+
     }
 
     private VBox createFormContents() {
@@ -64,6 +70,14 @@ public class EndShiftActionView extends View{
     @Override
     public void updateState(String key, Object value) {
         // TODO Auto-generated method stub
+        switch (key){
+            case"ShfitEnded":
+                statusLog.displayMessage("The Shift has ended");
+            case"NotesError":
+                statusLog.displayErrorMessage("Notes were entered incorrectly");
+
+                break;
+        }
 
     }
 
