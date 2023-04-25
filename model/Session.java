@@ -67,6 +67,10 @@ public class Session extends EntityBase implements IView {
     }
 
     public void stateChangeRequest(String key, Object value) {
+        switch(key) {
+            default:
+                break;
+        }
         myRegistry.updateSubscribers(key, this);
     }
 
@@ -78,6 +82,16 @@ public class Session extends EntityBase implements IView {
         if(mySchema == null) {
             mySchema = getSchemaInfo(tableName);
         }
+    }
+
+    public void save(Properties props) {
+        Enumeration keys = props.propertyNames();
+        while(keys.hasMoreElements()) {
+            String nextKey = (String)keys.nextElement();
+            String nextVal = props.getProperty(nextKey);
+            persistentState.setProperty(nextKey, nextVal); // don't think we need a null check here
+        }
+        updateStateInDatabase();
     }
 
     public void save() {

@@ -29,35 +29,4 @@
 [4/7/23, 1:41 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1406: (conn=29304) Data too long for column 'Cost' at row 1>
 [4/7/23, 1:43 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=29306) Duplicate entry '12' for key 'BarcodePrefix'>
 [4/7/23, 1:44 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=29306) Duplicate entry '11' for key 'BarcodePrefix'>
-[4/16/23, 9:42 PM]|StartShiftAction|doYourJob|Error|NOTAG|null<Could not create new scene>
-[4/16/23, 9:42 PM]|StartShiftAction|doYourJob|Error|NOTAG|null<Could not create new scene>
-[4/16/23, 9:45 PM]|StartShiftAction|doYourJob|Error|NOTAG|null<Could not create new scene>
-[4/21/23, 12:40 PM]|Shift|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1452: (conn=56555) Cannot add or update a child row: a foreign key constraint fails (`spr23_csc429_nmoon1`.`Shift`, CONSTRAINT `Shift_ibfk_2` FOREIGN KEY (`ScoutID`) REFERENCES `Scout` (`ID`))>
-[4/21/23, 12:40 PM]|Shift|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1452: (conn=56555) Cannot add or update a child row: a foreign key constraint fails (`spr23_csc429_nmoon1`.`Shift`, CONSTRAINT `Shift_ibfk_2` FOREIGN KEY (`ScoutID`) REFERENCES `Scout` (`ID`))>
-[4/21/23, 12:50 PM]|Shift|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1054: (conn=56587) Unknown column 'we' in 'field list'>
-[4/21/23, 12:50 PM]|Shift|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1054: (conn=56587) Unknown column 'we' in 'field list'>
-[4/21/23, 12:51 PM]|Shift|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1054: (conn=56587) Unknown column 'we' in 'field list'>
-[4/21/23, 12:51 PM]|Shift|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1054: (conn=56587) Unknown column 'we' in 'field list'>
-[4/21/23, 12:54 PM]|Shift|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1054: (conn=56587) Unknown column 'we' in 'field list'>
-[4/21/23, 12:54 PM]|Shift|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1054: (conn=56587) Unknown column 'we' in 'field list'>
-[4/21/23, 12:54 PM]|Shift|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1054: (conn=56587) Unknown column 'b' in 'field list'>
-[4/21/23, 12:54 PM]|Shift|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1054: (conn=56587) Unknown column 'we' in 'field list'>
-[4/21/23, 12:54 PM]|Shift|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1054: (conn=56587) Unknown column 'we' in 'field list'>
-[4/21/23, 12:54 PM]|Shift|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1054: (conn=56587) Unknown column 'b' in 'field list'>
-[4/21/23, 12:54 PM]|Shift|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1054: (conn=56587) Unknown column 'we' in 'field list'>
-[4/21/23, 12:54 PM]|Shift|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1054: (conn=56587) Unknown column 'we' in 'field list'>
-[4/21/23, 12:54 PM]|Shift|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1054: (conn=56587) Unknown column 'b' in 'field list'>
-[4/21/23, 12:54 PM]|Shift|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1054: (conn=56587) Unknown column 'h' in 'field list'>
-[4/21/23, 12:59 PM]|Shift|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1054: (conn=56840) Unknown column 'b' in 'field list'>
-[4/21/23, 1:01 PM]|Shift|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1054: (conn=56841) Unknown column 'q' in 'field list'>
-[4/21/23, 1:01 PM]|Shift|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1054: (conn=56841) Unknown column 'q' in 'field list'>
-[4/21/23, 1:02 PM]|Shift|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1054: (conn=56841) Unknown column 'q' in 'field list'>
-[4/21/23, 1:02 PM]|Shift|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1054: (conn=56841) Unknown column 'q' in 'field list'>
-[4/21/23, 1:02 PM]|Shift|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1054: (conn=56841) Unknown column 'b' in 'field list'>
-[4/21/23, 1:05 PM]|Shift|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1054: (conn=56849) Unknown column 'sd' in 'field list'>
-[4/21/23, 1:05 PM]|Shift|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1054: (conn=56849) Unknown column 'b' in 'field list'>
-[4/21/23, 1:07 PM]|Shift|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1054: (conn=56851) Unknown column 'b' in 'field list'>
-[4/21/23, 1:07 PM]|Shift|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1054: (conn=56851) Unknown column 'b' in 'field list'>
-[4/21/23, 1:07 PM]|Shift|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1054: (conn=56851) Unknown column 'b' in 'field list'>
-[4/21/23, 1:07 PM]|Shift|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1054: (conn=56851) Unknown column 'b' in 'field list'>
-[4/21/23, 1:09 PM]|Shift|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1054: (conn=56851) Unknown column 'b' in 'field list'>
+[4/18/23, 12:46 PM]|TLC|createAction|Error|NOTAG|null<Unrecognized action: SellTree.java.lang.NullPointerException: Cannot invoke "model.Action.subscribe(String, impresario.IView)" because "action" is null>
