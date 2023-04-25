@@ -56,8 +56,6 @@ public class StartShiftActionView extends View {
     private DatePicker startDatePicker;
     private TextField startHour;
     private TextField startMin;
-    private TextField endHour;
-    private TextField endMin;
     private TextField startingCash;
 
     private TextField companion;
@@ -147,29 +145,12 @@ public class StartShiftActionView extends View {
         startTimeBox.getChildren().addAll(startHour, startHourLabel, startMin, startMinLabel);
         grid.add(startTimeBox, 2, 1);
 
-        // End Time
-        Label endTimeLabel = new Label("End Time:");
-        grid.add(endTimeLabel, 1, 2);
-
-        HBox endTimeBox = new HBox(10);
-
-        endHour = new TextField();
-        endHour.setPrefWidth(75);
-        Label endHourLabel = new Label("H");
-
-        endMin = new TextField();
-        endMin.setPrefWidth(75);
-        Label endMinLabel = new Label("M");
-
-        endTimeBox.getChildren().addAll(endHour, endHourLabel, endMin, endMinLabel);
-        grid.add(endTimeBox, 2, 2);
-
         // Starting Cash
         Label startingCashLabel = new Label("Starting Cash:");
-        grid.add(startingCashLabel, 1, 3);
+        grid.add(startingCashLabel, 1, 2);
 
         startingCash = new TextField();
-        grid.add(startingCash, 2, 3);
+        grid.add(startingCash, 2, 2);
 
         /*
          * ---------------------------
@@ -182,13 +163,6 @@ public class StartShiftActionView extends View {
         grid.add(scoutLabel, 1, 5);
 
         Vector<String> scoutList = (Vector<String>)myModel.getState("GetScouts");
-
-        /*scoutComboBox = new ComboBox<>(
-                FXCollections.observableArrayList(
-                        new Scout("Jon", "Jones", 208),
-                        new Scout("Jake", "Gyllenhaal", 302),
-                        new Scout("Juice", "Wrld", 999),
-                        new Scout("Bob", "Marley", 305)));*/
 
         scoutComboBox = new ComboBox<>(
                 FXCollections.observableArrayList(scoutList));
@@ -360,12 +334,10 @@ public class StartShiftActionView extends View {
         startSessionBtn.setOnAction(event -> {
             String startHourText = startHour.getText();
             String startMinText = startMin.getText();
-            String endHourText = endHour.getText();
-            String endMinText = endMin.getText();
 
             // check if any required fields are null or empty
             if (startDatePicker.getValue() == null || startHourText.isEmpty() || startMinText.isEmpty()
-                    || endHourText.isEmpty() || endMinText.isEmpty() || startingCash.getText().isEmpty()) {
+                   || startingCash.getText().isEmpty()) {
                 // Display an error message and return
                 displayErrorMessage("Please fill out all Session fields");
                 return;
@@ -373,7 +345,6 @@ public class StartShiftActionView extends View {
 
             // check for 24 hour time
             int startHourInt = Integer.parseInt(startHourText);
-            int endHourInt = Integer.parseInt(endHourText);
             if (startHourInt < 0 || startHourInt > 23 || endHourInt < 0 || endHourInt > 23) {
                 displayErrorMessage("Session Start and End hour must be between 0 and 23.");
                 return;
@@ -381,15 +352,8 @@ public class StartShiftActionView extends View {
 
             // check if start and end minute are between 0 and 59
             int startMinInt = Integer.parseInt(startMinText);
-            int endMinInt = Integer.parseInt(endMinText);
-            if (startMinInt < 0 || startMinInt > 59 || endMinInt < 0 || endMinInt > 59) {
-                displayErrorMessage("Session Start and End minute must be between 0 and 59.");
-                return;
-            }
-
-            // check if start time is less than end time
-            if (startHourInt > endHourInt || (startHourInt == endHourInt && startMinInt >= endMinInt)) {
-                displayErrorMessage("Session Start time must be before End time.");
+            if (startMinInt < 0 || startMinInt > 59) {
+                displayErrorMessage("Session Start minute must be between 0 and 59.");
                 return;
             }
 
@@ -402,8 +366,6 @@ public class StartShiftActionView extends View {
             startDatePicker.setDisable(true);
             startHour.setDisable(true);
             startMin.setDisable(true);
-            endHour.setDisable(true);
-            endMin.setDisable(true);
             startingCash.setDisable(true);
             startSessionBtn.setDisable(true);
 
@@ -416,7 +378,7 @@ public class StartShiftActionView extends View {
 
             StartSession(event);
         });
-        grid.add(startSessionBtn, 1, 4);
+        grid.add(startSessionBtn, 1, 3);
 
         /*
          * ---------------------------
