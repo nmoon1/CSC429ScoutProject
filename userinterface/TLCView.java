@@ -108,8 +108,8 @@ public class TLCView extends View {
     }
 
     private void toggleButtonDisabled(Boolean disabled) {
-//        endShiftBtn.setDisable(disabled);
-//        sellTreeBtn.setDisable(disabled);
+        endShiftBtn.setDisable(disabled);
+        sellTreeBtn.setDisable(disabled);
     }
 
 }
