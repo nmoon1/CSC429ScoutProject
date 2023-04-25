@@ -163,7 +163,7 @@ public class StartShiftActionView extends View {
         Label scoutLabel = new Label("Scout:");
         grid.add(scoutLabel, 1, 5);
 
-        Vector<String> scoutList = (Vector<String>)myModel.getState("GetScouts");
+        Vector<String> scoutList = (Vector<String>) myModel.getState("GetScouts");
 
         scoutComboBox = new ComboBox<>(
                 FXCollections.observableArrayList(scoutList));
@@ -234,7 +234,6 @@ public class StartShiftActionView extends View {
             String scoutEndHourText = scoutEndHour.getText();
             String scoutEndMinText = scoutEndMin.getText();
             String companionHourText = companionHour.getText();
-            
 
             // Check if any required fields are null or empty
             if (scoutComboBox.getValue() == null || companion.getText().isEmpty() || scoutStartHourText.isEmpty()
@@ -245,33 +244,47 @@ public class StartShiftActionView extends View {
                 return;
             }
 
-            //check for companion name length
-            if(companion.getText().length() > 30){
+            // check for companion name length
+            if (companion.getText().length() > 30) {
                 displayErrorMessage("Companion name too long");
                 return;
             }
 
-            // check for 24 hour time
-            int scoutStartHourInt = Integer.parseInt(scoutStartHourText);
-            int scoutEndHourInt = Integer.parseInt(scoutEndHourText);
-            int companionHourInt = Integer.parseInt(companionHourText);
-            if (scoutStartHourInt < 0 || scoutStartHourInt > 23 || scoutEndHourInt < 0 || scoutEndHourInt > 23 || companionHourInt < 0 || companionHourInt > 23) {
-                displayErrorMessage("Scout Start and End hour must be between 0 and 23.");
-                return;
-            }
+            // validate time
+            int scoutStartHourInt;
+            int scoutEndHourInt;
+            int scoutStartMinInt;
+            int scoutEndMinInt;
+            int companionHourInt;
+            try {
+                scoutStartHourInt = Integer.parseInt(scoutStartHourText);
+                scoutEndHourInt = Integer.parseInt(scoutEndHourText);
+                companionHourInt = Integer.parseInt(companionHourText);
+                scoutStartMinInt = Integer.parseInt(scoutStartMinText);
+                scoutEndMinInt = Integer.parseInt(scoutEndMinText);
 
-            // check if start and end minute are between 0 and 59
-            int scoutStartMinInt = Integer.parseInt(scoutStartMinText);
-            int scoutEndMinInt = Integer.parseInt(scoutEndMinText);
-            if (scoutStartMinInt < 0 || scoutStartMinInt > 59 || scoutEndMinInt < 0 || scoutEndMinInt > 59) {
-                displayErrorMessage("Scout Start and End minute must be between 0 and 59.");
-                return;
-            }
+                // must be 24 hour format
+                if (scoutStartHourInt < 0 || scoutStartHourInt > 23 || scoutEndHourInt < 0 || scoutEndHourInt > 23
+                        || companionHourInt < 0 || companionHourInt > 23) {
+                    displayErrorMessage("Scout Start and End hour must be between 0 and 23.");
+                    return;
+                }
 
-            // check if start time is less than end time
-            if (scoutStartHourInt > scoutEndHourInt
-                    || (scoutStartHourInt == scoutEndHourInt && scoutStartMinInt >= scoutEndMinInt)) {
-                displayErrorMessage("Scout Start time must be before End time.");
+                // check if start and end minute are between 0 and 59
+                if (scoutStartMinInt < 0 || scoutStartMinInt > 59 || scoutEndMinInt < 0 || scoutEndMinInt > 59) {
+                    displayErrorMessage("Scout Start and End minute must be between 0 and 59.");
+                    return;
+                }
+
+                // check if start time is less than end time
+                if (scoutStartHourInt > scoutEndHourInt
+                        || (scoutStartHourInt == scoutEndHourInt && scoutStartMinInt >= scoutEndMinInt)) {
+                    displayErrorMessage("Scout Start time must be before End time.");
+                    return;
+                }
+
+            } catch (Exception e) {
+                displayErrorMessage("Time must be a number.");
                 return;
             }
 
@@ -339,7 +352,7 @@ public class StartShiftActionView extends View {
 
             // check if any required fields are null or empty
             if (startDatePicker.getValue() == null || startHourText.isEmpty() || startMinText.isEmpty()
-                   || startingCash.getText().isEmpty()) {
+                    || startingCash.getText().isEmpty()) {
                 // Display an error message and return
                 displayErrorMessage("Please fill out all Session fields");
                 return;
@@ -366,22 +379,18 @@ public class StartShiftActionView extends View {
 
             // must be a number
             double startingCashNumber;
-            try{
+            try {
                 startingCashNumber = Double.parseDouble(startingCashText);
-            }
-            catch(Exception e){
+            } catch (Exception e) {
                 displayErrorMessage("Starting Cash must be a number.");
                 return;
             }
 
-            //cannot be negative
-            if(startingCashNumber < 0){
+            // cannot be negative
+            if (startingCashNumber < 0) {
                 displayErrorMessage("Starting cash must be positive.");
                 return;
             }
-
-
-
 
             // disable start session
             startDatePicker.setDisable(true);
@@ -498,10 +507,10 @@ public class StartShiftActionView extends View {
         String startTimeH = startHour.getText();
         String startTimeM = startMin.getText();
 
-        if(startTimeH.length() == 1) {
+        if (startTimeH.length() == 1) {
             startTimeH = "0" + startTimeH;
         }
-        if(startTimeM.length() == 1) {
+        if (startTimeM.length() == 1) {
             startTimeM = "0" + startTimeM;
         }
 
@@ -534,10 +543,10 @@ public class StartShiftActionView extends View {
         String scoutStartH = scoutStartHour.getText();
         String scoutStartM = scoutStartMin.getText();
 
-        if(scoutStartH.length() == 1) {
+        if (scoutStartH.length() == 1) {
             scoutStartH = "0" + scoutStartH;
         }
-        if(scoutStartM.length() == 1) {
+        if (scoutStartM.length() == 1) {
             scoutStartM = "0" + scoutStartM;
         }
 
@@ -550,8 +559,9 @@ public class StartShiftActionView extends View {
         props.setProperty("StartTime", ScoutStartTime);
 
         myModel.stateChangeRequest("AddShift", props);
-        //System.out.println(scout + " " + comp + " " + compH + " " + ScoutStartTime + " " + ScoutEndTime);
-        
+        // System.out.println(scout + " " + comp + " " + compH + " " + ScoutStartTime +
+        // " " + ScoutEndTime);
+
         // Remove the added scout from the list of scouts we can choose
         scoutComboBox.getItems().remove(scoutComboBox.getValue());
 
@@ -570,11 +580,13 @@ public class StartShiftActionView extends View {
 
     /*
      * finish (Commented this out for now, since I don't really get the point of it)
-     */ 
-    /*public void Final(Event event) {
-        clearErrorMessage();
-        displayErrorMessage("Error adding to database");
-    }*/
+     */
+    /*
+     * public void Final(Event event) {
+     * clearErrorMessage();
+     * displayErrorMessage("Error adding to database");
+     * }
+     */
 
     public void updateState(String key, Object value) {
 
