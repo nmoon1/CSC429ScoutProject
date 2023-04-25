@@ -6,9 +6,12 @@ import javafx.scene.Scene;
 import userinterface.View;
 import userinterface.ViewFactory;
 
+import java.util.Vector;
+
 public class StartShiftAction extends Action {
 
-    protected ScoutCollection allScouts = new ScoutCollection();
+    private ScoutCollection allScouts = new ScoutCollection();
+    private Vector<Shift> shiftList = new Vector<Shift>();
 
     public StartShiftAction() throws Exception {
         super();
@@ -37,7 +40,17 @@ public class StartShiftAction extends Action {
     public Object getState(String key) {
         if (key.equals("GetScouts"))
 		{
-			return allScouts;
+			Vector<Scout> scoutList = (Vector<Scout>)allScouts.getState("Scouts");
+            Vector<String> scoutInfoList = new Vector<String>();
+            for (int i = 0; i < scoutList.size(); i++)
+            {
+                Scout curScout = scoutList.get(i);
+                String scoutID = (String)curScout.getState("ID");
+                String scoutName = curScout.getFullName();
+                String scoutTroop = (String)curScout.getState("TroopID");
+                scoutInfoList.add(scoutID + " " + scoutName + " " + scoutTroop);
+            }
+            return scoutInfoList;
 		}
         else
             return null;
@@ -53,6 +66,9 @@ public class StartShiftAction extends Action {
                 break;
             case "AddShift":
                 addShift((Properties)value);
+                break;
+            case "StartShift":
+                startShift();
                 break;
         }
         myRegistry.updateSubscribers(key, this);
@@ -74,8 +90,24 @@ public class StartShiftAction extends Action {
             props.setProperty("SessionID", (String)se.getState("ID"));
             
             Shift shift = new Shift(props);
-            shift.save();
+            shiftList.add(shift);
+            //shift.save();
             
+        } catch(Exception e) {
+            System.out.println("Error adding shift: " + e.toString());
+        }
+    }
+
+    private void startShift() {
+        try {
+            for (int i = 0; i < shiftList.size(); i++)
+            {
+                Shift curShift = shiftList.get(i);
+                curShift.save();
+            }
+
+            stateChangeRequest("CompleteAction", null);
+
         } catch(Exception e) {
             System.out.println("Error adding shift: " + e.toString());
         }

@@ -66,8 +66,8 @@ public class StartShiftActionView extends View {
     private TextField scoutStartMin;
     private TextField scoutEndHour;
     private TextField scoutEndMin;
-    private ComboBox<Scout> scoutComboBox;
-    ObservableList<Scout> data = FXCollections.observableArrayList();
+    private ComboBox<String> scoutComboBox;
+    ObservableList<ScoutInfo> data = FXCollections.observableArrayList();
 
     // for showing error message
     protected MessageView statusLog;
@@ -181,12 +181,17 @@ public class StartShiftActionView extends View {
         Label scoutLabel = new Label("Scout:");
         grid.add(scoutLabel, 1, 5);
 
-        scoutComboBox = new ComboBox<>(
+        Vector<String> scoutList = (Vector<String>)myModel.getState("GetScouts");
+
+        /*scoutComboBox = new ComboBox<>(
                 FXCollections.observableArrayList(
                         new Scout("Jon", "Jones", 208),
                         new Scout("Jake", "Gyllenhaal", 302),
                         new Scout("Juice", "Wrld", 999),
-                        new Scout("Bob", "Marley", 305)));
+                        new Scout("Bob", "Marley", 305)));*/
+
+        scoutComboBox = new ComboBox<>(
+                FXCollections.observableArrayList(scoutList));
 
         scoutComboBox.setPrefWidth(200);
         scoutComboBox.setDisable(true);
@@ -256,7 +261,7 @@ public class StartShiftActionView extends View {
                 return;
             }
             // Get the selected scout from the combo box
-            Scout selectedScouts = scoutComboBox.getValue();
+            ScoutInfo selectedScouts = new ScoutInfo(scoutComboBox.getValue());
             // Add the selected scout to the table
             data.add(selectedScouts);
             // add to database
@@ -270,31 +275,26 @@ public class StartShiftActionView extends View {
          * ---------------------------
          */
         // Create table and set placeholder text
-        TableView<Scout> table = new TableView<>();
+        TableView<ScoutInfo> table = new TableView<>();
         Label placeholderLabel = new Label("No data available.");
         placeholderLabel.setPadding(new Insets(20, 20, 20, 20));
         table.setPlaceholder(placeholderLabel);
 
         // first column
-        TableColumn<Scout, String> firstCol = new TableColumn<>("First");
-        firstCol.setCellValueFactory(new PropertyValueFactory<>("First"));
-
-        // last column
-        TableColumn<Scout, Integer> lastCol = new TableColumn<>("Last");
-        lastCol.setCellValueFactory(new PropertyValueFactory<>("Last"));
+        TableColumn<ScoutInfo, String> nameCol = new TableColumn<>("Name");
+        nameCol.setCellValueFactory(new PropertyValueFactory<>("Name"));
 
         // troop id column
-        TableColumn<Scout, Integer> troopCol = new TableColumn<>("Troop ID");
+        TableColumn<ScoutInfo, String> troopCol = new TableColumn<>("Troop ID");
         troopCol.setCellValueFactory(new PropertyValueFactory<>("Troop"));
 
         // Add columns to the table
-        table.getColumns().addAll(firstCol, lastCol, troopCol);
+        table.getColumns().addAll(nameCol, troopCol);
 
         table.setItems(data);
 
         // Set column widths
-        firstCol.setPrefWidth(150);
-        lastCol.setPrefWidth(150);
+        nameCol.setPrefWidth(300);
         troopCol.setPrefWidth(75);
 
         // Set the table height to show 4 rows without scrolling
@@ -367,7 +367,7 @@ public class StartShiftActionView extends View {
         submitBtn.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         submitBtn.setTextAlignment(TextAlignment.CENTER);
         submitBtn.setOnAction(event -> {
-            Final(event);
+            myModel.stateChangeRequest("StartShift", null);
         });
 
         // cancel buttom
@@ -390,32 +390,27 @@ public class StartShiftActionView extends View {
     }
 
     // scouts constructor
-    private class Scout {
-        private final String first;
-        private final String last;
-        private final int troop;
+    public class ScoutInfo {
+        private final String name;
+        private final String troop;
 
-        public Scout(String first, String last, int troop) {
-            this.first = first;
-            this.last = last;
-            this.troop = troop;
+        public ScoutInfo(String info) {
+            int nameIndex = info.indexOf(" ") + 1;
+            this.name = info.substring(nameIndex, info.length() - 6);
+            this.troop = info.substring(info.length() - 5);
         }
 
-        public String getFirst() {
-            return first;
+        public String getName() {
+            return name;
         }
 
-        public String getLast() {
-            return last;
-        }
-
-        public int getTroop() {
+        public String getTroop() {
             return troop;
         }
 
         @Override
         public String toString() {
-            return first + " " + last + " (Troop " + troop + ")";
+            return name + " (Troop " + troop + ")";
         }
     }
 
@@ -471,8 +466,8 @@ public class StartShiftActionView extends View {
         // clear error messages
         clearErrorMessage();
 
-        Scout selectedScout = scoutComboBox.getValue();
-        String scout = selectedScout.toString();
+        String selectedScout = scoutComboBox.getValue();
+        String scoutID = selectedScout.substring(0, selectedScout.indexOf(" "));
 
         String comp = companion.getText();
         String compH = companionHour.getText();
@@ -484,15 +479,18 @@ public class StartShiftActionView extends View {
         String ScoutStartTime = scoutStartH + ":" + scoutStartM;
         String ScoutEndTime = scoutEndH + ":" + scoutEndM;
 
-        ///Properties props = new Properties();
-        //props.setProperty("Scout", scout);
-        //props.setProperty("Companion", comp);
-        //props.setProperty("CompanionHour", compH);
-        //props.setProperty("ScoutStartTime", ScoutStartTime);
-        //props.setProperty("ScoutEndTime", ScoutEndTime);
+        Properties props = new Properties();
+        props.setProperty("ScoutID", scoutID);
+        props.setProperty("CompanionName", comp);
+        props.setProperty("CompanionHours", compH);
+        props.setProperty("StartTime", ScoutStartTime);
+        props.setProperty("EndTime", ScoutEndTime);
 
-        //myModel.stateChangeRequest("AddShift", props);
-        System.out.println(scout + " " + comp + " " + compH + " " + ScoutStartTime + " " + ScoutEndTime);
+        myModel.stateChangeRequest("AddShift", props);
+        //System.out.println(scout + " " + comp + " " + compH + " " + ScoutStartTime + " " + ScoutEndTime);
+        
+        // Remove the added scout from the list of scouts we can choose
+        scoutComboBox.getItems().remove(scoutComboBox.getValue());
 
         // clear input fields
         scoutComboBox.getSelectionModel().clearSelection();
@@ -508,12 +506,12 @@ public class StartShiftActionView extends View {
     }
 
     /*
-     * finish
-     */
-    public void Final(Event event) {
+     * finish (Commented this out for now, since I don't really get the point of it)
+     */ 
+    /*public void Final(Event event) {
         clearErrorMessage();
         displayErrorMessage("Error adding to database");
-    }
+    }*/
 
     public void updateState(String key, Object value) {
 
