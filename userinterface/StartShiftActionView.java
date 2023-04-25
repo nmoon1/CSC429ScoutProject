@@ -56,8 +56,6 @@ public class StartShiftActionView extends View {
     private DatePicker startDatePicker;
     private TextField startHour;
     private TextField startMin;
-    private TextField endHour;
-    private TextField endMin;
     private TextField startingCash;
 
     private TextField companion;
@@ -147,29 +145,12 @@ public class StartShiftActionView extends View {
         startTimeBox.getChildren().addAll(startHour, startHourLabel, startMin, startMinLabel);
         grid.add(startTimeBox, 2, 1);
 
-        // End Time
-        Label endTimeLabel = new Label("End Time:");
-        grid.add(endTimeLabel, 1, 2);
-
-        HBox endTimeBox = new HBox(10);
-
-        endHour = new TextField();
-        endHour.setPrefWidth(75);
-        Label endHourLabel = new Label("H");
-
-        endMin = new TextField();
-        endMin.setPrefWidth(75);
-        Label endMinLabel = new Label("M");
-
-        endTimeBox.getChildren().addAll(endHour, endHourLabel, endMin, endMinLabel);
-        grid.add(endTimeBox, 2, 2);
-
         // Starting Cash
         Label startingCashLabel = new Label("Starting Cash:");
-        grid.add(startingCashLabel, 1, 3);
+        grid.add(startingCashLabel, 1, 2);
 
         startingCash = new TextField();
-        grid.add(startingCash, 2, 3);
+        grid.add(startingCash, 2, 2);
 
         /*
          * ---------------------------
@@ -182,13 +163,6 @@ public class StartShiftActionView extends View {
         grid.add(scoutLabel, 1, 5);
 
         Vector<String> scoutList = (Vector<String>)myModel.getState("GetScouts");
-
-        /*scoutComboBox = new ComboBox<>(
-                FXCollections.observableArrayList(
-                        new Scout("Jon", "Jones", 208),
-                        new Scout("Jake", "Gyllenhaal", 302),
-                        new Scout("Juice", "Wrld", 999),
-                        new Scout("Bob", "Marley", 305)));*/
 
         scoutComboBox = new ComboBox<>(
                 FXCollections.observableArrayList(scoutList));
@@ -302,13 +276,12 @@ public class StartShiftActionView extends View {
 
             // format single digits
             if (scoutStartHourText.length() < 2 || scoutStartMinText.length() < 2 || scoutEndHourText.length() < 2
-                    || scoutEndMinText.length() < 2 || companionHourText.length() < 2) {
+                    || scoutEndMinText.length() < 2) {
                 displayErrorMessage("Scout time must be 2 digits.");
                 return;
             }
 
             // Get the selected scout from the combo box
-            ScoutInfo selectedScouts = new ScoutInfo(scoutComboBox.getValue());
             ScoutInfo selectedScout = new ScoutInfo(scoutComboBox.getValue());
             // Add the selected scout to the table
             data.add(selectedScout);
@@ -368,12 +341,10 @@ public class StartShiftActionView extends View {
         startSessionBtn.setOnAction(event -> {
             String startHourText = startHour.getText();
             String startMinText = startMin.getText();
-            String endHourText = endHour.getText();
-            String endMinText = endMin.getText();
 
             // check if any required fields are null or empty
             if (startDatePicker.getValue() == null || startHourText.isEmpty() || startMinText.isEmpty()
-                    || endHourText.isEmpty() || endMinText.isEmpty() || startingCash.getText().isEmpty()) {
+                   || startingCash.getText().isEmpty()) {
                 // Display an error message and return
                 displayErrorMessage("Please fill out all Session fields");
                 return;
@@ -381,29 +352,20 @@ public class StartShiftActionView extends View {
 
             // check for 24 hour time
             int startHourInt = Integer.parseInt(startHourText);
-            int endHourInt = Integer.parseInt(endHourText);
-            if (startHourInt < 1 || startHourInt > 24 || endHourInt < 1 || endHourInt > 24) {
-                displayErrorMessage("Session Start and End hour must be between 1 and 24.");
+            if (startHourInt < 1 || startHourInt > 24) {
+                displayErrorMessage("Session Start hour must be between 1 and 24.");
                 return;
             }
 
             // check if start and end minute are between 0 and 59
             int startMinInt = Integer.parseInt(startMinText);
-            int endMinInt = Integer.parseInt(endMinText);
-            if (startMinInt < 0 || startMinInt > 59 || endMinInt < 0 || endMinInt > 59) {
-                displayErrorMessage("Session Start and End minute must be between 0 and 59.");
-                return;
-            }
-
-            // check if start time is less than end time
-            if (startHourInt > endHourInt || (startHourInt == endHourInt && startMinInt >= endMinInt)) {
-                displayErrorMessage("Session Start time must be before End time.");
+            if (startMinInt < 0 || startMinInt > 59) {
+                displayErrorMessage("Session Start minute must be between 0 and 59.");
                 return;
             }
 
             // format single digits
-            if (startHourText.length() < 2 || startMinText.length() < 2 || endHourText.length() < 2
-                    || endMinText.length() < 2) {
+            if (startHourText.length() < 2 || startMinText.length() < 2) {
                 displayErrorMessage("Session time must be 2 digits.");
                 return;
             }
@@ -417,8 +379,6 @@ public class StartShiftActionView extends View {
             startDatePicker.setDisable(true);
             startHour.setDisable(true);
             startMin.setDisable(true);
-            endHour.setDisable(true);
-            endMin.setDisable(true);
             startingCash.setDisable(true);
             startSessionBtn.setDisable(true);
 
@@ -431,7 +391,7 @@ public class StartShiftActionView extends View {
 
             StartSession(event);
         });
-        grid.add(startSessionBtn, 1, 4);
+        grid.add(startSessionBtn, 1, 3);
 
         /*
          * ---------------------------
@@ -529,17 +489,13 @@ public class StartShiftActionView extends View {
 
         String startTimeH = startHour.getText();
         String startTimeM = startMin.getText();
-        String endTimeH = endHour.getText();
-        String endTimeM = endMin.getText();
         String cash = startingCash.getText();
 
         String startTime = startTimeH + ":" + startTimeM;
-        String endTime = endTimeH + ":" + endTimeM;
 
         Properties props = new Properties();
         props.setProperty("StartDate", date);
         props.setProperty("StartTime", startTime);
-        props.setProperty("EndTime", endTime);
         props.setProperty("StartingCash", cash);
 
         myModel.stateChangeRequest("StartSession", props);
