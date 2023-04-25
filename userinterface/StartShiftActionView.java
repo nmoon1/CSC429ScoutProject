@@ -253,17 +253,64 @@ public class StartShiftActionView extends View {
         addScoutBtn.setTextAlignment(TextAlignment.CENTER);
         addScoutBtn.setDisable(true);
         addScoutBtn.setOnAction(event -> {
+
+            String scoutStartHourText = scoutStartHour.getText();
+            String scoutStartMinText = scoutStartMin.getText();
+            String scoutEndHourText = scoutEndHour.getText();
+            String scoutEndMinText = scoutEndMin.getText();
+            String companionHourText = companionHour.getText();
+            
+
             // Check if any required fields are null or empty
-            if (scoutComboBox.getValue() == null || companion.getText().isEmpty() || scoutStartHour.getText().isEmpty()
-                    || scoutStartMin.getText().isEmpty() || scoutEndHour.getText().isEmpty() || scoutEndMin.getText().isEmpty() || companionHour.getText().isEmpty()) {
+            if (scoutComboBox.getValue() == null || companion.getText().isEmpty() || scoutStartHourText.isEmpty()
+                    || scoutStartMinText.isEmpty() || scoutEndHourText.isEmpty()
+                    || scoutEndMinText.isEmpty() || companionHourText.isEmpty()) {
                 // Display an error message and return
                 displayErrorMessage("Please fill out all Scout fields");
                 return;
             }
+
+            //check for companion name length
+            if(companion.getText().length() > 30){
+                displayErrorMessage("Companion name too long");
+                return;
+            }
+
+            // check for 24 hour time
+            int scoutStartHourInt = Integer.parseInt(scoutStartHourText);
+            int scoutEndHourInt = Integer.parseInt(scoutEndHourText);
+            int companionHourInt = Integer.parseInt(companionHourText);
+            if (scoutStartHourInt < 1 || scoutStartHourInt > 24 || scoutEndHourInt < 1 || scoutEndHourInt > 24 || companionHourInt < 1 || companionHourInt > 24) {
+                displayErrorMessage("Scout Start and End hour must be between 1 and 24.");
+                return;
+            }
+
+            // check if start and end minute are between 0 and 59
+            int scoutStartMinInt = Integer.parseInt(scoutStartMinText);
+            int scoutEndMinInt = Integer.parseInt(scoutEndMinText);
+            if (scoutStartMinInt < 0 || scoutStartMinInt > 59 || scoutEndMinInt < 0 || scoutEndMinInt > 59) {
+                displayErrorMessage("Scout Start and End minute must be between 0 and 59.");
+                return;
+            }
+
+            // check if start time is less than end time
+            if (scoutStartHourInt > scoutEndHourInt
+                    || (scoutStartHourInt == scoutEndHourInt && scoutStartMinInt >= scoutEndMinInt)) {
+                displayErrorMessage("Scout Start time must be before End time.");
+                return;
+            }
+
+            // format single digits
+            if (scoutStartHourText.length() < 2 || scoutStartMinText.length() < 2 || scoutEndHourText.length() < 2
+                    || scoutEndMinText.length() < 2 || companionHourText.length() < 2) {
+                displayErrorMessage("Scout time must be 2 digits.");
+                return;
+            }
+
             // Get the selected scout from the combo box
             ScoutInfo selectedScouts = new ScoutInfo(scoutComboBox.getValue());
             // Add the selected scout to the table
-            data.add(selectedScouts);
+            data.add(selectedScout);
             // add to database
             AddScout(event);
         });
@@ -318,13 +365,53 @@ public class StartShiftActionView extends View {
         startSessionBtn.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         startSessionBtn.setTextAlignment(TextAlignment.CENTER);
         startSessionBtn.setOnAction(event -> {
-            // Check if any required fields are null or empty
-            if (startDatePicker.getValue() == null || startHour.getText().isEmpty() || startMin.getText().isEmpty()
-                    || endHour.getText().isEmpty() || endMin.getText().isEmpty() || startingCash.getText().isEmpty()) {
+            String startHourText = startHour.getText();
+            String startMinText = startMin.getText();
+            String endHourText = endHour.getText();
+            String endMinText = endMin.getText();
+
+            // check if any required fields are null or empty
+            if (startDatePicker.getValue() == null || startHourText.isEmpty() || startMinText.isEmpty()
+                    || endHourText.isEmpty() || endMinText.isEmpty() || startingCash.getText().isEmpty()) {
                 // Display an error message and return
                 displayErrorMessage("Please fill out all Session fields");
                 return;
             }
+
+            // check for 24 hour time
+            int startHourInt = Integer.parseInt(startHourText);
+            int endHourInt = Integer.parseInt(endHourText);
+            if (startHourInt < 1 || startHourInt > 24 || endHourInt < 1 || endHourInt > 24) {
+                displayErrorMessage("Session Start and End hour must be between 1 and 24.");
+                return;
+            }
+
+            // check if start and end minute are between 0 and 59
+            int startMinInt = Integer.parseInt(startMinText);
+            int endMinInt = Integer.parseInt(endMinText);
+            if (startMinInt < 0 || startMinInt > 59 || endMinInt < 0 || endMinInt > 59) {
+                displayErrorMessage("Session Start and End minute must be between 0 and 59.");
+                return;
+            }
+
+            // check if start time is less than end time
+            if (startHourInt > endHourInt || (startHourInt == endHourInt && startMinInt >= endMinInt)) {
+                displayErrorMessage("Session Start time must be before End time.");
+                return;
+            }
+
+            // format single digits
+            if (startHourText.length() < 2 || startMinText.length() < 2 || endHourText.length() < 2
+                    || endMinText.length() < 2) {
+                displayErrorMessage("Session time must be 2 digits.");
+                return;
+            }
+
+            // max length for cash
+            if (startingCash.getText().length() > 6) {
+                displayErrorMessage("Starting cash too large.");
+            }
+
             // disable start session
             startDatePicker.setDisable(true);
             startHour.setDisable(true);
@@ -501,7 +588,7 @@ public class StartShiftActionView extends View {
         scoutEndHour.clear();
         scoutEndMin.clear();
 
-        //display success message
+        // display success message
         displayMessage("Scout added!");
     }
 
