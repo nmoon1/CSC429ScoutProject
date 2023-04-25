@@ -125,6 +125,7 @@ public class StartShiftActionView extends View {
         grid.add(startDateLabel, 1, 0);
 
         startDatePicker = new DatePicker();
+        startDatePicker.setEditable(false);
         startDatePicker.setPrefWidth(200);
         grid.add(startDatePicker, 2, 0);
 
@@ -334,6 +335,7 @@ public class StartShiftActionView extends View {
         startSessionBtn.setOnAction(event -> {
             String startHourText = startHour.getText();
             String startMinText = startMin.getText();
+            String startingCashText = startingCash.getText();
 
             // check if any required fields are null or empty
             if (startDatePicker.getValue() == null || startHourText.isEmpty() || startMinText.isEmpty()
@@ -345,8 +347,8 @@ public class StartShiftActionView extends View {
 
             // check for 24 hour time
             int startHourInt = Integer.parseInt(startHourText);
-            if (startHourInt < 0 || startHourInt > 23 || endHourInt < 0 || endHourInt > 23) {
-                displayErrorMessage("Session Start and End hour must be between 0 and 23.");
+            if (startHourInt < 0 || startHourInt > 23) {
+                displayErrorMessage("Session Start hour must be between 0 and 23.");
                 return;
             }
 
@@ -361,6 +363,25 @@ public class StartShiftActionView extends View {
             if (startingCash.getText().length() > 6) {
                 displayErrorMessage("Starting cash too large.");
             }
+
+            // must be a number
+            double startingCashNumber;
+            try{
+                startingCashNumber = Double.parseDouble(startingCashText);
+            }
+            catch(Exception e){
+                displayErrorMessage("Starting Cash must be a number.");
+                return;
+            }
+
+            //cannot be negative
+            if(startingCashNumber < 0){
+                displayErrorMessage("Starting cash must be positive.");
+                return;
+            }
+
+
+
 
             // disable start session
             startDatePicker.setDisable(true);
