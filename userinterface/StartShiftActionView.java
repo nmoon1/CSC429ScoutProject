@@ -309,6 +309,7 @@ public class StartShiftActionView extends View {
 
             // Get the selected scout from the combo box
             ScoutInfo selectedScouts = new ScoutInfo(scoutComboBox.getValue());
+            ScoutInfo selectedScout = new ScoutInfo(scoutComboBox.getValue());
             // Add the selected scout to the table
             data.add(selectedScout);
             // add to database
