@@ -280,8 +280,8 @@ public class StartShiftActionView extends View {
             int scoutStartHourInt = Integer.parseInt(scoutStartHourText);
             int scoutEndHourInt = Integer.parseInt(scoutEndHourText);
             int companionHourInt = Integer.parseInt(companionHourText);
-            if (scoutStartHourInt < 1 || scoutStartHourInt > 24 || scoutEndHourInt < 1 || scoutEndHourInt > 24 || companionHourInt < 1 || companionHourInt > 24) {
-                displayErrorMessage("Scout Start and End hour must be between 1 and 24.");
+            if (scoutStartHourInt < 0 || scoutStartHourInt > 23 || scoutEndHourInt < 0 || scoutEndHourInt > 23 || companionHourInt < 0 || companionHourInt > 23) {
+                displayErrorMessage("Scout Start and End hour must be between 0 and 23.");
                 return;
             }
 
@@ -300,15 +300,7 @@ public class StartShiftActionView extends View {
                 return;
             }
 
-            // format single digits
-            if (scoutStartHourText.length() < 2 || scoutStartMinText.length() < 2 || scoutEndHourText.length() < 2
-                    || scoutEndMinText.length() < 2 || companionHourText.length() < 2) {
-                displayErrorMessage("Scout time must be 2 digits.");
-                return;
-            }
-
             // Get the selected scout from the combo box
-            ScoutInfo selectedScouts = new ScoutInfo(scoutComboBox.getValue());
             ScoutInfo selectedScout = new ScoutInfo(scoutComboBox.getValue());
             // Add the selected scout to the table
             data.add(selectedScout);
@@ -382,8 +374,8 @@ public class StartShiftActionView extends View {
             // check for 24 hour time
             int startHourInt = Integer.parseInt(startHourText);
             int endHourInt = Integer.parseInt(endHourText);
-            if (startHourInt < 1 || startHourInt > 24 || endHourInt < 1 || endHourInt > 24) {
-                displayErrorMessage("Session Start and End hour must be between 1 and 24.");
+            if (startHourInt < 0 || startHourInt > 23 || endHourInt < 0 || endHourInt > 23) {
+                displayErrorMessage("Session Start and End hour must be between 0 and 23.");
                 return;
             }
 
@@ -398,13 +390,6 @@ public class StartShiftActionView extends View {
             // check if start time is less than end time
             if (startHourInt > endHourInt || (startHourInt == endHourInt && startMinInt >= endMinInt)) {
                 displayErrorMessage("Session Start time must be before End time.");
-                return;
-            }
-
-            // format single digits
-            if (startHourText.length() < 2 || startMinText.length() < 2 || endHourText.length() < 2
-                    || endMinText.length() < 2) {
-                displayErrorMessage("Session time must be 2 digits.");
                 return;
             }
 
@@ -529,17 +514,21 @@ public class StartShiftActionView extends View {
 
         String startTimeH = startHour.getText();
         String startTimeM = startMin.getText();
-        String endTimeH = endHour.getText();
-        String endTimeM = endMin.getText();
+
+        if(startTimeH.length() == 1) {
+            startTimeH = "0" + startTimeH;
+        }
+        if(startTimeM.length() == 1) {
+            startTimeM = "0" + startTimeM;
+        }
+
         String cash = startingCash.getText();
 
         String startTime = startTimeH + ":" + startTimeM;
-        String endTime = endTimeH + ":" + endTimeM;
 
         Properties props = new Properties();
         props.setProperty("StartDate", date);
         props.setProperty("StartTime", startTime);
-        props.setProperty("EndTime", endTime);
         props.setProperty("StartingCash", cash);
 
         myModel.stateChangeRequest("StartSession", props);
@@ -561,18 +550,21 @@ public class StartShiftActionView extends View {
         String compH = companionHour.getText();
         String scoutStartH = scoutStartHour.getText();
         String scoutStartM = scoutStartMin.getText();
-        String scoutEndH = scoutEndHour.getText();
-        String scoutEndM = scoutEndMin.getText();
+
+        if(scoutStartH.length() == 1) {
+            scoutStartH = "0" + scoutStartH;
+        }
+        if(scoutStartM.length() == 1) {
+            scoutStartM = "0" + scoutStartM;
+        }
 
         String ScoutStartTime = scoutStartH + ":" + scoutStartM;
-        String ScoutEndTime = scoutEndH + ":" + scoutEndM;
 
         Properties props = new Properties();
         props.setProperty("ScoutID", scoutID);
         props.setProperty("CompanionName", comp);
         props.setProperty("CompanionHours", compH);
         props.setProperty("StartTime", ScoutStartTime);
-        props.setProperty("EndTime", ScoutEndTime);
 
         myModel.stateChangeRequest("AddShift", props);
         //System.out.println(scout + " " + comp + " " + compH + " " + ScoutStartTime + " " + ScoutEndTime);
