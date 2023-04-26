@@ -266,7 +266,7 @@ public class StartShiftActionView extends View {
                 // must be 24 hour format
                 if (scoutStartHourInt < 0 || scoutStartHourInt > 23 || scoutEndHourInt < 0 || scoutEndHourInt > 23
                         || companionHourInt < 0 || companionHourInt > 23) {
-                    displayErrorMessage("Scout Start and End hour must be between 0 and 23.");
+                    displayErrorMessage("Hours must be between 0 and 23.");
                     return;
                 }
 
@@ -337,6 +337,9 @@ public class StartShiftActionView extends View {
         // Add the scroll pane to the grid
         grid.add(scrollPane, 1, 10, 4, 2);
 
+        // initialize submitBtn so it can be enabled by start session button
+        Button submitBtn = new Button("Start Shift");
+
         /*
          * ----------------------
          * start session button
@@ -372,17 +375,30 @@ public class StartShiftActionView extends View {
                 return;
             }
 
-            // max length for cash
-            if (startingCash.getText().length() > 6) {
-                displayErrorMessage("Starting cash too large.");
-            }
-
             // must be a number
             double startingCashNumber;
             try {
                 startingCashNumber = Double.parseDouble(startingCashText);
             } catch (Exception e) {
                 displayErrorMessage("Starting Cash must be a number.");
+                return;
+            }
+
+            int decimal = startingCashText.indexOf(".");
+            // check for 2 decimal places max
+            if (decimal != -1)
+            {
+                if(decimal < (startingCashText.length() - 3)) 
+                {
+                    displayErrorMessage("Starting cash may only have 2 digits after decimal.");
+                    return;
+                }
+            }
+
+            // max value for cash
+            if (startingCashNumber >= 1000000)
+            { 
+                displayErrorMessage("Starting cash too large.");
                 return;
             }
 
@@ -401,10 +417,12 @@ public class StartShiftActionView extends View {
 
             // enable add scout
             addScoutBtn.setDisable(false);
+            submitBtn.setDisable(false);
             scoutEndBox.setDisable(false);
             scoutStartBox.setDisable(false);
             scoutComboBox.setDisable(false);
             companionBox.setDisable(false);
+
 
             StartSession(event);
         });
@@ -428,9 +446,9 @@ public class StartShiftActionView extends View {
         });
 
         // start shift button
-        Button submitBtn = new Button("Start Shift");
         submitBtn.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         submitBtn.setTextAlignment(TextAlignment.CENTER);
+        submitBtn.setDisable(true);
         submitBtn.setOnAction(event -> {
             myModel.stateChangeRequest("StartShift", null);
         });
@@ -542,6 +560,8 @@ public class StartShiftActionView extends View {
         String compH = companionHour.getText();
         String scoutStartH = scoutStartHour.getText();
         String scoutStartM = scoutStartMin.getText();
+        String scoutEndH = scoutEndHour.getText();
+        String scoutEndM = scoutEndMin.getText();
 
         if (scoutStartH.length() == 1) {
             scoutStartH = "0" + scoutStartH;
@@ -549,14 +569,22 @@ public class StartShiftActionView extends View {
         if (scoutStartM.length() == 1) {
             scoutStartM = "0" + scoutStartM;
         }
+        if(scoutEndH.length() == 1) {
+            scoutEndH = "0" + scoutEndH;
+        }
+        if(scoutEndM.length() == 1) {
+            scoutEndM = "0" + scoutEndM;
+        }
 
         String ScoutStartTime = scoutStartH + ":" + scoutStartM;
+        String ScoutEndTime = scoutEndH + ":" + scoutEndM;
 
         Properties props = new Properties();
         props.setProperty("ScoutID", scoutID);
         props.setProperty("CompanionName", comp);
         props.setProperty("CompanionHours", compH);
         props.setProperty("StartTime", ScoutStartTime);
+        props.setProperty("EndTime", ScoutEndTime);
 
         myModel.stateChangeRequest("AddShift", props);
         // System.out.println(scout + " " + comp + " " + compH + " " + ScoutStartTime +
