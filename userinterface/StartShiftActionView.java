@@ -454,31 +454,6 @@ public class StartShiftActionView extends View {
         return statusLog;
     }
 
-    // scouts constructor
-    public class ScoutInfo {
-        private final String name;
-        private final String troop;
-
-        public ScoutInfo(String info) {
-            int nameIndex = info.indexOf(" ") + 1;
-            this.name = info.substring(nameIndex, info.length() - 6);
-            this.troop = info.substring(info.length() - 5);
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public String getTroop() {
-            return troop;
-        }
-
-        @Override
-        public String toString() {
-            return name + " (Troop " + troop + ")";
-        }
-    }
-
     /*
      * --------------------
      * start session
@@ -542,6 +517,8 @@ public class StartShiftActionView extends View {
         String compH = companionHour.getText();
         String scoutStartH = scoutStartHour.getText();
         String scoutStartM = scoutStartMin.getText();
+        String scoutEndH = scoutEndHour.getText();
+        String scoutEndM = scoutEndMin.getText();
 
         if (scoutStartH.length() == 1) {
             scoutStartH = "0" + scoutStartH;
@@ -549,14 +526,22 @@ public class StartShiftActionView extends View {
         if (scoutStartM.length() == 1) {
             scoutStartM = "0" + scoutStartM;
         }
+        if(scoutEndH.length() == 1) {
+            scoutEndH = "0" + scoutEndH;
+        }
+        if(scoutEndM.length() == 1) {
+            scoutEndM = "0" + scoutEndM;
+        }
 
         String ScoutStartTime = scoutStartH + ":" + scoutStartM;
+        String ScoutEndTime = scoutEndH + ":" + scoutEndM;
 
         Properties props = new Properties();
         props.setProperty("ScoutID", scoutID);
         props.setProperty("CompanionName", comp);
         props.setProperty("CompanionHours", compH);
         props.setProperty("StartTime", ScoutStartTime);
+        props.setProperty("EndTime", ScoutEndTime);
 
         myModel.stateChangeRequest("AddShift", props);
         // System.out.println(scout + " " + comp + " " + compH + " " + ScoutStartTime +
