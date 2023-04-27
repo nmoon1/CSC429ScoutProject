@@ -17,11 +17,14 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import javafx.scene.control.TextArea;
+import java.util.Properties;
 
 public class SellTreeCostView extends View {
 	// GUI components
 	protected TextField newCost;
 	protected Text curCost;
+	protected TextArea treeNotes;
 
 	protected Button backButton, submitButton;
 
@@ -111,6 +114,13 @@ public class SellTreeCostView extends View {
 		newCost = new TextField();
 		grid.add(newCost, 1, 2);
 
+		Text treeNotesLabel = new Text("Notes:");
+		treeNotesLabel.setFont(myFont);
+		treeNotesLabel.setTextAlignment(TextAlignment.CENTER);
+		treeNotes = new TextArea();
+		grid.add(treeNotesLabel, 0, 3, 2, 1);
+		grid.add(treeNotes, 0, 4, 2, 1);
+
 		HBox doneCont = new HBox(10);
 		doneCont.setAlignment(Pos.CENTER);
 		
@@ -131,8 +141,10 @@ public class SellTreeCostView extends View {
    		     @Override
    		     public void handle(ActionEvent e) {
    		    	clearErrorMessage();
-   		    	
-   		    	myModel.stateChangeRequest("SubmitCost", newCost.getText());
+   		    	Properties props = new Properties();
+				props.setProperty("Cost", newCost.getText());
+				props.setProperty("Notes", treeNotes.getText());
+   		    	myModel.stateChangeRequest("SubmitCost", props);
    				
    				String error = (String)myModel.getState("Error");
    				if (error.length() != 0) displayErrorMessage(error);
@@ -173,8 +185,10 @@ public class SellTreeCostView extends View {
 	public void populateFields()
 	{
 		String currentCost = (String)myModel.getState("Cost");
+		String notes = (String)myModel.getState("Notes");
 		curCost.setText(currentCost);
 		newCost.setText(currentCost);
+		treeNotes.setText(notes);
 	}
 
 	/**
