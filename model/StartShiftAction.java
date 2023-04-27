@@ -16,7 +16,7 @@ public class StartShiftAction extends Action {
     public StartShiftAction() throws Exception {
         super();
 
-        allScouts.lookupAll();
+        allScouts.lookupAll("Status <> 'Inactive'");
     }
 
     protected void setDependencies() {
