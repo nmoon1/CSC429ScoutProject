@@ -144,6 +144,9 @@ public class Tree extends EntityBase implements IView {
 
 	// ---------------------------------------------------------------------
 	public void updateState(String key, Object value) {
+		if(key.equals("Notes")) {
+			persistentState.setProperty("Notes", (String)value);
+		}
 		stateChangeRequest(key, value);
 	}
 

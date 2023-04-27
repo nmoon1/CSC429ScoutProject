@@ -15,6 +15,8 @@ public class SellTreeAction extends Action {
 	private String errorMessage = "";
 	private String cost = "";
 	private String barcode = "";
+	private String notes = "";
+	private Tree tree;
 	
 	protected SellTreeAction() throws Exception {
 		super();
@@ -34,6 +36,7 @@ public class SellTreeAction extends Action {
 			case "Error": return errorMessage;
 			case "Stage": return myStage;
 			case "Cost": return cost;
+			case "Notes": return notes;
 		}
 		
 		return null;
@@ -67,7 +70,7 @@ public class SellTreeAction extends Action {
 					
 					// Make sure that the tree exists and is not sold
 					try {
-						Tree tree = new Tree(barcode);
+						tree = new Tree(barcode);
 						if (tree.getState("Status").equals("Sold")) {
 							errorMessage = "Tree with barcode " + barcode + " has already been sold";
 							return;
@@ -76,6 +79,7 @@ public class SellTreeAction extends Action {
 						errorMessage = "No tree exists with barcode " + barcode;
 						return;
 					}
+					notes = (String)tree.getState("Notes");
 					
 					// Get tree type cost
 					String prefix = barcode.substring(0, 2); 
@@ -93,11 +97,19 @@ public class SellTreeAction extends Action {
 				errorMessage = "";
 
 				// Validate cost is a dollar value
-				cost = (String)value;
+				Properties props = (Properties) value;
+				cost = props.getProperty("Cost");
+				notes = props.getProperty("Notes") == null? "" : props.getProperty("Notes");
 				if (!Pattern.matches("^\\d+(\\.\\d\\d?)?$", cost)) {
 					errorMessage = "Invalid cost";
 					return;
 				}
+				if(notes.length() > 200){
+					errorMessage = "Notes must be less than 200 characters.";
+					return;
+				}
+				tree.updateState("Notes", notes);
+				tree.update();
 				
 				swapToView(getOrCreateScene(infoViewName));
 				break;
@@ -110,40 +122,47 @@ public class SellTreeAction extends Action {
 					
 					Properties customerInfo = (Properties)value;
 					
-					// Validate customer name
-					String custName = customerInfo.getProperty("Name");
-					if (custName == null || custName.length() == 0) {
-						errorMessage = "Name cannot be empty";
-						return;
+					String paymentMethod = customerInfo.getProperty("PaymentMethod");
+					String custName = "",
+						   phoneNumber = "",
+						   email = "";
+					if(paymentMethod.equals("Check")) {
+						// Validate customer name
+						custName = customerInfo.getProperty("Name");
+
+						if (custName == null || custName.length() == 0) {
+							errorMessage = "Name cannot be empty";
+							return;
+						}
+						
+						if (custName.length() > 50) {
+							errorMessage = "Name is too long";
+							return;
+						}
+						
+						// Validate phone number
+						phoneNumber = customerInfo.getProperty("PhoneNumber");
+						if (phoneNumber.length() == 0) {
+							errorMessage = "Phone number cannot be empty";
+							return;
+						}
+						
+						if (Pattern.matches("^\\d{3}\\-\\d{3}\\-\\d{4}$", phoneNumber))
+							phoneNumber = phoneNumber.substring(0, 3) + phoneNumber.substring(4, 7) + phoneNumber.substring(8);
+						else if (Pattern.matches("^\\(\\d{3}\\)\\d{3}\\-\\d{4}$", phoneNumber))
+							phoneNumber = phoneNumber.substring(1, 4) + phoneNumber.substring(5, 8) + phoneNumber.substring(9);
+						else if (!Pattern.matches("^\\d{10}$", phoneNumber)) {
+							errorMessage = "Phone number must be of the form XXXXXXXXXX or (XXX)XXX-XXXX or XXX-XXX-XXXX";
+							return;
+						}
+						
+						// Validate email
+						email = customerInfo.getProperty("Email");
+						if (!email.contains("@")) {
+							errorMessage = "Invalid email";
+							return;
+						}
 					}
-					
-					if (custName.length() > 50) {
-						errorMessage = "Name is too long";
-						return;
-					}
-					
-					// Validate phone number
-					String phoneNumber = customerInfo.getProperty("PhoneNumber");
-			    	if (phoneNumber.length() == 0) {
-			    		errorMessage = "Phone number cannot be empty";
-			    		return;
-			    	}
-			    	
-			    	if (Pattern.matches("^\\d{3}\\-\\d{3}\\-\\d{4}$", phoneNumber))
-			    		phoneNumber = phoneNumber.substring(0, 3) + phoneNumber.substring(4, 7) + phoneNumber.substring(8);
-			    	else if (Pattern.matches("^\\(\\d{3}\\)\\d{3}\\-\\d{4}$", phoneNumber))
-			    		phoneNumber = phoneNumber.substring(1, 4) + phoneNumber.substring(5, 8) + phoneNumber.substring(9);
-			    	else if (!Pattern.matches("^\\d{10}$", phoneNumber)) {
-			    		errorMessage = "Phone number must be of the form XXXXXXXXXX or (XXX)XXX-XXXX or XXX-XXX-XXXX";
-			    		return;
-			    	}
-			    	
-			    	// Validate email
-			    	String email = customerInfo.getProperty("Email");
-			    	if (!email.contains("@")) {
-			    		errorMessage = "Invalid email";
-			    		return;
-			    	}
 					
 			    	// Time is HHMM
 					Properties transactionProps = new Properties();

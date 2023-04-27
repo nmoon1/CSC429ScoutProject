@@ -49,6 +49,13 @@ public class EndShiftActionView extends View{
         VBox container = new VBox(10);
         container.setAlignment(Pos.CENTER);
         container.setPadding(new Insets(20));
+
+        Text titleText = new Text("End Shift");
+		titleText.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+		titleText.setWrappingWidth(300);
+		titleText.setTextAlignment(TextAlignment.CENTER);
+		titleText.setFill(Color.DARKGREEN);
+
         String endingCash = (String)myModel.getState("EndingCash");
         String totalCheckSales = (String)myModel.getState("TotalCheckSales");
         Text cash = new Text("Ending Cash: " + endingCash);
@@ -85,6 +92,7 @@ public class EndShiftActionView extends View{
 
         statusLog = new MessageView("");
 
+        container.getChildren().add(titleText);
         container.getChildren().add(cash);
         container.getChildren().add(check);
         container.getChildren().add(notesLabel);

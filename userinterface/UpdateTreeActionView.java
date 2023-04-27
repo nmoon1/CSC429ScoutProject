@@ -52,6 +52,7 @@ public class UpdateTreeActionView extends View {
         getChildren().add(container);
         myModel.subscribe("LookupTreeError", this);
         myModel.subscribe("TreeUpdated", this);
+        myModel.subscribe("TreeSoldError", this);
     }
 
     private Node createTitle() {
@@ -113,15 +114,23 @@ public class UpdateTreeActionView extends View {
     public void updateState(String key, Object value) {
         switch(key) {
             case "LookupTreeError":
-                statusLog.displayErrorMessage("ERROR! Tree with barcode + " + barcode.getText() + " does not exist!");
-                // maybe put a helper method somewhwere to do this
-                Stage stage = MainStageContainer.getInstance();
-                stage.sizeToScene();
+                statusLog.displayErrorMessage("ERROR! Tree with barcode " + barcode.getText() + " does not exist!");
+                resize();
                 break;
             case "TreeUpdated":
                 displayTreeUpdated();
+                break;
+            case "TreeSoldError":
+                statusLog.displayErrorMessage("ERROR! Tree with barcode " + barcode.getText() + " has been sold!");
+                resize();
+                break;
         }
         
+    }
+
+    private void resize() {
+        Stage stage = MainStageContainer.getInstance();
+        stage.sizeToScene();
     }
 
     private void displayTreeUpdated() {
