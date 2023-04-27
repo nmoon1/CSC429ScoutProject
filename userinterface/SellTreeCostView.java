@@ -186,7 +186,7 @@ public class SellTreeCostView extends View {
 	{
 		String currentCost = (String)myModel.getState("Cost");
 		String notes = (String)myModel.getState("Notes");
-		curCost.setText(currentCost);
+		curCost.setText("$" + currentCost);
 		newCost.setText(currentCost);
 		treeNotes.setText(notes);
 	}
