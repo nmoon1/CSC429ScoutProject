@@ -338,14 +338,14 @@ public class StartShiftActionView extends View {
         grid.add(scrollPane, 1, 10, 4, 2);
 
         // initialize submitBtn so it can be enabled by start session button
-        Button submitBtn = new Button("Start Shift");
+        Button submitBtn = new Button("Submit Scouts");
 
         /*
          * ----------------------
          * start session button
          * ----------------------
          */
-        Button startSessionBtn = new Button("Add Session");
+        Button startSessionBtn = new Button("Start Shift");
         startSessionBtn.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         startSessionBtn.setTextAlignment(TextAlignment.CENTER);
         startSessionBtn.setOnAction(event -> {
