@@ -31,7 +31,6 @@ import java.util.Vector;
 // project imports
 import impresario.IModel;
 
-import javafx.scene.control.DatePicker;
 import java.time.LocalDate;
 
 import javafx.scene.control.ComboBox;
@@ -134,7 +133,7 @@ public class StartShiftActionView extends View {
         startDate.setText(LocalDate.now().toString());
         startDate.setDisable(true);
         startDate.setPrefWidth(200);
-        startDate.setStyle("-fx-opacity: 1; -fx-text-fill: black;");
+        startDate.setStyle("-fx-opacity: 1");
         grid.add(startDate, 2, 0);
 
         // start time
@@ -145,7 +144,7 @@ public class StartShiftActionView extends View {
         currentTime.setText(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm")));
         currentTime.setDisable(true);
         currentTime.setPrefWidth(200);
-        currentTime.setStyle("-fx-opacity: 1; -fx-text-fill: black;");
+        currentTime.setStyle("-fx-opacity: 1");
         grid.add(currentTime, 2, 1);
 
         // End Time
@@ -185,7 +184,7 @@ public class StartShiftActionView extends View {
 
         scoutComboBox = new ComboBox<>(
                 FXCollections.observableArrayList(scoutList));
-
+       // System.out.println(scoutList);
         scoutComboBox.setPrefWidth(200);
         scoutComboBox.setDisable(true);
         scoutComboBox.setPromptText("Select a Scout");
@@ -326,20 +325,25 @@ public class StartShiftActionView extends View {
 
         // first column
         TableColumn<ScoutInfo, String> nameCol = new TableColumn<>("Name");
-        nameCol.setCellValueFactory(new PropertyValueFactory<>("Name"));
+        nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
 
         // troop id column
         TableColumn<ScoutInfo, String> troopCol = new TableColumn<>("Troop ID");
-        troopCol.setCellValueFactory(new PropertyValueFactory<>("Troop"));
+        troopCol.setCellValueFactory(new PropertyValueFactory<>("troop"));
+
+        // phone column
+        TableColumn<ScoutInfo, String> phoneCol = new TableColumn<>("Phone");
+        phoneCol.setCellValueFactory(new PropertyValueFactory<>("phone"));
 
         // Add columns to the table
-        table.getColumns().addAll(nameCol, troopCol);
+        table.getColumns().addAll(nameCol, troopCol, phoneCol);
 
         table.setItems(data);
 
         // Set column widths
-        nameCol.setPrefWidth(300);
+        nameCol.setPrefWidth(225);
         troopCol.setPrefWidth(75);
+        phoneCol.setPrefWidth(75);
 
         // Set the table height to show 4 rows without scrolling
         table.setFixedCellSize(25);
@@ -478,7 +482,7 @@ public class StartShiftActionView extends View {
         cancelBtn.setTextAlignment(TextAlignment.CENTER);
         cancelBtn.setOnAction(event -> {
             if (cancelFlag) {
-                displayErrorMessage("You must submit at least one scout to the started session.");
+                displayErrorMessage("You must submit scouts to the started session.");
                 return;
             }
             myModel.stateChangeRequest("Cancel", null);
