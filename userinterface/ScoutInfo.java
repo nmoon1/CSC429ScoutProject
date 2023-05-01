@@ -10,6 +10,7 @@ public class ScoutInfo {
         this.name = info.substring(nameIndex, info.length() - 6);
         this.troop = info.substring(info.length() - 5);
         //temp phone value
+        //TODO get phone number associated with the scout
         this.phone = "1234567890";
     }
 

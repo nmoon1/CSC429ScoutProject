@@ -181,10 +181,12 @@ public class StartShiftActionView extends View {
         grid.add(scoutLabel, 1, 5);
 
         Vector<String> scoutList = (Vector<String>) myModel.getState("GetScouts");
-
+        
+        System.out.println(scoutList);
+        
         scoutComboBox = new ComboBox<>(
                 FXCollections.observableArrayList(scoutList));
-       // System.out.println(scoutList);
+        // System.out.println(scoutList);
         scoutComboBox.setPrefWidth(200);
         scoutComboBox.setDisable(true);
         scoutComboBox.setPromptText("Select a Scout");
@@ -570,6 +572,7 @@ public class StartShiftActionView extends View {
         String scoutEndH = scoutEndHour.getText();
         String scoutEndM = scoutEndMin.getText();
 
+        // add leading 0 if one digit
         if (scoutStartH.length() == 1) {
             scoutStartH = "0" + scoutStartH;
         }
