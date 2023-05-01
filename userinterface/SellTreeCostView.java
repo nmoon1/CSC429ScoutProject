@@ -94,15 +94,16 @@ public class SellTreeCostView extends View {
         
         Text curCostLabel = new Text(" Current Cost: ");
 		Font myFont = Font.font("Helvetica", FontWeight.BOLD, 12);
+		Font normalFont = Font.font("Helvetica", FontWeight.NORMAL, 12);
 		curCostLabel.setFont(myFont);
 		curCostLabel.setWrappingWidth(150);
 		curCostLabel.setTextAlignment(TextAlignment.RIGHT);
 		grid.add(curCostLabel, 0, 1);
 
 		curCost = new Text();
-		curCost.setFont(myFont);
+		curCost.setFont(normalFont);
 		curCost.setWrappingWidth(150);
-		curCost.setTextAlignment(TextAlignment.RIGHT);
+		curCost.setTextAlignment(TextAlignment.LEFT);
 		grid.add(curCost, 1, 1);
         
         Text newCostLabel = new Text(" New Cost: ");
@@ -121,7 +122,7 @@ public class SellTreeCostView extends View {
 		grid.add(descLabel, 0, 3);
         
 		description = new Text("");
-		description.setFont(Font.font("Helvetica", FontWeight.NORMAL, 12));
+		description.setFont(normalFont);
 		description.setWrappingWidth(150);
 		description.setTextAlignment(TextAlignment.LEFT);
 		grid.add(description, 1, 3);
