@@ -38,7 +38,7 @@ public class Session extends EntityBase implements IView {
     }
 
     private void findOpenSession() {
-        String query = "SELECT * FROM " + myTableName + " WHERE EndTime IS NULL";
+        String query = "SELECT * FROM " + myTableName + " WHERE EndingCash IS NULL";
 
         Vector<Properties> allData = getSelectQueryResult(query);
         // TODO: might need to throw error if multiple entries found
@@ -122,15 +122,5 @@ public class Session extends EntityBase implements IView {
             updateStatusMessage = "Error in saving session data to the database.";
         }
     }
-
-    // public String stringify() {
-    //     String str = "";
-    //     String id = persistentState.getProperty("ID");
-    //     String startDate = persistentState.getProperty("StartDate");
-    //     String startTime = persistentState.getProperty("StartTime");
-    //     String endTime = persistentState.getProperty("EndTime");
-    //     String startCash = persistentState.
-    //     return str;
-    // }
     
 }
