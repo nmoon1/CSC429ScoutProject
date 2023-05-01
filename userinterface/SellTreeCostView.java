@@ -23,7 +23,7 @@ import java.util.Properties;
 public class SellTreeCostView extends View {
 	// GUI components
 	protected TextField newCost;
-	protected Text curCost;
+	protected Text curCost, description;
 	protected TextArea treeNotes;
 
 	protected Button backButton, submitButton;
@@ -94,15 +94,16 @@ public class SellTreeCostView extends View {
         
         Text curCostLabel = new Text(" Current Cost: ");
 		Font myFont = Font.font("Helvetica", FontWeight.BOLD, 12);
+		Font normalFont = Font.font("Helvetica", FontWeight.NORMAL, 12);
 		curCostLabel.setFont(myFont);
 		curCostLabel.setWrappingWidth(150);
 		curCostLabel.setTextAlignment(TextAlignment.RIGHT);
 		grid.add(curCostLabel, 0, 1);
 
 		curCost = new Text();
-		curCost.setFont(myFont);
+		curCost.setFont(normalFont);
 		curCost.setWrappingWidth(150);
-		curCost.setTextAlignment(TextAlignment.RIGHT);
+		curCost.setTextAlignment(TextAlignment.LEFT);
 		grid.add(curCost, 1, 1);
         
         Text newCostLabel = new Text(" New Cost: ");
@@ -113,13 +114,25 @@ public class SellTreeCostView extends View {
 
 		newCost = new TextField();
 		grid.add(newCost, 1, 2);
+        
+        Text descLabel = new Text(" Description: ");
+        descLabel.setFont(myFont);
+        descLabel.setWrappingWidth(150);
+        descLabel.setTextAlignment(TextAlignment.RIGHT);
+		grid.add(descLabel, 0, 3);
+        
+		description = new Text("");
+		description.setFont(normalFont);
+		description.setWrappingWidth(150);
+		description.setTextAlignment(TextAlignment.LEFT);
+		grid.add(description, 1, 3);
 
 		Text treeNotesLabel = new Text("Notes:");
 		treeNotesLabel.setFont(myFont);
 		treeNotesLabel.setTextAlignment(TextAlignment.CENTER);
 		treeNotes = new TextArea();
-		grid.add(treeNotesLabel, 0, 3, 2, 1);
-		grid.add(treeNotes, 0, 4, 2, 1);
+		grid.add(treeNotesLabel, 0, 4, 2, 1);
+		grid.add(treeNotes, 0, 5, 2, 1);
 
 		HBox doneCont = new HBox(10);
 		doneCont.setAlignment(Pos.CENTER);
@@ -186,9 +199,11 @@ public class SellTreeCostView extends View {
 	{
 		String currentCost = (String)myModel.getState("Cost");
 		String notes = (String)myModel.getState("Notes");
-		curCost.setText(currentCost);
+		String desc = (String)myModel.getState("Description");
+		curCost.setText("$" + currentCost);
 		newCost.setText(currentCost);
 		treeNotes.setText(notes);
+		description.setText(desc);
 	}
 
 	/**

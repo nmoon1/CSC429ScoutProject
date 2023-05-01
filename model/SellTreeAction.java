@@ -16,6 +16,7 @@ public class SellTreeAction extends Action {
 	private String cost = "";
 	private String barcode = "";
 	private String notes = "";
+	private String description = "";
 	private Tree tree;
 	
 	protected SellTreeAction() throws Exception {
@@ -37,6 +38,7 @@ public class SellTreeAction extends Action {
 			case "Stage": return myStage;
 			case "Cost": return cost;
 			case "Notes": return notes;
+			case "Description": return description;
 		}
 		
 		return null;
@@ -86,6 +88,7 @@ public class SellTreeAction extends Action {
 					try {
 						TreeType treeType = new TreeType(prefix);
 						cost = (String)treeType.getState("Cost");
+						description = (String)treeType.getState("TypeDescription");
 						swapToView(getOrCreateScene(costViewName));
 					} catch (Exception e) {
 						errorMessage = "No tree type with barcode prefix matching \"" + prefix + "\"";
