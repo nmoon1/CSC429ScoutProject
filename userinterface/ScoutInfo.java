@@ -6,12 +6,11 @@ public class ScoutInfo {
     private final String phone;
 
     public ScoutInfo(String info) {
-        int nameIndex = info.indexOf(" ") + 1;
-        this.name = info.substring(nameIndex, info.length() - 6);
-        this.troop = info.substring(info.length() - 5);
-        //temp phone value
-        //TODO get phone number associated with the scout
-        this.phone = "1234567890";
+        int firstSpaceIndex = info.indexOf(' ');
+        int secondSpaceIndex = info.indexOf(' ', firstSpaceIndex + 1);
+        this.name = info.substring(0, secondSpaceIndex);
+        this.troop = info.substring(secondSpaceIndex + 1, secondSpaceIndex + 8);
+        this.phone = info.substring(secondSpaceIndex + 8);
     }
 
     public String getName() {
@@ -31,3 +30,4 @@ public class ScoutInfo {
         return name + " (Troop " + troop + ") ";
     }
 }
+

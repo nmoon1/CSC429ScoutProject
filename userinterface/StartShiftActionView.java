@@ -182,7 +182,7 @@ public class StartShiftActionView extends View {
 
         Vector<String> scoutList = (Vector<String>) myModel.getState("GetScouts");
         
-        System.out.println(scoutList);
+        //System.out.println(scoutList);
         
         scoutComboBox = new ComboBox<>(
                 FXCollections.observableArrayList(scoutList));
@@ -340,12 +340,13 @@ public class StartShiftActionView extends View {
         // Add columns to the table
         table.getColumns().addAll(nameCol, troopCol, phoneCol);
 
+        // add to table
         table.setItems(data);
 
         // Set column widths
-        nameCol.setPrefWidth(225);
+        nameCol.setPrefWidth(200);
         troopCol.setPrefWidth(75);
-        phoneCol.setPrefWidth(75);
+        phoneCol.setPrefWidth(100);
 
         // Set the table height to show 4 rows without scrolling
         table.setFixedCellSize(25);
