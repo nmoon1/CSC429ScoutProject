@@ -421,8 +421,9 @@ public class StartShiftActionView extends View {
             double startingCashNumber;
             try {
                 startingCashNumber = Double.parseDouble(startingCashText);
-                if (startingCashNumber < 0) {
+                if (startingCashNumber <= 0) {
                     displayErrorMessage("Starting cash must be > $0.00");
+                    return;
                 }
             } catch (Exception e) {
                 displayErrorMessage("Starting Cash must be a number.");
