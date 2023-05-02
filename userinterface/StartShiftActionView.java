@@ -52,11 +52,14 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import javafx.scene.control.DatePicker;
 
 public class StartShiftActionView extends View {
 
-    private TextField startDate;
+    private DatePicker startDate;
     private TextField currentTime;
+    private TextField startHour;
+    private TextField startMin;
     private TextField endHour;
     private TextField endMin;
     private TextField startingCash;
@@ -129,23 +132,35 @@ public class StartShiftActionView extends View {
         Label startDateLabel = new Label("Start Date:");
         grid.add(startDateLabel, 1, 0);
 
-        startDate = new TextField();
-        startDate.setText(LocalDate.now().toString());
-        startDate.setDisable(true);
+        startDate = new DatePicker();
+        startDate.setValue(LocalDate.now());
+        startDate.setEditable(false);
         startDate.setPrefWidth(200);
-        startDate.setStyle("-fx-opacity: 1");
         grid.add(startDate, 2, 0);
 
         // start time
         Label startTimeLabel = new Label("Start Time:");
         grid.add(startTimeLabel, 1, 1);
 
-        currentTime = new TextField();
-        currentTime.setText(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm")));
-        currentTime.setDisable(true);
-        currentTime.setPrefWidth(200);
-        currentTime.setStyle("-fx-opacity: 1");
-        grid.add(currentTime, 2, 1);
+        // get the current time and extract the hour and minute
+        LocalTime currentTime = LocalTime.now();
+        int sessionHour = currentTime.getHour();
+        int sessionMin = currentTime.getMinute();
+
+        HBox startTimeBox = new HBox(10);
+        startHour = new TextField();
+        //set default hour
+        startHour.setText(String.format("%02d", sessionHour));
+        startHour.setPrefWidth(30);
+        Label startHourLabel = new Label(":");
+
+        startMin = new TextField();
+        startMin.setPrefWidth(30);
+        //set default minute
+        startMin.setText(String.format("%02d", sessionMin));
+
+        startTimeBox.getChildren().addAll(startHour, startHourLabel, startMin);
+        grid.add(startTimeBox, 2, 1);
 
         // End Time
         Label endTimeLabel = new Label("End Time:");
@@ -181,9 +196,9 @@ public class StartShiftActionView extends View {
         grid.add(scoutLabel, 1, 5);
 
         Vector<String> scoutList = (Vector<String>) myModel.getState("GetScouts");
-        
-        //System.out.println(scoutList);
-        
+
+        // System.out.println(scoutList);
+
         scoutComboBox = new ComboBox<>(
                 FXCollections.observableArrayList(scoutList));
         // System.out.println(scoutList);
@@ -374,46 +389,65 @@ public class StartShiftActionView extends View {
         startSessionBtn.setOnAction(event -> {
             String endHourText = endHour.getText();
             String endMinText = endMin.getText();
+            String startHourText = startHour.getText();
+            String startMinText = startMin.getText();
             String startingCashText = startingCash.getText();
 
             // check if any required fields are null or empty
             if (endHourText.isEmpty() || endMinText.isEmpty()
-                    || startingCashText.isEmpty()) {
+                    || startMinText.isEmpty() || startHourText.isEmpty() || startingCashText.isEmpty()
+                    || startDate.getValue() == null) {
                 // Display an error message and return
                 displayErrorMessage("Please fill out all Session fields");
                 return;
             }
 
-            // check for ent time to be integer
-            int endHourInt;
-            int endMinInt;
+            //check that start date is not in the past
+            if(startDate.getValue().isBefore(LocalDate.now())){
+                displayErrorMessage("Start date cannot be in the past.");
+                return;
+            }
+
+            // check for time to be integer
+            int endHourInt, endMinInt, startHourInt, startMinInt;
             try {
                 endMinInt = Integer.parseInt(endMinText);
                 endHourInt = Integer.parseInt(endHourText);
+                startMinInt = Integer.parseInt(startMinText);
+                startHourInt = Integer.parseInt(startHourText);
 
                 // check for 24 hour time
-                if (endHourInt < 0 || endHourInt > 23) {
-                    displayErrorMessage("Session End hour must be between 0 and 23.");
+                if (endHourInt < 0 || endHourInt > 25 || startHourInt < 0 || startHourInt > 25) {
+                    displayErrorMessage("Session hour must be between 0 and 24.");
                     return;
                 }
 
                 // check if start and end minute are between 0 and 59
-                if (endMinInt < 0 || endMinInt > 59) {
-                    displayErrorMessage("Session End minute must be between 0 and 59.");
+                if (endMinInt < 0 || endMinInt > 60 || startMinInt < 0 || startMinInt > 60) {
+                    displayErrorMessage("Session minute must be between 0 and 59.");
                     return;
                 }
 
-                // check that end time is after current time
-                LocalTime endTime = LocalTime.of(endHourInt, endMinInt);
-                LocalTime tempTime = LocalTime.now();
-                if (endTime.isBefore(tempTime)) {
-                    System.out.println("before!");
-                    displayErrorMessage("End time must be after start time.");
-                    return;
+                // check end time is after start time
+                if (endHourInt <= startHourInt) {
+                    // if the same hour
+                    if (endHourInt == startHourInt) {
+                        // error if end is less than start min
+                        if (endMinInt <= startMinInt) {
+                            displayErrorMessage("Session end minute must be after start minute.");
+                            return;
+                        }
+                    }
+                    // return error if end hour is less than start hour
+                    else {
+                        displayErrorMessage("Session end hour must be after start hour.");
+                        return;
+                    }
+
                 }
 
             } catch (Exception e) {
-                displayErrorMessage("End time must be an integer.");
+                displayErrorMessage("Session time must be an integer.");
                 return;
             }
 
@@ -456,6 +490,9 @@ public class StartShiftActionView extends View {
             endMin.setDisable(true);
             startingCash.setDisable(true);
             startSessionBtn.setDisable(true);
+            startDate.setDisable(true);
+            startHour.setDisable(true);
+            startMin.setDisable(true);
 
             // enable add scout
             addScoutBtn.setDisable(false);
@@ -528,6 +565,16 @@ public class StartShiftActionView extends View {
         // clear error message
         clearErrorMessage();
 
+        String startTimeH = startHour.getText();
+        String startTimeM = startMin.getText();
+
+        if (startTimeH.length() == 1) {
+            startTimeH = "0" + startTimeH;
+        }
+        if (startTimeM.length() == 1) {
+            startTimeM = "0" + startTimeM;
+        }
+
         String endTimeH = endHour.getText();
         String endTimeM = endMin.getText();
 
@@ -542,9 +589,10 @@ public class StartShiftActionView extends View {
 
         String endTime = endTimeH + ":" + endTimeM;
 
-        String startTime = currentTime.getText();
+        String startTime = startTimeH + ":" + startTimeM;
 
-        String date = startDate.getText();
+        LocalDate selectedDate = startDate.getValue();
+        String date = selectedDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
         Properties props = new Properties();
         props.setProperty("StartDate", date);
