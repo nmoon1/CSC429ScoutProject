@@ -60,7 +60,10 @@ public class Session extends EntityBase implements IView {
         dependencies = new Properties();
         myRegistry.setDependencies(dependencies);
     }
-
+    public void setState(String key, String value)
+    {
+        persistentState.setProperty(key, value);
+    }
     public Object getState(String key) {
         if(key.equals("UpdateStatusMessage")) return updateStatusMessage;
         return persistentState.getProperty(key);
@@ -98,7 +101,7 @@ public class Session extends EntityBase implements IView {
         updateStateInDatabase();
     }
 
-    private void updateStateInDatabase() {
+    public void updateStateInDatabase() {
         try {
             String sessionID = persistentState.getProperty("ID");
             boolean sessionExists = sessionID != null;

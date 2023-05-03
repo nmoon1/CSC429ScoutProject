@@ -23,6 +23,8 @@ public class EndShiftAction extends Action {
         return getOrCreateScene("EndShiftActionView");
     }
 
+
+
     protected void setDependencies() {
         dependencies = new Properties();
         dependencies.setProperty("Cancel", "CancelAction");
@@ -41,6 +43,7 @@ public class EndShiftAction extends Action {
         }
     }
 
+
     @Override
     public void stateChangeRequest(String key, Object value) {
         switch(key) {
@@ -49,7 +52,13 @@ public class EndShiftAction extends Action {
                 doYourJob();
                 break;
             case "Confirm":
-                endSession((String)value);
+               Properties props = (Properties)value;
+//                Session session = new Session();
+//                session.setState("EndTime", props.getProperty("Time"));
+//                session.setState("Notes", props.getProperty("Notes"));
+//                session.updateStateInDatabase();
+                //System.out.println(props.getProperty("Time"));
+                endSession(props);
                 break;
         }
         myRegistry.updateSubscribers(key, this);
@@ -70,23 +79,27 @@ public class EndShiftAction extends Action {
         totalCheckSales = (double)transactions.getState("TotalCheckSales");
     }
 
-    private void endSession(String notes) {
+    private void endSession(Properties props) {
         String endTime = Instant.now().atZone(ZoneId.of("America/New_York")).truncatedTo(ChronoUnit.MINUTES).toString();
-        int index = endTime.indexOf(":");
-        endTime = endTime.substring(index - 2, index + 3);
-        
+//        int index = endTime.indexOf(":");
+//        endTime = endTime.substring(index - 2, index + 3);
+        String notes = props.getProperty("Notes");
+
         notes = notes == null ? "" : notes;
         if(notes.length() > 500) {
             stateChangeRequest("NotesError", "");
             return;
         }
-        Properties props = new Properties();
-        props.setProperty("EndTime", endTime);
-        props.setProperty("EndingCash", String.valueOf(endCash));
-        props.setProperty("TotalCheckTransactionsAmount", String.valueOf(totalCheckSales));
-        props.setProperty("Notes", notes);
-        currentSession.save(props);
+        Properties props1 = new Properties();
+        props1.setProperty("EndTime", props.getProperty("Time") );
+        props1.setProperty("EndingCash", String.valueOf(endCash));
+        props1.setProperty("TotalCheckTransactionsAmount", String.valueOf(totalCheckSales));
+        props1.setProperty("Notes", notes);
+        currentSession.save(props1);
         stateChangeRequest("ShiftEnded", "");
+
+
+///
     }
     
 }
