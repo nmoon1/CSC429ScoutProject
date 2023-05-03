@@ -326,6 +326,7 @@ public class StartShiftActionView extends View {
             data.add(selectedScout);
             // add to database
             AddScout(event);
+            cancelFlag = false;
         });
         grid.add(addScoutBtn, 1, 9);
 
@@ -522,10 +523,6 @@ public class StartShiftActionView extends View {
         cancelBtn.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         cancelBtn.setTextAlignment(TextAlignment.CENTER);
         cancelBtn.setOnAction(event -> {
-            if (cancelFlag) {
-                displayErrorMessage("You must submit scouts to the started session.");
-                return;
-            }
             myModel.stateChangeRequest("Cancel", null);
         });
 
@@ -534,6 +531,10 @@ public class StartShiftActionView extends View {
         submitBtn.setTextAlignment(TextAlignment.CENTER);
         submitBtn.setDisable(true);
         submitBtn.setOnAction(event -> {
+            if(cancelFlag) {
+                displayErrorMessage("You must add at least one scout.");
+                return;
+            }
             myModel.stateChangeRequest("StartShift", null);
         });
 
@@ -613,7 +614,12 @@ public class StartShiftActionView extends View {
         clearErrorMessage();
 
         String selectedScout = scoutComboBox.getValue();
-        String scoutID = selectedScout.substring(0, selectedScout.indexOf(" "));
+        // String scoutID = selectedScout.substring(0, selectedScout.indexOf(" "));
+        String scoutData[] = selectedScout.split(" ");
+        String firstName = scoutData[0];
+        String lastName = scoutData[1];
+        String troopID = selectedScout.substring(selectedScout.indexOf("(") + 1, selectedScout.indexOf(")"));
+        String phone = scoutData[3];
 
         String comp = companion.getText();
         String compH = companionHour.getText();
@@ -638,9 +644,12 @@ public class StartShiftActionView extends View {
 
         String ScoutStartTime = scoutStartH + ":" + scoutStartM;
         String ScoutEndTime = scoutEndH + ":" + scoutEndM;
-
+        
         Properties props = new Properties();
-        props.setProperty("ScoutID", scoutID);
+        props.setProperty("FirstName", firstName);
+        props.setProperty("LastName", lastName);
+        props.setProperty("TroopID", troopID);
+        props.setProperty("PhoneNumber", phone);
         props.setProperty("CompanionName", comp);
         props.setProperty("CompanionHours", compH);
         props.setProperty("StartTime", ScoutStartTime);

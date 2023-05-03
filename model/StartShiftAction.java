@@ -87,9 +87,28 @@ public class StartShiftAction extends Action {
     private void addShift(Properties props) {
         try {
             Session se = new Session();
-            props.setProperty("SessionID", (String) se.getState("ID"));
 
-            Shift shift = new Shift(props);
+            String firstName = props.getProperty("FirstName");
+            String lastName = props.getProperty("LastName");
+            String troopID = props.getProperty("TroopID");
+            String phone = props.getProperty("PhoneNumber");
+            String phoneTokens [] = phone.split("-");
+            phone = phoneTokens[0] + phoneTokens[1] + phoneTokens[2];
+            Scout scout = new Scout();
+            String condition = "FirstName=\"" + firstName +"\" AND LastName=\"" + lastName +"\" AND troopID=\"" + troopID + "\" AND PhoneNumber=\"" + phone + "\"";
+            scout.lookupAndStore(condition);
+            String scoutID = (String)scout.getState("ID");
+
+            Properties shiftProps = new Properties();
+            shiftProps.setProperty("ScoutID", scoutID);
+            shiftProps.setProperty("SessionID", (String)se.getState("ID"));
+            shiftProps.setProperty("CompanionName", props.getProperty("CompanionName"));
+            shiftProps.setProperty("CompanionHours", props.getProperty("CompanionHours"));
+            shiftProps.setProperty("StartTime", props.getProperty("StartTime"));
+            shiftProps.setProperty("EndTime", props.getProperty("EndTime"));
+            
+
+            Shift shift = new Shift(shiftProps);
             shiftList.add(shift);
             // shift.save();
 
