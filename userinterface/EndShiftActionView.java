@@ -36,12 +36,15 @@ public class EndShiftActionView extends View{
     private Button done;
     private Button cancel;
     private TextArea notes;
+    private TextField endHour;
+    private TextField endMinute;
 
     public EndShiftActionView(IModel model) {
         super(model, "EndShiftActionView");
         VBox container = createFormContents();
         getChildren().add(container);
-        myModel.subscribe("NotesError", this);
+        populateFields();
+        myModel.subscribe("ConfirmError", this);
         myModel.subscribe("ShiftEnded", this);
     }
 
@@ -61,6 +64,15 @@ public class EndShiftActionView extends View{
         Text cash = new Text("Ending Cash: " + endingCash);
         Text check = new Text("Total Check Sales: " + totalCheckSales);
 
+        HBox endTimeContainer = new HBox(10);
+        endTimeContainer.setAlignment(Pos.CENTER);
+        Text endTimeLabel = new Text("End Time: ");
+        endHour = new TextField();
+        endHour.setPrefWidth(35);
+        endMinute = new TextField();
+        endMinute.setPrefWidth(35);
+        endTimeContainer.getChildren().addAll(endTimeLabel, endHour, endMinute);
+
         Text notesLabel = new Text("Please enter any notes about the shift: ");
         notes = new TextArea();
 
@@ -75,7 +87,7 @@ public class EndShiftActionView extends View{
 
         confirm = new Button("Confirm");
         confirm.setOnAction( action -> {
-            myModel.stateChangeRequest("Confirm", notes.getText());
+            handleConfirm();
         });
         confirm.managedProperty().bind(confirm.visibleProperty());
 
@@ -95,6 +107,7 @@ public class EndShiftActionView extends View{
         container.getChildren().add(titleText);
         container.getChildren().add(cash);
         container.getChildren().add(check);
+        container.getChildren().add(endTimeContainer);
         container.getChildren().add(notesLabel);
         container.getChildren().add(notes);
         container.getChildren().add(btnContainer);
@@ -108,12 +121,35 @@ public class EndShiftActionView extends View{
         confirm.setVisible(false);
         done.setVisible(true);
         notes.setDisable(true);
+        endHour.setDisable(true);
+        endMinute.setDisable(true);
+    }
+
+    private void populateFields() {
+        String endTime = (String)myModel.getState("EndTime");
+        String endH = endTime.split(":")[0];
+        String endM = endTime.split(":")[1];
+        endHour.setText(endH);
+        endMinute.setText(endM);
+    }
+
+    private void handleConfirm() {
+        Properties props = new Properties();
+        // send notes and end time
+        String userNotes = notes.getText();
+        String endH = endHour.getText();
+        String endM = endMinute.getText();
+        props.setProperty("Notes", userNotes);
+        props.setProperty("EndHour", endH);
+        props.setProperty("EndMinute", endM);
+        myModel.stateChangeRequest("Confirm", props);
     }
 
     public void updateState(String key, Object value) {
         switch(key) {
-            case "NotesError":
-                statusLog.displayErrorMessage("Notes msut be less than 500 characters.");
+            case "ConfirmError":
+                String message = (String)myModel.getState("StatusMessage");
+                statusLog.displayErrorMessage(message);
                 break;
             case "ShiftEnded":
                 displayEndShift();
