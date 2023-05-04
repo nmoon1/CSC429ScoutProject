@@ -31,7 +31,7 @@ public class EndShiftAction extends Action {
         dependencies.setProperty("Done", "CompleteAction");
         myRegistry.setDependencies(dependencies);
     }
-
+ 
     public Object getState(String key) {
         switch(key) {
             case "TotalCheckSales":
