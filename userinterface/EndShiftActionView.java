@@ -121,6 +121,8 @@ public class EndShiftActionView extends View{
         confirm.setVisible(false);
         done.setVisible(true);
         notes.setDisable(true);
+        endHour.setDisable(true);
+        endMinute.setDisable(true);
     }
 
     private void populateFields() {

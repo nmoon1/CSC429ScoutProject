@@ -88,6 +88,17 @@ public class EndShiftAction extends Action {
         String endHour = props.getProperty("EndHour");
         String endMinute = props.getProperty("EndMinute");
 
+        // validate user input a time
+        if(endHour.equals("")) {
+            statusMessage = "You must enter an end hour.";
+            stateChangeRequest("ConfirmError", "");
+            return;
+        }
+        // if no end minute, assume 00
+        if(endMinute.equals("")) {
+            endMinute = "00";
+        }
+
         // validate end hour 0-23, end minute 0-59
         if(!Pattern.matches("\\d{0,2}", endHour)) {
             statusMessage = "End hour must be between 0 and 23";
