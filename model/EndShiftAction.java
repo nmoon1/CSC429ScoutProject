@@ -80,7 +80,7 @@ public class EndShiftAction extends Action {
     }
 
     private void endSession(Properties props) {
-        String endTime = Instant.now().atZone(ZoneId.of("America/New_York")).truncatedTo(ChronoUnit.MINUTES).toString();
+   // String endTime = Instant.now().atZone(ZoneId.of("America/New_York")).truncatedTo(ChronoUnit.MINUTES).toString();
 //        int index = endTime.indexOf(":");
 //        endTime = endTime.substring(index - 2, index + 3);
         String notes = props.getProperty("Notes");
