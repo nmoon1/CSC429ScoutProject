@@ -80,13 +80,26 @@ public class EndShiftAction extends Action {
 
     private void endSession(Properties props) {
         Properties props1 = new Properties();
+        String Timecheck = props.getProperty("Time");
+        String TimecheckMin = props.getProperty("Time");
+        String TimecheckHour = props.getProperty("Time");
+
 //        String endTime = Instant.now().atZone(ZoneId.of("America/New_York")).truncatedTo(ChronoUnit.MINUTES).toString();
-   // String endTime = Instant.now().atZone(ZoneId.of("America/New_York")).truncatedTo(ChronoUnit.MINUTES).toString();
 //        int index = endTime.indexOf(":");
-//        endTime = endTime.substring(index - 2, index + 3);
+//        endTime = endTime.substring(index - -1, index + 3);
+//        String endTime = Instant.now().atZone(ZoneId.of("America/New_York")).truncatedTo(ChronoUnit.MINUTES).toString();
+
+        int index = Timecheck.indexOf(":");
+        TimecheckHour = TimecheckHour.substring(index - 2, index + 0);
+        System.out.println(TimecheckHour);
+
+        TimecheckMin = TimecheckMin.substring(index - -1, index + 3);
+        System.out.println("checker123");
+
+        System.out.println(TimecheckHour);
+        System.out.println("checker123");
 
         ////////////////////////////////////////////////////////////////
-        String Timecheck = props.getProperty("Time");
         String TimecheckM ,TimecheckH, TimecheckM1;
 
 
@@ -95,28 +108,44 @@ public class EndShiftAction extends Action {
         TimecheckH = Timecheck.substring(0, 2);
         String notes = props.getProperty("Notes");
 
-        System.out.println(TimecheckM);
-        System.out.println(TimecheckH);
-        System.out.println(TimecheckM1);
-
-        System.out.println("cats cats1");
+//        System.out.println(TimecheckM);
+//        System.out.println(TimecheckH);
+//        System.out.println(TimecheckM1);
+//
+//        System.out.println("cats cats1");
 
 ////////////////////////
         int endHourInt, endMinInt;
-        System.out.println("cats cats2");
+//        System.out.println("cats cats2");
 
-            endMinInt = Integer.parseInt(TimecheckM);
+
+
+
+//        int index = TimecheckM.indexOf(":");
+//        Timecheck1 = Timecheck1.substring(index - 2, index + 3);
+//        System.out.println(Timecheck1);
         System.out.println("hmmm why does it break before it can print this hmmmmm");
 
         System.out.println(TimecheckM);
 
-        endHourInt = Integer.parseInt(TimecheckH);
+
+        if (!TimecheckHour.matches("^\\d{2}$") || TimecheckHour.isEmpty() || !TimecheckMin.matches("^\\d{2}$") || TimecheckMin.isEmpty()
+        ) {
+            System.out.println(Timecheck);
+
+            stateChangeRequest("EndTimeNumbersOnly", "");
+            return;
+        }
             // check for 24 hour time
-            if (endHourInt < 0 || endHourInt > 25) {
+
+               endHourInt = Integer.parseInt(TimecheckH);
+               endMinInt = Integer.parseInt(TimecheckMin);
+
+               if (endHourInt < 0 || endHourInt > 24) {
                 stateChangeRequest("EndTimeH", "");
                 return;
             }
-            // check if start and end minute are between 0 and 59
+            // check if end minute are between 0 and 59
             if (endMinInt < 0 || endMinInt > 60) {
                 stateChangeRequest("EndTimeM", "");
                 return;

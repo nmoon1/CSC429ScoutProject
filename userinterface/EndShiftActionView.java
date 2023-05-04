@@ -54,7 +54,7 @@ public class EndShiftActionView extends View{
         myModel.subscribe("ShiftEnded", this);
         myModel.subscribe("EndTimeH", this);
         myModel.subscribe("EndTimeM", this);
-
+        myModel.subscribe("EndTimeNumbersOnly", this);
         populateFields();
 
     }
@@ -109,7 +109,7 @@ public class EndShiftActionView extends View{
 
 
         ////////////////
-        Text endShiftLabel = new Text("Would you like to change the shift ");
+        Text endShiftLabel = new Text("Would you like to change the shift (Must be XX:XX format for H and M)");
 //        endShiftField = new TextField();
         /////////////////////////////////
 
@@ -207,8 +207,11 @@ public class EndShiftActionView extends View{
             statusLog.displayErrorMessage("The min must be between 0 and 59.");
                 break;
             case"EndTimeH":
-              statusLog.displayErrorMessage("The hour must be between 0 and 23.");
+              statusLog.displayErrorMessage("The hour must be between 0 and 24.");
               break;
+            case"EndTimeNumbersOnly":
+                statusLog.displayErrorMessage("That field requires numbers");
+                break;
 
 
         }
