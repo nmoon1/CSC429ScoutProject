@@ -52,7 +52,9 @@ public class EndShiftActionView extends View{
         getChildren().add(container);
         myModel.subscribe("NotesError", this);
         myModel.subscribe("ShiftEnded", this);
-        myModel.subscribe("EndTime", this);
+        myModel.subscribe("EndTimeH", this);
+        myModel.subscribe("EndTimeM", this);
+
         populateFields();
 
     }
@@ -134,7 +136,7 @@ public class EndShiftActionView extends View{
             props.setProperty("Time", endHour.getText() + ":" + endMin.getText());
             props.setProperty("Notes", notes.getText());
             myModel.stateChangeRequest("Confirm", props);
-            // add code to vaildate that its between  0 - 23 and acutually numbers
+            // add code to vaildate that its between  0 - 23 and actually numbers
           //  Pattern.matches("^\\d{2}$", text)
             // make the text boxes a reasonable size
 
@@ -176,9 +178,6 @@ public class EndShiftActionView extends View{
         return container;
     }
 
-
-
-
         private void populateFields() {
             String minTime = (String)new Session().getState("EndTime");
             String HourTime = (String)new Session().getState("EndTime");
@@ -189,7 +188,7 @@ public class EndShiftActionView extends View{
 //
 
     private void displayEndShift() {
-//        statusLog.displayMessage("Shift ended.");
+        statusLog.displayMessage("Shift ended.");
         cancel.setVisible(false);
         confirm.setVisible(false);
         done.setVisible(true);
@@ -204,14 +203,14 @@ public class EndShiftActionView extends View{
             case "ShiftEnded":
                 displayEndShift();
                 break;
-            case "EndTime":
-                statusLog.displayMessage("Shift Changed succesfully");
+            case "EndTimeM":
+            statusLog.displayErrorMessage("The min must be between 0 and 59.");
                 break;
-//          case"EndTimeH":
-//               return currentSession.getState(String.valueOf(endTimeH));
-//                myModel.getState(endtime);
-//
-//                break;
+            case"EndTimeH":
+              statusLog.displayErrorMessage("The hour must be between 0 and 23.");
+              break;
+
+
         }
 
     }
