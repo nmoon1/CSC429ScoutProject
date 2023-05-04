@@ -30,7 +30,7 @@ public class EndShiftAction extends Action {
         dependencies.setProperty("Done", "CompleteAction");
         myRegistry.setDependencies(dependencies);
     }
-
+ 
     public Object getState(String key) {
         switch (key) {
             case "TotalCheckSales":
@@ -81,6 +81,7 @@ public class EndShiftAction extends Action {
     private void endSession(Properties props) {
         Properties props1 = new Properties();
 //        String endTime = Instant.now().atZone(ZoneId.of("America/New_York")).truncatedTo(ChronoUnit.MINUTES).toString();
+   // String endTime = Instant.now().atZone(ZoneId.of("America/New_York")).truncatedTo(ChronoUnit.MINUTES).toString();
 //        int index = endTime.indexOf(":");
 //        endTime = endTime.substring(index - 2, index + 3);
 
