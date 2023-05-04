@@ -40,11 +40,8 @@ public class EndShiftActionView extends View{
     private Button done;
     private Button cancel;
     private TextArea notes;
-
     private TextField endHour;
     private TextField endMin;
-
-//    private TextField endShiftField;
 
     public EndShiftActionView(IModel model) {
         super(model, "EndShiftActionView");
@@ -73,7 +70,6 @@ public class EndShiftActionView extends View{
         String endingCash = (String)myModel.getState("EndingCash");
         String totalCheckSales = (String)myModel.getState("TotalCheckSales");
 
-
         NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(Locale.US);
         String formattedEndingCash = currencyFormatter.format(Double.parseDouble(endingCash));
         String formattedTotalCheckSales = currencyFormatter.format(Double.parseDouble(totalCheckSales));
@@ -81,45 +77,31 @@ public class EndShiftActionView extends View{
         Text cash = new Text("Ending Cash: " + formattedEndingCash);
         Text check = new Text("Total Check Sales: " + formattedTotalCheckSales);
 
-        GridPane grid = new GridPane();
-        grid.setAlignment(Pos.CENTER);
-        // grid.setStyle("-fx-background-color: #f5f5f5;");
-        grid.setHgap(10);
-        grid.setVgap(10);
+//        GridPane grid = new GridPane();
+////        grid.setAlignment(Pos.CENTER);
+//        grid.setHgap(10);
+//        grid.setVgap(10);
         Text notesLabel = new Text("Please enter any notes about the shift: ");
         notes = new TextArea();
-        ///////////////////////
 
-        Label startTimeLabel = new Label("Start Time:");
-        grid.add(startTimeLabel, 1, 1);
 
-        HBox endTimeBox = new HBox(10);
+//        Label startTimeLabel = new Label("Start Time:");
+//        grid.add(startTimeLabel, 1, 1);
+
+//        HBox endTimeBox = new HBox(10);
 
         endHour = new TextField();
-        endHour.setPrefWidth(30);
+        endHour.setPrefWidth(10);
         Label endHourLabel = new Label("H");
 
         endMin = new TextField();
-        endMin.setPrefWidth(30);
+        endMin.setPrefWidth(10);
         Label endMinLabel = new Label("M");
 
-        endTimeBox.getChildren().addAll(endHour, endHourLabel, endMin, endMinLabel);
-        grid.add(endTimeBox, 2, 1);
+//        endTimeBox.getChildren().addAll(endHour, endHourLabel, endMin, endMinLabel);
+//        grid.add(endTimeBox, 2, 1);
 
-
-
-        ////////////////
         Text endShiftLabel = new Text("Would you like to change the shift (Must be XX:XX format for H and M)");
-//        endShiftField = new TextField();
-        /////////////////////////////////
-
-//        Session session = new Session();
-//        String endTime = (String)session.getState("EndTime");
-//        endShiftField.setText(endTime);
-//        System.out.println(endTime);
-
-        ///////////////////////////////////////////////
-
 
         HBox btnContainer = new HBox(10);
         btnContainer.setAlignment(Pos.CENTER);
@@ -136,12 +118,6 @@ public class EndShiftActionView extends View{
             props.setProperty("Time", endHour.getText() + ":" + endMin.getText());
             props.setProperty("Notes", notes.getText());
             myModel.stateChangeRequest("Confirm", props);
-            // add code to vaildate that its between  0 - 23 and actually numbers
-          //  Pattern.matches("^\\d{2}$", text)
-            // make the text boxes a reasonable size
-
-//            myModel.stateChangeRequest("Confirm", notes.getText());
-//            myModel.stateChangeRequest("Confirm", endShiftField.getText());
         });
         confirm.managedProperty().bind(confirm.visibleProperty());
 
@@ -164,29 +140,21 @@ public class EndShiftActionView extends View{
         container.getChildren().add(notesLabel);
         container.getChildren().add(notes);
         container.getChildren().add(endShiftLabel);
-//        container.getChildren().add(endShiftField);
         container.getChildren().add(endHour);
         container.getChildren().add(endHourLabel);
         container.getChildren().add(endMin);
         container.getChildren().add(endMinLabel);
-
-
-
         container.getChildren().add(btnContainer);
         container.getChildren().add(statusLog);
 
         return container;
     }
-
         private void populateFields() {
             String minTime = (String)new Session().getState("EndTime");
             String HourTime = (String)new Session().getState("EndTime");
             endMin.setText(minTime.substring(3));
             endHour.setText(HourTime.substring(0,2));
         }
-
-//
-
     private void displayEndShift() {
         statusLog.displayMessage("Shift ended.");
         cancel.setVisible(false);
@@ -194,7 +162,6 @@ public class EndShiftActionView extends View{
         done.setVisible(true);
         notes.setDisable(true);
     }
-
     public void updateState(String key, Object value) {
         switch(key) {
             case "NotesError":
@@ -212,10 +179,6 @@ public class EndShiftActionView extends View{
             case"EndTimeNumbersOnly":
                 statusLog.displayErrorMessage("That field requires numbers");
                 break;
-
-
         }
-
     }
-
 }
