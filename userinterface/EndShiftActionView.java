@@ -77,29 +77,30 @@ public class EndShiftActionView extends View{
         Text cash = new Text("Ending Cash: " + formattedEndingCash);
         Text check = new Text("Total Check Sales: " + formattedTotalCheckSales);
 
-//        GridPane grid = new GridPane();
-////        grid.setAlignment(Pos.CENTER);
-//        grid.setHgap(10);
-//        grid.setVgap(10);
+        GridPane grid = new GridPane();
+        grid.setAlignment(Pos.CENTER);
+        grid.setHgap(10);
+        grid.setVgap(10);
         Text notesLabel = new Text("Please enter any notes about the shift: ");
         notes = new TextArea();
+//       notes.setPrefWidth(10);
 
 
-//        Label startTimeLabel = new Label("Start Time:");
-//        grid.add(startTimeLabel, 1, 1);
+        Label startTimeLabel = new Label("Start Time:");
+        grid.add(startTimeLabel, 1, 2);
 
-//        HBox endTimeBox = new HBox(10);
+        HBox endTimeBox = new HBox(10);
 
         endHour = new TextField();
-        endHour.setPrefWidth(10);
+        endHour.setPrefWidth(30);
         Label endHourLabel = new Label("H");
 
         endMin = new TextField();
-        endMin.setPrefWidth(10);
+        endMin.setPrefWidth(30);
         Label endMinLabel = new Label("M");
 
-//        endTimeBox.getChildren().addAll(endHour, endHourLabel, endMin, endMinLabel);
-//        grid.add(endTimeBox, 2, 1);
+        endTimeBox.getChildren().addAll(endHour, endHourLabel, endMin, endMinLabel);
+        grid.add(endTimeBox, 2, 2);
 
         Text endShiftLabel = new Text("Would you like to change the shift (Must be XX:XX format for H and M)");
 
